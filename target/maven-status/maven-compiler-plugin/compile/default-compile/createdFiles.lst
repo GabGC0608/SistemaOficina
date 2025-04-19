@@ -1,0 +1,15 @@
+com\mycompany\sistemaoficina\Funcionario.class
+com\mycompany\sistemaoficina\SistemaOficina.class
+com\mycompany\sistemaoficina\Veiculo.class
+com\mycompany\sistemaoficina\Agenda.class
+com\mycompany\sistemaoficina\Cliente.class
+com\mycompany\sistemaoficina\Estoque.class
+com\mycompany\sistemaoficina\Administrador.class
+com\mycompany\sistemaoficina\Oficina.class
+com\mycompany\sistemaoficina\Caixa.class
+com\mycompany\sistemaoficina\Caixa$Transacao.class
+com\mycompany\sistemaoficina\Estoque$ItemEstoque.class
+com\mycompany\sistemaoficina\Pessoa.class
+com\mycompany\sistemaoficina\Agenda$Agendamento.class
+com\mycompany\sistemaoficina\JsonUtil.class
+com\mycompany\sistemaoficina\Servico.class

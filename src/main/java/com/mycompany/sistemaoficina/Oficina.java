@@ -12,12 +12,14 @@ import java.util.List;
 import com.mycompany.sistemaoficina.Estoque.ItemEstoque;
 
 public class Oficina {
+    private Elevador elevadores[3];
     private List<Funcionario> funcionarios;
     private List<Cliente> clientes;
     private List<Servico> servicos;
     private Agenda agenda;
     private Estoque estoque;
     private Caixa caixa;
+    
 
     public Oficina() {
         this.funcionarios = new ArrayList<>();
@@ -159,42 +161,5 @@ public class Oficina {
 
     public Caixa getCaixa() {
         return caixa;
-    }
-
-    public static void main(String[] args) {
-        // Exemplo de uso do sistema
-        Oficina oficina = new Oficina();
-        
-        // Cadastrando funcionários
-        Funcionario mecanico = new Funcionario("João Silva", "11987654321", "Rua A, 123", 
-                                            "Mecânico", 2500.00, "MEC001");
-        Administrador admin = new Administrador("Maria Souza", "11912345678", "Rua B, 456", 
-                                             4500.00, "ADM001");
-        
-        oficina.contratarFuncionario(mecanico);
-        oficina.contratarFuncionario(admin);
-        
-        // Cadastrando clientes
-        Cliente cliente1 = new Cliente("Carlos Oliveira", "11955556666", "Rua C, 789");
-        Veiculo veiculo1 = new Veiculo("Gol", "ABC1234", 2018, "Volkswagen", "Prata");
-        cliente1.adicionarVeiculo(veiculo1);
-        
-        oficina.cadastrarCliente(cliente1);
-        
-        // Listando cadastros
-        oficina.listarFuncionarios();
-        oficina.listarClientes();
-        oficina.listarServicos();
-        
-        // Realizando agendamento
-        oficina.agendarServico(cliente1, veiculo1, "Troca de Óleo", mecanico, "25/04/2023 14:00","A fazer" );
-        oficina.listarAgendamentos();
-        
-        // Registrando transações financeiras
-        oficina.registrarPagamento(120.00, "Troca de óleo - Carlos Oliveira", "25/04/2023");
-        oficina.registrarDespesa(50.00, "Compra de óleo", "24/04/2023");
-        
-        // Gerando relatórios
-        oficina.gerarRelatorioDiario("25/04/2023");
     }
 }

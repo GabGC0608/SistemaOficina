@@ -67,34 +67,9 @@ public class SistemaOficina {
         }
         scanner.close();
     }
-    private static void carregarDados() {
-        File arquivo = new File(ARQUIVO_DADOS);
-    
-        if (!arquivo.exists()) {
-            System.out.println("Arquivo não encontrado. Criando novo sistema...");
-            oficina = new Oficina();
-            inicializarDadosDemonstracao();
-            salvarDados(); // Cria o arquivo automaticamente
-        } else {
-            try {
-                oficina = JsonUtil.carregarOficina(ARQUIVO_DADOS);
-                System.out.println("Dados carregados com sucesso!");
-            } catch (IOException e) {
-                System.err.println("Erro ao carregar dados. Criando novo sistema...");
-                oficina = new Oficina();
-                inicializarDadosDemonstracao();
-        }
-    }
-}
 
-    public static void salvarDados() {
-        try {
-            JsonUtil.salvarParaJson(oficina, ARQUIVO_DADOS);
-            System.out.println("Dados salvos com sucesso no arquivo: " + ARQUIVO_DADOS);
-        } catch (IOException e) {
-            System.err.println("Erro ao salvar dados: " + e.getMessage());
-        }
-    }
+
+
     
     private static void exibirMenuPrincipal() {
         System.out.println("\n=== MENU PRINCIPAL ===");
@@ -613,6 +588,35 @@ public class SistemaOficina {
         oficina.gerarRelatorioMensal(mes, ano);
     }
 
+    public static void salvarDados() {
+        try {
+            JsonUtil.salvarParaJson(oficina, ARQUIVO_DADOS);
+            System.out.println("Dados salvos com sucesso no arquivo: " + ARQUIVO_DADOS);
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar dados: " + e.getMessage());
+        }
+    }    
+    
+    private static void carregarDados() {
+        File arquivo = new File(ARQUIVO_DADOS);
+    
+        if (!arquivo.exists()) {
+            System.out.println("Arquivo não encontrado. Criando novo sistema...");
+            oficina = new Oficina();
+            inicializarDadosDemonstracao();
+            salvarDados(); // Cria o arquivo automaticamente
+        } else {
+            try {
+                oficina = JsonUtil.carregarOficina(ARQUIVO_DADOS);
+                System.out.println("Dados carregados com sucesso!");
+            }catch (IOException e) {
+                System.err.println("Erro ao carregar dados. Criando novo sistema...");
+                oficina = new Oficina();
+                inicializarDadosDemonstracao();
+            }
+        }
+       
+    }
     // Métodos auxiliares para leitura de entrada
     private static String lerString(String mensagem) {
         System.out.print(mensagem);
@@ -674,4 +678,6 @@ public class SistemaOficina {
         
         System.out.println("\nDados de demonstração cadastrados com sucesso!");
     }
+
+    
 }

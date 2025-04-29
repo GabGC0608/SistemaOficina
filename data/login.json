@@ -1,0 +1,10 @@
+{
+  "credenciais" : {
+    "funcionario1" : "func123",
+    "admin" : "admin123"
+  },
+  "permissoes" : {
+    "funcionario1" : "Funcionario",
+    "admin" : "Administrador"
+  }
+}

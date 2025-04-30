@@ -73,7 +73,14 @@ public class Oficina {
     public void atualizarItemEstoque(String codigo, int novaQuantidade) {
         estoque.atualizarQuantidade(codigo, novaQuantidade);
     }
-
+    /**
+     * Vende um item do estoque.
+     * @param codigo
+     * @param quantidade
+     */
+    public void venderItemEstoque(String codigo, int quantidade) {
+        estoque.venderItem(codigo, quantidade);
+    }
     /**
      * Lista todos os itens do estoque.
      */

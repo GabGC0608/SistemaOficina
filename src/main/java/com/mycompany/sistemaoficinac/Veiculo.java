@@ -12,7 +12,6 @@ public class Veiculo {
     private int ano;       // Ano de fabricação do veículo
     private String marca;  // Marca do veículo
     private String cor;    // Cor do veículo
-
     /**
      * Construtor da classe Veiculo.
      *

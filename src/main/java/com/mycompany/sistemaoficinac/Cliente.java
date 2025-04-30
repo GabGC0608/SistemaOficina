@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Cliente extends Pessoa {
     private List<Veiculo> veiculos; // Lista de veículos do cliente
-
+    private static int contadorVeiculos = 0; // Contador de veículos (encapsulado)
     /**
      * Construtor da classe Cliente com lista de veículos.
      *
@@ -37,6 +37,19 @@ public class Cliente extends Pessoa {
         super(nome, telefone, endereco);
         this.veiculos = new ArrayList<>();
     }
+    /***
+     * Método que retorna o contador de veículos.
+     * @return contadorVeiculos
+     */
+    public static int getContadorVeiculos() {
+        return contadorVeiculos;
+    }
+    /***
+     * Método que retorna o contador de veículos.
+     */
+    private static void incrementarContadorVeiculos() {
+        contadorVeiculos++;
+    }
 
     /**
      * Adiciona um veículo à lista de veículos do cliente.
@@ -45,6 +58,7 @@ public class Cliente extends Pessoa {
      */
     public void adicionarVeiculo(Veiculo veiculo) {
         veiculos.add(veiculo);
+        incrementarContadorVeiculos(); // Incrementa o contador de veículos
         System.out.println("Veículo adicionado com sucesso!");
     }
 

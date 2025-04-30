@@ -26,6 +26,7 @@ public class SistemaOficinac {
     private static Oficina oficina = new Oficina();
     private static Scanner scanner = new Scanner(System.in);
     private static Login loginManager = new Login(); // Inicializa com um objeto padrão
+    protected static int contadorVeiculos = 0; // Contador de veículos (protected)
 /**
  * Ponto de entrada principal do sistema de oficina.
  * <p>
@@ -112,8 +113,10 @@ public class SistemaOficinac {
                         break;
                     case 3:
                         menuRelatorios();
-                        break;
                     case 4:
+                        alterarSenha(); 
+                        break;
+                    case 0:
                         try {
                             salvarDados();
                         } catch (IOException e) {
@@ -147,8 +150,10 @@ public class SistemaOficinac {
                         break;
                     case 5:
                         menuServicos();
+                    case 6: 
+                        menuElevadores();
                         break;
-                    case 6:
+                    case 0:
                         try {
                             salvarDados();
                         } catch (IOException e) {
@@ -182,7 +187,8 @@ public class SistemaOficinac {
         System.out.println("1. Gerenciar Funcionários");
         System.out.println("2. Gerenciar Financeiro");  
         System.out.println("3. Gerar Relatórios");
-        System.out.println("4. Salvar e sair");
+        System.out.println("4. Alterar senha");
+        System.out.println("0. Salvar e sair");
     }
     /**
      * Exibe o menu de opções para o funcionário.
@@ -194,7 +200,8 @@ public class SistemaOficinac {
         System.out.println("3. Gerenciar Estoque");
         System.out.println("4. Gerenciar Clientes");
         System.out.println("5. Gerenciar Serviços");
-        System.out.println("6. Sair");
+        System.out.println("6. Gerenciar Elevadores");
+        System.out.println("0. Sair");
         
     }
     /**
@@ -208,6 +215,7 @@ public class SistemaOficinac {
             System.out.println("2. Remover item do estoque");
             System.out.println("3. Atualizar quantidade");
             System.out.println("4. Listar estoque");
+            System.out.println("5. Vender item");
             System.out.println("0. Voltar");
             
             int opcao = lerInteiro("Digite sua opção: ");
@@ -224,6 +232,39 @@ public class SistemaOficinac {
                     break;
                 case 4:
                     oficina.listarEstoque();
+                    break;
+                case 5:
+                    venderItemEstoque();
+                case 0:
+                    voltar = true;
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        }
+    }
+    /***
+     * Exibe o menu de opções para gerenciar elevadores.
+     */
+    private static void menuElevadores() {
+        boolean voltar = false;
+        while (!voltar) {
+            System.out.println("\n=== MENU DE ELEVADORES ===");
+            System.out.println("1. Listar elevadores");
+            System.out.println("2. Alocar elevador");
+            System.out.println("3. Liberar elevador");
+            System.out.println("0. Voltar");
+            
+            int opcao = lerInteiro("Digite sua opção: ");
+            switch (opcao) {
+                case 1:
+                    Elevador.listarElevadores();
+                    break;
+                case 2:
+                    alocarElevador();
+                    break;
+                case 3:
+                    liberarElevador();
                     break;
                 case 0:
                     voltar = true;
@@ -246,6 +287,7 @@ public class SistemaOficinac {
             System.out.println("3. Buscar cliente por nome");
             System.out.println("4. Remover cliente");
             System.out.println("5. Adicionar veículo a cliente");
+            System.out.println("6. Alterar dados do cliente");
             System.out.println("0. Voltar");
             
             int opcao = lerInteiro("Digite sua opção: ");
@@ -265,6 +307,9 @@ public class SistemaOficinac {
                     break;
                 case 5:
                     adicionarVeiculoACliente();
+                    break;
+                case 6:
+                    alterarDadosCliente();
                     break;
                 case 0:
                     voltar = true;
@@ -313,7 +358,9 @@ public class SistemaOficinac {
             System.out.println("2. Listar todos os funcionários");
             System.out.println("3. Buscar funcionário por nome");
             System.out.println("4. Remover funcionário");
+            System.out.println("5. Alterar dados do funcionário");
             System.out.println("0. Voltar");
+
             
             int opcao = lerInteiro("Digite sua opção: ");
             
@@ -330,6 +377,8 @@ public class SistemaOficinac {
                 case 4:
                     removerFuncionario();
                     break;
+                case 5:
+                    alterarDadosFuncionario();
                 case 0:
                     voltar = true;
                     break;
@@ -480,9 +529,46 @@ public class SistemaOficinac {
     }
 
     // Métodos auxiliares para operações específicas
+    /***
+     * Aloca o elevador
+     */
+    private static void alocarElevador() {
+        System.out.println("\n=== ALOCAR ELEVADOR ===");
+        Elevador elevador = Elevador.alocarElevador();
+        if (elevador != null) {
+            System.out.println("Elevador alocado: " + elevador.getModelo());
+        }
+    }
+    /***
+     *  Libera o elevador
+     */
+    private static void liberarElevador() {
+        System.out.println("\n=== LIBERAR ELEVADOR ===");
+        Elevador.listarElevadores();
+        int numero = lerInteiro("Digite o número do elevador a ser liberado: ");
+        
+        if (numero < 1 || numero > 3) {
+            System.out.println("Número inválido!");
+            return;
+        }
+        
+        Elevador elevador = Elevador.alocarElevador(); // Obtém o elevador correspondente
+        if (elevador != null && "Ocupado".equalsIgnoreCase(elevador.getEstado())) {
+            Elevador.liberarElevador(elevador);
+        } else {
+            System.out.println("O elevador já está disponível ou não existe.");
+        }
+    }
     /**
      * Adiciona um item ao estoque da oficina.
-     */ 
+     */
+    private static void venderItemEstoque() {
+        System.out.println("\n=== VENDER ITEM ===");
+        String codigo = lerString("Código: ");
+        int quantidade = lerInteiro("Quantidade: ");
+        
+        oficina.venderItemEstoque(codigo, quantidade);
+    } 
     private static void adicionarItemEstoque() {
         System.out.println("\n=== ADICIONAR ITEM ===");
         String codigo = lerString("Código: ");
@@ -561,6 +647,20 @@ public class SistemaOficinac {
             System.out.println("Cliente não encontrado!");
         }
     }
+    /***
+     * Método que retorna o contador de veículos.
+     */
+    protected static void incrementarContadorVeiculos() {
+        contadorVeiculos++;
+    }
+    /***
+     * Método que retorna o contador de veículos.
+     * @return contadorVeiculos
+     * @see #incrementarContadorVeiculos()
+     */
+    public static int getContadorVeiculos() {
+        return contadorVeiculos;
+    }
     /**
      * Lista todos os veículos cadastrados na oficina.
      */
@@ -603,6 +703,115 @@ public class SistemaOficinac {
         oficina.contratarFuncionario(novoFuncionario);
     }
     /**
+ * Altera os dados de um cliente existente.
+ */
+    private static void alterarDadosCliente() {
+        System.out.println("\n=== ALTERAR DADOS DO CLIENTE ===");
+        String telefone = lerString("Digite o telefone do cliente: ");
+        
+        // Busca o cliente pelo telefone
+        Cliente cliente = oficina.getClientes().stream()
+            .filter(c -> c.getTelefone().equals(telefone))
+            .findFirst()
+            .orElse(null);
+        
+        if (cliente == null) {
+            System.out.println("Cliente não encontrado!");
+            return;
+        }
+        
+        boolean alterar = true;
+        while (alterar) {
+            System.out.println("\nCliente encontrado: " + cliente);
+            System.out.println("1. Alterar nome");
+            System.out.println("2. Alterar telefone");
+            System.out.println("3. Alterar endereço");
+            System.out.println("0. Voltar");
+            
+            int opcao = lerInteiro("Digite sua opção: ");
+            switch (opcao) {
+                case 1:
+                    String novoNome = lerString("Novo nome: ");
+                    cliente.setNome(novoNome);
+                    break;
+                case 2:
+                    String novoTelefone = lerString("Novo telefone: ");
+                    cliente.setTelefone(novoTelefone);
+                    break;
+                case 3:
+                    String novoEndereco = lerString("Novo endereço: ");
+                    cliente.setEndereco(novoEndereco);
+                    break;
+                case 0:
+                    alterar = false;
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        }
+        System.out.println("Dados do cliente atualizados com sucesso!");
+    }
+    /**
+ * Altera os dados de um funcionário existente.
+ */
+    private static void alterarDadosFuncionario() {
+        System.out.println("\n=== ALTERAR DADOS DO FUNCIONÁRIO ===");
+        String matricula = lerString("Digite a matrícula do funcionário: ");
+        
+        // Busca o funcionário pela matrícula
+        Funcionario funcionario = oficina.getFuncionarios().stream()
+            .filter(f -> f.getMatricula().equalsIgnoreCase(matricula))
+            .findFirst()
+            .orElse(null);
+        
+        if (funcionario == null) {
+            System.out.println("Funcionário não encontrado!");
+            return;
+        }
+        
+        boolean alterar = true;
+        while (alterar) {
+            System.out.println("\nFuncionário encontrado: " + funcionario);
+            System.out.println("1. Alterar nome");
+            System.out.println("2. Alterar telefone");
+            System.out.println("3. Alterar endereço");
+            System.out.println("4. Alterar cargo");
+            System.out.println("5. Alterar salário");
+            System.out.println("0. Voltar");
+            
+            int opcao = lerInteiro("Digite sua opção: ");
+            switch (opcao) {
+                case 1:
+                    String novoNome = lerString("Novo nome: ");
+                    funcionario.setNome(novoNome);
+                    break;
+                case 2:
+                    String novoTelefone = lerString("Novo telefone: ");
+                    funcionario.setTelefone(novoTelefone);
+                    break;
+                case 3:
+                    String novoEndereco = lerString("Novo endereço: ");
+                    funcionario.setEndereco(novoEndereco);
+                    break;
+                case 4:
+                    String novoCargo = lerString("Novo cargo: ");
+                    funcionario.setCargo(novoCargo);
+                    break;
+                case 5:
+                    double novoSalario = lerDouble("Novo salário: ");
+                    funcionario.setSalario(novoSalario);
+                    break;
+                case 0:
+                    alterar = false;
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        }
+        System.out.println("Dados do funcionário atualizados com sucesso!");
+    }
+
+    /**
      * Busca um funcionário pelo nome.
      */
     private static void buscarFuncionarioPorNome() {
@@ -618,6 +827,7 @@ public class SistemaOficinac {
         String matricula = lerString("Digite a matrícula do funcionário a ser removido: ");
         oficina.demitirFuncionario(matricula);
     }
+
     /**
      * Cadastra um novo serviço na oficina.
      */
@@ -807,6 +1017,18 @@ public class SistemaOficinac {
             throw new IllegalArgumentException("Dados incompletos no arquivo JSON.");
         }
     }
+    /***
+     * Altera a senha do usuário.
+     */
+    private static void alterarSenha() {
+        System.out.println("\n=== ALTERAR SENHA ===");
+        String usuario = lerString("Digite o nome de usuário: ");
+        String senhaAtual = lerString("Digite a senha atual: ");
+        String novaSenha = lerString("Digite a nova senha: ");
+        
+        // Chama o método da classe Login para alterar a senha
+        loginManager.alterarSenha(usuario, senhaAtual, novaSenha);
+    }  
     // Métodos auxiliares para leitura de entrada
     /**
      * Lê uma string do console.

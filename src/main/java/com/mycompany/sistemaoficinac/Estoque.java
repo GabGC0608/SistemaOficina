@@ -125,6 +125,20 @@ public class Estoque {
             .ifPresent(item -> item.setQuantidade(novaQuantidade));
         System.out.println("Quantidade atualizada com sucesso!");
     }
+    public void venderItem(String codigo, int quantidade) {
+        for (ItemEstoque item : itens) {
+            if (item.getCodigo().equals(codigo)) {
+                if (item.getQuantidade() >= quantidade) {
+                    item.setQuantidade(item.getQuantidade() - quantidade);
+                    System.out.println("Venda realizada com sucesso!");
+                } else {
+                    System.out.println("Quantidade insuficiente em estoque.");
+                }
+                return;
+            }
+        }
+        System.out.println("Item não encontrado no estoque.");
+    }
 
     /**
      * Lista todos os itens do estoque.

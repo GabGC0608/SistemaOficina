@@ -61,6 +61,20 @@ public class Login {
         }
         return null;
     }
+    /***
+     * 
+     * @param usuario
+     * @param novaSenha
+    */
+    public void alterarSenha(String usuario, String senhaAtual, String novaSenha) {
+        // Verifica se o usuário existe e a senha atual está correta
+        if (credenciais.containsKey(usuario) && credenciais.get(usuario).equals(senhaAtual)) {
+            credenciais.put(usuario, novaSenha); // Atualiza a senha
+            System.out.println("Senha alterada com sucesso!");
+        } else {
+            System.out.println("Erro: Usuário não encontrado ou senha atual incorreta.");
+        }
+    }
 
     /**
      * Retorna uma representação em string do objeto Login, mostrando todas as credenciais e permissões.

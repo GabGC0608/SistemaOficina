@@ -20,75 +20,75 @@ public class Estoque {
         this.itens = new ArrayList<>();
     }
 
+/**
+ * Classe interna que representa um item no estoque.
+ */
+public static class ItemEstoque {
+    private String codigo; // Código do item
+    private String nome; // Nome do item
+    private int quantidade; // Quantidade disponível no estoque
+
     /**
-     * Classe interna que representa um item no estoque.
+     * Construtor da classe ItemEstoque.
+     *
+     * @param codigo Código do item.
+     * @param nome Nome do item.
+     * @param quantidade Quantidade do item.
      */
-    public static class ItemEstoque {
-        private String codigo; // Código do item
-        private String nome; // Nome do item
-        private int quantidade; // Quantidade disponível no estoque
-
-        /**
-         * Construtor da classe ItemEstoque.
-         *
-         * @param codigo Código do item.
-         * @param nome Nome do item.
-         * @param quantidade Quantidade do item.
-         */
-        public ItemEstoque(@JsonProperty("codigo") String codigo,
-                           @JsonProperty("nome") String nome,
-                           @JsonProperty("quantidade") int quantidade) {
-            this.codigo = codigo;
-            this.nome = nome;
-            this.quantidade = quantidade;
-        }
-
-        /**
-         * Obtém o código do item.
-         *
-         * @return Código do item.
-         */
-        public String getCodigo() {
-            return codigo;
-        }
-
-        /**
-         * Obtém o nome do item.
-         *
-         * @return Nome do item.
-         */
-        public String getNome() {
-            return nome;
-        }
-
-        /**
-         * Obtém a quantidade do item.
-         *
-         * @return Quantidade do item.
-         */
-        public int getQuantidade() {
-            return quantidade;
-        }
-
-        /**
-         * Define a quantidade do item.
-         *
-         * @param quantidade Nova quantidade do item.
-         */
-        public void setQuantidade(int quantidade) {
-            this.quantidade = quantidade;
-        }
-
-        /**
-         * Retorna uma representação textual do item.
-         *
-         * @return String representando o item.
-         */
-        @Override
-        public String toString() {
-            return String.format("%s - %s | Quantidade: %d", codigo, nome, quantidade);
-        }
+    public ItemEstoque(@JsonProperty("codigo") String codigo,
+                       @JsonProperty("nome") String nome,
+                       @JsonProperty("quantidade") int quantidade) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.quantidade = quantidade;
     }
+
+    /**
+     * Obtém o código do item.
+     *
+     * @return Código do item.
+     */
+    public String getCodigo() {
+        return codigo;
+    }
+
+    /**
+     * Obtém o nome do item.
+     *
+     * @return Nome do item.
+     */
+    public String getNome() {
+        return nome;
+    }
+
+    /**
+     * Obtém a quantidade do item.
+     *
+     * @return Quantidade do item.
+     */
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    /**
+     * Define a quantidade do item.
+     *
+     * @param quantidade Nova quantidade do item.
+     */
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    /**
+     * Retorna uma representação textual do item.
+     *
+     * @return String representando o item.
+     */
+    @Override
+    public String toString() {
+        return String.format("%s - %s | Quantidade: %d", codigo, nome, quantidade);
+    }
+}
 
     /**
      * Adiciona um novo item ao estoque.

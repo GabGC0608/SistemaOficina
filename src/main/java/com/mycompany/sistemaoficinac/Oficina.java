@@ -157,6 +157,17 @@ public class Oficina {
             System.out.println("Serviço não encontrado!");
         }
     }
+    /**
+     * Cancela um agendamento e registra o valor retido no caixa.
+     *
+     * @param index Índice do agendamento a ser cancelado.
+     */
+    public void cancelarAgendamento(int index) {
+        double valorRetido = agenda.cancelarAgendamento(index); // Cancela o agendamento e obtém o valor retido
+        if (valorRetido > 0) {
+            caixa.registrarEntrada(valorRetido, "Cancelamento de agendamento", "Data do cancelamento");
+        }
+    }
 
     // Métodos para gerenciar funcionários
     /**
@@ -311,6 +322,52 @@ public class Oficina {
      */
     public List<Cliente> getClientes() {
         return clientes;
+    }
+    /***
+     * Define o caixa financeiro da oficina.
+     */
+    public void setCaixa(Caixa caixa) {
+        this.caixa = caixa;
+    }
+
+
+    /***
+     * Define o estoque da oficina.
+     * @param estoque
+     */
+    public void setEstoque(Estoque estoque) {
+        this.estoque = estoque;
+    }
+
+
+    /***
+     * Define a lista de funcionários.
+     * @param funcionarios Lista de funcionários a ser definida.
+     */
+    public void setFuncionarios(List<Funcionario> funcionarios) {
+        this.funcionarios = funcionarios;
+    }
+    /***
+     * Define a lista de clientes.
+     * @param clientes Lista de clientes a ser definida.
+     */
+    public void setClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
+    }
+    
+    /**
+     * Define a lista de serviços.
+     * @param servicos
+     */
+    public void setServicos(List<Servico> servicos) {
+        this.servicos = servicos;
+    }
+    /***
+     * Define a lista de serviços.
+     * @param servicos Lista de serviços a ser definida.
+     */
+    public void setAgenda(Agenda agenda) {
+        this.agenda = agenda;
     }
 
     /**

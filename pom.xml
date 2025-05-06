@@ -31,7 +31,7 @@
         </dependency>
     </dependencies>
     <name>SistemaOficinac</name>
-   <build>
+ <build>
     <plugins>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -41,7 +41,22 @@
                 <source>17</source>
                 <detectJavaApiLink>false</detectJavaApiLink>
                 <additionalOptions>-Xdoclint:none</additionalOptions>
+                <failOnError>false</failOnError>
+                <sourcepath>${project.basedir}/src/main/java</sourcepath>
+                <!-- Força a documentação mesmo sem classes públicas -->
+                <doclint>none</doclint>
+                <includeDependencySources>true</includeDependencySources>
+                <!-- Especifica explicitamente seu pacote principal -->
+                <packages>com.mycompany.sistemaoficinac</packages>
             </configuration>
+            <executions>
+                <execution>
+                    <id>attach-javadocs</id>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                </execution>
+            </executions>
         </plugin>
     </plugins>
 </build>

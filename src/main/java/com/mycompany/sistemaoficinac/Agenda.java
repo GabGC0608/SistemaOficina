@@ -191,11 +191,12 @@ public class Agenda {
     }
 
     /**
-     * Cancela um agendamento com base no índice, retendo 20% do valor do serviço.
-     *
-     * @param index Índice do agendamento a ser cancelado.
-     */
-    public void cancelarAgendamento(int index) {
+ * Cancela um agendamento com base no índice, retendo 20% do valor do serviço.
+ *
+ * @param index Índice do agendamento a ser cancelado.
+ * @return Valor retido (20% do valor do serviço).
+ */
+    public double cancelarAgendamento(int index) {
         if (index >= 0 && index < agendamentos.size()) {
             Agendamento agendamento = agendamentos.get(index);
             double valorServico = agendamento.getServico().getValor();
@@ -207,8 +208,11 @@ public class Agenda {
 
             agendamentos.remove(index);
             System.out.println("Agendamento cancelado com sucesso!");
+
+            return valorRetido; // Retorna o valor retido
         } else {
             System.out.println("Índice inválido!");
+            return 0; // Retorna 0 caso o índice seja inválido
         }
     }
     /**

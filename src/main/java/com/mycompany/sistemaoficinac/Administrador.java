@@ -69,4 +69,15 @@ public class Administrador extends Funcionario {
         System.out.println("Total de funcionários: " + funcionarios.size());
         System.out.println("Total de clientes: " + clientes.size());
     }
+    @Override
+    public String toString() {
+        return "Administrador{" +
+                "nome='" + getNome() + '\'' +
+                ", telefone='" + getTelefone() + '\'' +
+                ", endereco='" + getEndereco() + '\'' +
+                ", cargo='" + getCargo() + '\'' +
+                ", salario=" + getSalario() +
+                ", matricula='" + getMatricula() + '\'' +
+                '}';
+    }
 }

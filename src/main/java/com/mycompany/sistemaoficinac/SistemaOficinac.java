@@ -1,6 +1,23 @@
 
 
 package com.mycompany.sistemaoficinac;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+
 /**
  * Classe principal do sistema de gerenciamento de oficina mecânica.
  * <p>
@@ -10,17 +27,6 @@ package com.mycompany.sistemaoficinac;
  * @version 1.0
  * @author Gabriel
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-
 public class SistemaOficinac {
     private static final String ARQUIVO_DADOS = "data/ficina.json";
     private static Oficina oficina = new Oficina();
@@ -43,7 +49,7 @@ public class SistemaOficinac {
     public static void main(String[] args) {
         
         try {
-            carregarDados(); // Carrega os dados da oficina e do login
+            carregarDados();    // Carrega os dados da oficina e do login
         } catch (IOException | ClassNotFoundException | IllegalArgumentException e) {
             System.err.println("Erro ao carregar os dados: " + e.getMessage());
             System.out.println("Deseja criar um novo sistema? (S/N)");
@@ -82,14 +88,6 @@ public class SistemaOficinac {
         }
         
     
-        // Direciona para o menu apropriado
-        if (tipoUsuario.equals("Administrador")) {
-            exibirMenuAdministrador();
-        } else if (tipoUsuario.equals("Funcionario")) {
-            exibirMenuFuncionario();
-        } else {
-            System.out.println("Tipo de usuário inválido!");
-        }
     
         
         
@@ -664,12 +662,26 @@ public class SistemaOficinac {
     /**
      * Lista todos os veículos cadastrados na oficina.
      */
+    /**
+ * Lista todos os veículos cadastrados na oficina.
+ */
     private static void listarTodosVeiculos() {
         System.out.println("\n=== TODOS OS VEÍCULOS ===");
-        oficina.getClientes().forEach(cliente -> {
-            System.out.println("\nCliente: " + cliente.getNome());
-            cliente.listarVeiculos();
-        });
+        boolean encontrouVeiculos = false;
+
+        for (Cliente cliente : oficina.getClientes()) {
+            if (cliente.getVeiculos() != null && !cliente.getVeiculos().isEmpty()) {
+                System.out.println("\nCliente: " + cliente.getNome());
+                for (Veiculo veiculo : cliente.getVeiculos()) {
+                    System.out.println("Modelo: " + veiculo.getModelo() + ", Placa: " + veiculo.getPlaca());
+                }
+                encontrouVeiculos = true;
+        }
+    }
+
+        if (!encontrouVeiculos) {
+            System.out.println("Nenhum veículo cadastrado.");
+        }
     }
     /**
      * Busca um veículo pelo número da placa.
@@ -919,14 +931,16 @@ public class SistemaOficinac {
         String status = lerString("Digite o status (Agendado/Concluído/Cancelado): ");
         oficina.getAgenda().listarAgendamentosPorStatus(status);
     }
-    /**
+        /**
      * Cancela um agendamento existente.
      */
     private static void cancelarAgendamento() {
         oficina.getAgenda().listarAgendamentos();
         int index = lerInteiro("Digite o número do agendamento a cancelar: ");
-        oficina.getAgenda().cancelarAgendamento(index);
+        oficina.cancelarAgendamento(index); // Chama o método ajustado da classe Oficina
     }
+
+    
     /**
      * Conclui um agendamento existente.
      */
@@ -975,48 +989,147 @@ public class SistemaOficinac {
         oficina.gerarRelatorioMensal(mes, ano);
     }
     /**
-     * Salva os dados da oficina e do login em um arquivo JSON.
-     * @throws IOException Se ocorrer um erro durante a escrita no arquivo
-     */
+ * Salva os dados de todas as classes em arquivos JSON separados.
+ * @throws IOException Se ocorrer um erro durante a escrita nos arquivos.
+ */
     public static void salvarDados() throws IOException {
-        if (oficina == null || loginManager == null) {
-            System.err.println("Erro: Dados inválidos. Não é possível salvar.");
-            return;
-        }
+        ObjectMapper mapper = new ObjectMapper();
 
-        Map<String, Object> dadosCompletos = new HashMap<>();
-        dadosCompletos.put("oficina", oficina);
-        dadosCompletos.put("login", loginManager);
+        // Salva os dados da oficina
+        mapper.writeValue(new File("data/oficina.json"), oficina);
+        System.out.println("Dados da oficina salvos com sucesso!");
 
-        // Tenta salvar no arquivo principal
-        JsonUtil.salvarParaJson(dadosCompletos, ARQUIVO_DADOS);
-        System.out.println("Dados salvos com sucesso no arquivo: " + ARQUIVO_DADOS);
+        // Salva os dados de login
+        mapper.writeValue(new File("data/login.json"), loginManager);
+        System.out.println("Dados de login salvos com sucesso!");
+
+        // Salva o contador de veículos
+        mapper.writeValue(new File("data/contadorVeiculos.json"), contadorVeiculos);
+        System.out.println("Contador de veículos salvo com sucesso!");
+
+        // Salva os dados de clientes
+        mapper.writeValue(new File("data/clientes.json"), oficina.getClientes());
+        System.out.println("Dados dos clientes salvos com sucesso!");
+
+        // Salva os dados de funcionários
+        mapper.writeValue(new File("data/funcionarios.json"), oficina.getFuncionarios());
+        System.out.println("Dados dos funcionários salvos com sucesso!");
+
+        // Salva os dados de serviços
+        mapper.writeValue(new File("data/servicos.json"), oficina.getServicos());
+        System.out.println("Dados dos serviços salvos com sucesso!");
+
+        // Salva os dados do estoque
+        mapper.writeValue(new File("data/estoque.json"), oficina.getEstoque());
+        System.out.println("Dados do estoque salvos com sucesso!");
+
+        // Salva os dados da agenda
+        mapper.writeValue(new File("data/agenda.json"), oficina.getAgenda());
+        System.out.println("Dados da agenda salvos com sucesso!");
+
+        // Salva os dados do caixa
+        mapper.writeValue(new File("data/caixa.json"), oficina.getCaixa());
+        System.out.println("Dados do caixa salvos com sucesso!");
     }
-    /**
- * Carrega os dados da oficina e do login a partir de um arquivo JSON.
- * @throws IOException Se ocorrer um erro durante a leitura do arquivo
- * @throws ClassNotFoundException Se ocorrer um erro na desserialização dos objetos
+
+
+/**
+ * Carrega os dados de todas as classes a partir de arquivos JSON separados.
+ * @throws IOException Se ocorrer um erro durante a leitura dos arquivos.
+ * @throws ClassNotFoundException Se ocorrer um erro na desserialização dos objetos.
  */
     private static void carregarDados() throws IOException, ClassNotFoundException {
-        File arquivo = new File(ARQUIVO_DADOS);
-        
-        if (!arquivo.exists()) {
-            System.out.println("Arquivo não encontrado. Criando novo sistema...");
+        File arquivoOficina = new File("data/oficina.json");
+        File arquivoLogin = new File("data/login.json");
+        File arquivoClientes = new File("data/clientes.json");
+        File arquivoFuncionarios = new File("data/funcionarios.json");
+        File arquivoServicos = new File("data/servicos.json");
+        File arquivoEstoque = new File("data/estoque.json");
+        File arquivoAgenda = new File("data/agenda.json");
+        File arquivoCaixa = new File("data/caixa.json");
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        if (!arquivoOficina.exists() || !arquivoLogin.exists()) {
+            System.out.println("Arquivos de dados não encontrados. Criando novo sistema...");
             oficina = new Oficina();
             loginManager = new Login();
+            contadorVeiculos = 0;
             return;
         }
 
-        Map<String, Object> dadosCompletos = JsonUtil.carregarDeJson(ARQUIVO_DADOS, Map.class);
+        // Carrega os dados da oficina
+        oficina = mapper.readValue(arquivoOficina, Oficina.class);
+        System.out.println("Dados da oficina carregados com sucesso!");
 
-        if (dadosCompletos.containsKey("oficina") && dadosCompletos.containsKey("login")) {
-            oficina = JsonUtil.deJsonString(JsonUtil.paraJsonString(dadosCompletos.get("oficina")), Oficina.class);
-            loginManager = JsonUtil.deJsonString(JsonUtil.paraJsonString(dadosCompletos.get("login")), Login.class);
-            System.out.println("Dados carregados com sucesso!");
+        // Carrega os dados de login
+        loginManager = mapper.readValue(arquivoLogin, Login.class);
+        System.out.println("Dados de login carregados com sucesso!");
+
+        // Carrega o contador de veículos
+        File arquivoContador = new File("data/contadorVeiculos.json");
+        if (arquivoContador.exists()) {
+            contadorVeiculos = mapper.readValue(arquivoContador, Integer.class);
+            System.out.println("Contador de veículos carregado com sucesso!");
         } else {
-            throw new IllegalArgumentException("Dados incompletos no arquivo JSON.");
+            contadorVeiculos = 0;
+        }
+
+        // Carrega os dados de clientes
+        if (arquivoClientes.exists()) {
+            List<Cliente> clientes = mapper.readValue(arquivoClientes, new TypeReference<List<Cliente>>() {});
+            oficina.setClientes(clientes);
+            System.out.println("Dados dos clientes carregados com sucesso!");
+        } else {
+            oficina.setClientes(new ArrayList<>());
+        }
+
+        // Carrega os dados de funcionários
+        if (arquivoFuncionarios.exists()) {
+            List<Funcionario> funcionarios = mapper.readValue(arquivoFuncionarios, new TypeReference<List<Funcionario>>() {});
+            oficina.setFuncionarios(funcionarios);
+            System.out.println("Dados dos funcionários carregados com sucesso!");
+        } else {
+            oficina.setFuncionarios(new ArrayList<>());
+        }
+
+        // Carrega os dados de serviços
+        if (arquivoServicos.exists()) {
+            List<Servico> servicos = mapper.readValue(arquivoServicos, new TypeReference<List<Servico>>() {});
+            oficina.setServicos(servicos);
+            System.out.println("Dados dos serviços carregados com sucesso!");
+        } else {
+            oficina.setServicos(new ArrayList<>());
+        }
+
+        // Carrega os dados do estoque
+        if (arquivoEstoque.exists()) {
+            Estoque estoque = mapper.readValue(arquivoEstoque, Estoque.class);
+            oficina.setEstoque(estoque);
+            System.out.println("Dados do estoque carregados com sucesso!");
+        } else {
+            oficina.setEstoque(new Estoque());
+        }
+
+        // Carrega os dados da agenda
+        if (arquivoAgenda.exists()) {
+            Agenda agenda = mapper.readValue(arquivoAgenda, Agenda.class);
+            oficina.setAgenda(agenda);
+            System.out.println("Dados da agenda carregados com sucesso!");
+        } else {
+            oficina.setAgenda(new Agenda());
+        }
+
+        // Carrega os dados do caixa
+        if (arquivoCaixa.exists()) {
+            Caixa caixa = mapper.readValue(arquivoCaixa, Caixa.class);
+            oficina.setCaixa(caixa);
+            System.out.println("Dados do caixa carregados com sucesso!");
+        } else {
+            oficina.setCaixa(new Caixa());
         }
     }
+    
     /***
      * Altera a senha do usuário.
      */
@@ -1073,26 +1186,19 @@ public class SistemaOficinac {
         }
     }
 
-    // Método para inicializar dados de demonstração
-   
-    /**
+        /**
      * Inicializa dados de demonstração para facilitar o uso do sistema.
      * <p>
-     * Este método cria funcionários, clientes e serviços de exemplo para
-     * demonstrar as funcionalidades do sistema.
+     * Este método cria funcionários, clientes, veículos, serviços e agendamentos de exemplo
+     * para demonstrar as funcionalidades do sistema.
      * </p>
      */
     private static void inicializarDadosDemonstracao() {
-       
-    
-        
-        
-        
         // Cadastrar funcionários de demonstração
         Funcionario mecanico = new Funcionario("João Silva", "11987654321", "Rua A, 123", 
                                             "Mecânico", 2500.00, "MEC001");
         Administrador admin = new Administrador("Maria Souza", "11912345678", "Rua B, 456", 
-                                             4500.00, "ADM001");
+                                            4500.00, "ADM001");
         oficina.contratarFuncionario(mecanico);
         oficina.contratarFuncionario(admin);
         
@@ -1107,16 +1213,20 @@ public class SistemaOficinac {
         
         oficina.cadastrarCliente(cliente1);
         oficina.cadastrarCliente(cliente2);
+        
+        // Adicionar itens ao estoque
         oficina.adicionarItemEstoque("P001", "Pastilha de Freio", 20);
         oficina.adicionarItemEstoque("F001", "Filtro de Óleo", 15);
         oficina.adicionarItemEstoque("V001", "Vela de Ignição", 30);
-    
-    
 
         // Adicionar serviços adicionais
         oficina.adicionarServico(new Servico("Troca de Pastilhas", "Troca das pastilhas de freio", 180.00, 45));
         oficina.adicionarServico(new Servico("Diagnóstico Eletrônico", "Leitura de falhas do sistema", 150.00, 30));
-        
+
+        // Agendar serviços para os clientes
+        oficina.agendarServico(cliente1, veiculo1, "Troca de Pastilhas", mecanico, "10/05/2025 14:00", "Agendado");
+        oficina.agendarServico(cliente2, veiculo2, "Diagnóstico Eletrônico", mecanico, "11/05/2025 09:00", "Agendado");
+
         System.out.println("\nDados de demonstração cadastrados com sucesso!");
     }
 

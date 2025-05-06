@@ -45,12 +45,16 @@ public class Caixa {
             this.data = data;
         }
 
+        /**
+         * Retorna uma representação textual da transação.
+         *
+         * @return String representando a transação.
+         */
         @Override
         public String toString() {
             return tipo + ": R$" + valor + " - " + descricao + " (" + data + ")";
         }
-    }
-
+    }  
     /**
      * Registra uma entrada no caixa.
      *
@@ -121,6 +125,7 @@ public class Caixa {
 
     /**
      * Obtém o saldo atual do caixa.
+     * 
      *
      * @return Saldo atual.
      */

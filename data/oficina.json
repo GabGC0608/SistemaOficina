@@ -213,7 +213,7 @@
         "matricula" : "MEC001"
       },
       "dataHora" : "10/10/2025 16:20",
-      "status" : "A fazer",
+      "status" : "Concluído",
       "valorTotal" : 300.0
     } ]
   },
@@ -230,10 +230,14 @@
       "codigo" : "V001",
       "nome" : "Vela de Ignição",
       "quantidade" : 30
+    }, {
+      "codigo" : "1",
+      "nome" : "retrovisor",
+      "quantidade" : 1000
     } ]
   },
   "caixa" : {
-    "saldo" : 0.0
+    "saldo" : -107000.0
   },
   "registrosPonto" : [ ]
 }

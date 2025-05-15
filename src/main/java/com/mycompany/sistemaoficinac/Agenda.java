@@ -274,7 +274,7 @@ public class Agenda {
      */
     public void concluirAgendamento(int index) {
         if (index >= 0 && index < agendamentos.size()) {
-            agendamentos.get(index).status = "Concluído";
+            agendamentos.get(index).setStatus("Concluído");
             System.out.println("Agendamento concluído com sucesso!");
         } else {
             System.out.println("Índice inválido!");

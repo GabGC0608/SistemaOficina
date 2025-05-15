@@ -111,6 +111,7 @@ public class SistemaOficinac {
                         break;
                     case 3:
                         menuRelatorios();
+                        break;
                     case 4:
                         alterarSenha(); 
                         break;
@@ -1108,9 +1109,41 @@ public class SistemaOficinac {
      * Cancela um agendamento existente.
      */
     private static void cancelarAgendamento() {
+        // Listar agendamentos primeiro
         oficina.getAgenda().listarAgendamentos();
-        int index = lerInteiro("Digite o número do agendamento a cancelar: ");
-        oficina.cancelarAgendamento(index); // Chama o método ajustado da classe Oficina
+        
+        // Verificar se há agendamentos
+        if (oficina.getAgenda().getAgendamentos().isEmpty()) {
+            System.out.println("Não há agendamentos para cancelar.");
+            return;
+        }
+        
+        int index = lerInteiro("Digite o número do agendamento a cancelar: ") - 1;
+        
+        // Verificar se o índice é válido
+        if (index < 0 || index >= oficina.getAgenda().getAgendamentos().size()) {
+            System.out.println("Número de agendamento inválido!");
+            return;
+        }
+        
+        // Verificar status do agendamento
+        Agenda.Agendamento ag = oficina.getAgenda().getAgendamentos().get(index);
+        if ("Concluído".equalsIgnoreCase(ag.getStatus())) {
+            System.out.println("Não é possível cancelar um agendamento já concluído!");
+            return;
+        }
+        
+        // Mostrar detalhes e confirmar
+        System.out.println("\nAgendamento selecionado:");
+        System.out.println(ag);
+        String confirmacao = lerString("Deseja realmente cancelar este agendamento? (S/N): ");
+        
+        if (confirmacao.equalsIgnoreCase("S")) {
+            // Chama o método da classe Oficina para cancelar
+            oficina.cancelarAgendamento(index);
+        } else {
+            System.out.println("Cancelamento não realizado.");
+        }
     }
 
     
@@ -1118,24 +1151,62 @@ public class SistemaOficinac {
      * Conclui um agendamento existente.
      */
     private static void concluirAgendamento() {
+        // Listar agendamentos primeiro
         oficina.getAgenda().listarAgendamentos();
-        int index = lerInteiro("Digite o número do agendamento a concluir: ");
         
+        // Verificar se há agendamentos
+        if (oficina.getAgenda().getAgendamentos().isEmpty()) {
+            System.out.println("Não há agendamentos para concluir.");
+            return;
+        }
+        
+        int index = lerInteiro("Digite o número do agendamento a concluir: ") - 1;
+        
+        // Verificar se o índice é válido
+        if (index < 0 || index >= oficina.getAgenda().getAgendamentos().size()) {
+            System.out.println("Número de agendamento inválido!");
+            return;
+        }
+        
+        // Obter o agendamento
         Agenda.Agendamento ag = oficina.getAgenda().getAgendamentos().get(index);
         
-        // Conclui o agendamento
-        oficina.getAgenda().concluirAgendamento(index);
+        // Verificar status do agendamento
+        if ("Concluído".equalsIgnoreCase(ag.getStatus())) {
+            System.out.println("Este agendamento já foi concluído!");
+            return;
+        }
         
-        // Registrar um único pagamento com o valor total
-        String servicosStr = ag.getServicos().stream()
-                            .map(Servico::getNome)
-                            .collect(Collectors.joining(", "));
+        if ("Cancelado".equalsIgnoreCase(ag.getStatus())) {
+            System.out.println("Não é possível concluir um agendamento cancelado!");
+            return;
+        }
         
-        oficina.registrarPagamento(ag.getValorTotal(), 
-                                "Serviços: " + servicosStr + " - Cliente: " + ag.getCliente().getNome(), 
-                                ag.getDataHora().split(" ")[0]);
+        // Mostrar detalhes e confirmar
+        System.out.println("\nAgendamento selecionado:");
+        System.out.println(ag);
+        String confirmacao = lerString("Deseja realmente concluir este agendamento? (S/N): ");
         
-        System.out.println("Agendamento concluído e pagamento registrado com sucesso!");
+        if (confirmacao.equalsIgnoreCase("S")) {
+            // Conclui o agendamento
+            oficina.getAgenda().concluirAgendamento(index);
+            
+            // Registrar pagamento apenas se não estiver concluído
+            if (!"Concluído".equalsIgnoreCase(ag.getStatus())) {
+                String servicosStr = ag.getServicos().stream()
+                                    .map(Servico::getNome)
+                                    .collect(Collectors.joining(", "));
+                
+                String dataAtual = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                oficina.registrarPagamento(ag.getValorTotal(), 
+                                        "Serviços: " + servicosStr + " - Cliente: " + ag.getCliente().getNome(), 
+                                        dataAtual);
+                
+                System.out.println("Agendamento concluído e pagamento registrado com sucesso!");
+            }
+        } else {
+            System.out.println("Conclusão não realizada.");
+        }
     }
     /**
      * Registra um pagamento na oficina.

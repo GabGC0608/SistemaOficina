@@ -11,5 +11,9 @@
     "codigo" : "V001",
     "nome" : "Vela de Ignição",
     "quantidade" : 30
+  }, {
+    "codigo" : "1",
+    "nome" : "retrovisor",
+    "quantidade" : 1000
   } ]
 }

@@ -217,7 +217,8 @@ public class Oficina {
     public void cancelarAgendamento(int index) {
         double valorRetido = agenda.cancelarAgendamento(index); // Cancela o agendamento e obtém o valor retido
         if (valorRetido > 0) {
-            caixa.registrarEntrada(valorRetido, "Cancelamento de agendamento", "Data do cancelamento");
+            String dataAtual = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            caixa.registrarEntrada(valorRetido, "Cancelamento de agendamento", dataAtual);
         }
     }
 

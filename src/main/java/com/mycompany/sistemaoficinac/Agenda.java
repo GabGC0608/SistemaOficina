@@ -100,7 +100,10 @@ public class Agenda {
         public void setCliente(Cliente cliente) {
             this.cliente = cliente;
         }
-        
+        /***
+         * Calcula o valor total do agendamento somando os valores dos serviços.
+         * @return Valor total do agendamento.
+         */
         private double calcularValorTotal() {
             return servicos.stream().mapToDouble(Servico::getValor).sum();
         }
@@ -136,6 +139,7 @@ public class Agenda {
          * Define o serviço do agendamento.
          *
          * @param servico Novo serviço do agendamento.
+         * 
          */
         public void setServicos(List<Servico> servicos) {
             this.servicos = servicos;

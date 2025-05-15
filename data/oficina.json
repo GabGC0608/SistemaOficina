@@ -10,9 +10,9 @@
     "nome" : "Maria Souza",
     "telefone" : "11912345678",
     "endereco" : "Rua B, 456",
+    "cargo" : "Administrador",
     "salario" : 4500.0,
-    "matricula" : "ADM001",
-    "cargo" : "Administrador"
+    "matricula" : "ADM001"
   } ],
   "clientes" : [ {
     "nome" : "Carlos Oliveira",
@@ -198,10 +198,10 @@
         "tempoEstimado" : 30,
         "requerElevador" : false
       }, {
-        "nome" : "Revisão Básica",
-        "descricao" : "Revisão de 10 itens",
-        "valor" : 250.0,
-        "tempoEstimado" : 60,
+        "nome" : "Alinhamento",
+        "descricao" : "Alinhamento e balanceamento",
+        "valor" : 180.0,
+        "tempoEstimado" : 45,
         "requerElevador" : false
       } ],
       "responsavel" : {
@@ -214,7 +214,7 @@
       },
       "dataHora" : "10/10/2025 16:20",
       "status" : "A fazer",
-      "valorTotal" : 370.0
+      "valorTotal" : 300.0
     } ]
   },
   "estoque" : {

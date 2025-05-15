@@ -55,6 +55,7 @@ public class Agenda {
         private Funcionario responsavel; // Funcionário responsável pelo serviço
         private String dataHora; // Data e hora do agendamento
         private String status; // Status do agendamento (ex.: "Pendente", "Concluído")
+        private double valorTotal; 
 
         /**
          * Construtor da classe Agendamento.
@@ -79,6 +80,7 @@ public class Agenda {
             this.responsavel = responsavel;
             this.dataHora = dataHora;
             this.status = status;
+            this.valorTotal = calcularValorTotal();
         }
 
         /**
@@ -97,6 +99,10 @@ public class Agenda {
          */
         public void setCliente(Cliente cliente) {
             this.cliente = cliente;
+        }
+        
+        private double calcularValorTotal() {
+            return servicos.stream().mapToDouble(Servico::getValor).sum();
         }
 
         /**
@@ -133,6 +139,8 @@ public class Agenda {
          */
         public void setServicos(List<Servico> servicos) {
             this.servicos = servicos;
+            this.valorTotal = calcularValorTotal();
+            
         }
 
         /**

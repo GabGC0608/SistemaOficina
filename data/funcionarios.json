@@ -9,7 +9,7 @@
   "nome" : "Maria Souza",
   "telefone" : "11912345678",
   "endereco" : "Rua B, 456",
-  "cargo" : "Administrador",
   "salario" : 4500.0,
-  "matricula" : "ADM001"
+  "matricula" : "ADM001",
+  "cargo" : "Administrador"
 } ]

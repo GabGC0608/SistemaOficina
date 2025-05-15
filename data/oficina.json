@@ -10,9 +10,9 @@
     "nome" : "Maria Souza",
     "telefone" : "11912345678",
     "endereco" : "Rua B, 456",
-    "cargo" : "Administrador",
     "salario" : 4500.0,
-    "matricula" : "ADM001"
+    "matricula" : "ADM001",
+    "cargo" : "Administrador"
   } ],
   "clientes" : [ {
     "nome" : "Carlos Oliveira",
@@ -203,12 +203,6 @@
         "valor" : 250.0,
         "tempoEstimado" : 60,
         "requerElevador" : false
-      }, {
-        "nome" : "Troca de Óleo",
-        "descricao" : "Troca do óleo do motor",
-        "valor" : 200.0,
-        "tempoEstimado" : 60,
-        "requerElevador" : false
       } ],
       "responsavel" : {
         "nome" : "João Silva",
@@ -220,7 +214,7 @@
       },
       "dataHora" : "10/10/2025 16:20",
       "status" : "A fazer",
-      "valorTotal" : 570.0
+      "valorTotal" : 370.0
     } ]
   },
   "estoque" : {

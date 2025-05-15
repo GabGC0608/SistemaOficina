@@ -25,34 +25,27 @@ public class Caixa {
      * Classe interna que representa uma transação no caixa.
      */
     private static class Transacao {
-        private String tipo; // Tipo da transação: "Entrada" ou "Saída"
-        private double valor; // Valor da transação
-        private String descricao; // Descrição da transação
-        private String data; // Data da transação
+        private String tipo; // "Entrada" ou "Saída"
+        private double valor;
+        private String descricao;
+        private String data;
+        private String categoria; // Nova propriedade para categorizar as transações
 
-        /**
-         * Construtor da classe Transacao.
-         *
-         * @param tipo Tipo da transação.
-         * @param valor Valor da transação.
-         * @param descricao Descrição da transação.
-         * @param data Data da transação.
-         */
         public Transacao(String tipo, double valor, String descricao, String data) {
+            this(tipo, valor, descricao, data, "Outros");
+        }
+
+        public Transacao(String tipo, double valor, String descricao, String data, String categoria) {
             this.tipo = tipo;
             this.valor = valor;
             this.descricao = descricao;
             this.data = data;
+            this.categoria = categoria;
         }
 
-        /**
-         * Retorna uma representação textual da transação.
-         *
-         * @return String representando a transação.
-         */
         @Override
         public String toString() {
-            return tipo + ": R$" + valor + " - " + descricao + " (" + data + ")";
+            return String.format("%s: R$ %.2f - %s (%s) [%s]", tipo, valor, descricao, data, categoria);
         }
     }  
     /**
@@ -139,15 +132,51 @@ public class Caixa {
      * @param mes Mês para o relatório.
      * @param ano Ano para o relatório.
      */
+    /**
+ * Gera um relatório mensal detalhado com categorias de despesas.
+ *
+ * @param mes Mês para o relatório.
+ * @param ano Ano para o relatório.
+ */
     public void gerarRelatorioMensal(int mes, int ano) {
         System.out.println("\n=== RELATÓRIO MENSAL (" + mes + "/" + ano + ") ===");
+        
+        // Categorias de despesas
+        double totalSalarios = 0;
+        double totalPecas = 0;
+        double outrasDespesas = 0;
+        double totalEntradas = 0;
+        
         for (Transacao transacao : transacoes) {
             String[] dataParts = transacao.data.split("/");
             int transacaoMes = Integer.parseInt(dataParts[1]);
             int transacaoAno = Integer.parseInt(dataParts[2]);
+            
             if (transacaoMes == mes && transacaoAno == ano) {
                 System.out.println(transacao);
+                
+                if (transacao.tipo.equals("Entrada")) {
+                    totalEntradas += transacao.valor;
+                } else {
+                    if (transacao.descricao.contains("Pagamento de salários")) {
+                        totalSalarios += transacao.valor;
+                    } else if (transacao.descricao.contains("Compra de peças")) {
+                        totalPecas += transacao.valor;
+                    } else {
+                        outrasDespesas += transacao.valor;
+                    }
+                }
             }
         }
+        
+        // Resumo financeiro
+        System.out.println("\n=== RESUMO FINANCEIRO ===");
+        System.out.printf("Total de entradas: R$ %.2f%n", totalEntradas);
+        System.out.printf("Total de despesas: R$ %.2f%n", (totalSalarios + totalPecas + outrasDespesas));
+        System.out.println("\nDetalhamento de despesas:");
+        System.out.printf("- Salários: R$ %.2f%n", totalSalarios);
+        System.out.printf("- Peças e materiais: R$ %.2f%n", totalPecas);
+        System.out.printf("- Outras despesas: R$ %.2f%n", outrasDespesas);
+        System.out.printf("\nSaldo final: R$ %.2f%n", (totalEntradas - (totalSalarios + totalPecas + outrasDespesas)));
     }
 }

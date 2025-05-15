@@ -5,6 +5,7 @@ com\mycompany\sistemaoficinac\Veiculo.class
 com\mycompany\sistemaoficinac\Caixa$Transacao.class
 com\mycompany\sistemaoficinac\Servico.class
 com\mycompany\sistemaoficinac\Cliente.class
+com\mycompany\sistemaoficinac\PontoFuncionario.class
 com\mycompany\sistemaoficinac\SistemaOficinac$2.class
 com\mycompany\sistemaoficinac\Oficina.class
 com\mycompany\sistemaoficinac\Estoque.class

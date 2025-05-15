@@ -43,8 +43,8 @@ public class Login {
         credenciais.put("admin", "admin123");
         permissoes.put("admin", "Administrador");
 
-        credenciais.put("funcionario1", "func123");
-        permissoes.put("funcionario1", "Funcionario");
+        credenciais.put("func", "func123");
+        permissoes.put("func", "Funcionario");
     }
 
     /**

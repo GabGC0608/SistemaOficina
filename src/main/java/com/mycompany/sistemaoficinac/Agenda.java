@@ -4,6 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * Classe que gerencia os agendamentos da oficina.
@@ -29,13 +34,24 @@ public class Agenda {
         this.agendamentos = agendamentos;
     }
 
+    public boolean verificarDisponibilidadeFuncionario(Funcionario funcionario, String dataHora) {
+        for (Agendamento agendamento : agendamentos) {
+            if (agendamento.getResponsavel().equals(funcionario)) {
+                if (agendamento.getDataHora().equals(dataHora)) {
+                    return false; // Funcionário já tem um agendamento neste horário
+                }
+            }
+        }
+        return true; // Funcionário está disponível
+    }
+
     /**
      * Classe interna que representa um agendamento.
      */
     public static class Agendamento {
         private Cliente cliente; // Cliente relacionado ao agendamento
         private Veiculo veiculo; // Veículo relacionado ao agendamento
-        private Servico servico; // Serviço a ser realizado
+         private List<Servico> servicos; // Serviço a ser realizado
         private Funcionario responsavel; // Funcionário responsável pelo serviço
         private String dataHora; // Data e hora do agendamento
         private String status; // Status do agendamento (ex.: "Pendente", "Concluído")
@@ -53,13 +69,13 @@ public class Agenda {
         @JsonCreator
         public Agendamento(@JsonProperty("cliente") Cliente cliente,
                            @JsonProperty("veiculo") Veiculo veiculo,
-                           @JsonProperty("servico") Servico servico,
+                           @JsonProperty("servicos") List<Servico> servicos,
                            @JsonProperty("responsavel") Funcionario responsavel,
                            @JsonProperty("dataHora") String dataHora,
                            @JsonProperty("status") String status) {
             this.cliente = cliente;
             this.veiculo = veiculo;
-            this.servico = servico;
+            this.servicos = servicos;
             this.responsavel = responsavel;
             this.dataHora = dataHora;
             this.status = status;
@@ -106,8 +122,8 @@ public class Agenda {
          *
          * @return Serviço do agendamento.
          */
-        public Servico getServico() {
-            return servico;
+        public List<Servico> getServicos() {
+            return servicos;
         }
 
         /**
@@ -115,8 +131,8 @@ public class Agenda {
          *
          * @param servico Novo serviço do agendamento.
          */
-        public void setServico(Servico servico) {
-            this.servico = servico;
+        public void setServicos(List<Servico> servicos) {
+            this.servicos = servicos;
         }
 
         /**
@@ -172,6 +188,31 @@ public class Agenda {
         public void setStatus(String status) {
             this.status = status;
         }
+        /***
+         * Obtém o valor total do agendamento.
+         * @return
+         */
+        public double getValorTotal() {
+            return servicos.stream().mapToDouble(Servico::getValor).sum();
+        }
+            /***
+             * Retorna uma representação em string do agendamento.
+             */
+        @Override
+        public String toString() {
+            String servicosStr = servicos.stream()
+                .map(Servico::getNome)
+                .collect(Collectors.joining(", "));
+            
+            return String.format("Cliente: %s | Veículo: %s | Serviços: %s | Responsável: %s | Data/Hora: %s | Status: %s | Valor Total: R$%.2f",
+                    cliente.getNome(),
+                    veiculo.getModelo(),
+                    servicosStr,
+                    responsavel.getNome(),
+                    dataHora,
+                    status,
+                    getValorTotal());
+        }
     }
 
     /**
@@ -184,35 +225,34 @@ public class Agenda {
      * @param dataHora Data e hora do agendamento.
      * @param status Status do agendamento.
      */
-    public void adicionarAgendamento(Cliente cliente, Veiculo veiculo, Servico servico,
-                                     Funcionario responsavel, String dataHora, String status) {
-        agendamentos.add(new Agendamento(cliente, veiculo, servico, responsavel, dataHora, status));
+    public void adicionarAgendamento(Cliente cliente, Veiculo veiculo, List<Servico> servicos, Funcionario responsavel, String dataHora, String status) {
+        agendamentos.add(new Agendamento(cliente, veiculo, servicos, responsavel, dataHora, status));
         System.out.println("Agendamento adicionado com sucesso!");
     }
 
-    /**
- * Cancela um agendamento com base no índice, retendo 20% do valor do serviço.
- *
- * @param index Índice do agendamento a ser cancelado.
- * @return Valor retido (20% do valor do serviço).
- */
+        /**
+     * Cancela um agendamento com base no índice, retendo 20% do valor do serviço.
+     *
+     * @param index Índice do agendamento a ser cancelado.
+     * @return Valor retido (20% do valor do serviço).
+     */
     public double cancelarAgendamento(int index) {
         if (index >= 0 && index < agendamentos.size()) {
             Agendamento agendamento = agendamentos.get(index);
-            double valorServico = agendamento.getServico().getValor();
-            double valorRetido = valorServico * 0.20;
+            double valorTotal = agendamento.getValorTotal();
+            double valorRetido = valorTotal * 0.20;
 
             System.out.println("Cancelando o agendamento...");
-            System.out.printf("Valor do serviço: R$ %.2f%n", valorServico);
+            System.out.printf("Valor total dos serviços: R$ %.2f%n", valorTotal);
             System.out.printf("Valor retido (20%%): R$ %.2f%n", valorRetido);
 
             agendamentos.remove(index);
             System.out.println("Agendamento cancelado com sucesso!");
 
-            return valorRetido; // Retorna o valor retido
+            return valorRetido;
         } else {
             System.out.println("Índice inválido!");
-            return 0; // Retorna 0 caso o índice seja inválido
+            return 0;
         }
     }
     /**
@@ -266,4 +306,7 @@ public class Agenda {
             }
         }
     }
+
+   
+
 }

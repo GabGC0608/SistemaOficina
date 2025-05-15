@@ -1,1 +1,15 @@
-[{"nome":"João Silva","telefone":"11987654321","endereco":"Rua A, 123","cargo":"Mecânico","salario":2500.0,"matricula":"MEC001"},{"nome":"Maria Souza","telefone":"11912345678","endereco":"Rua B, 456","cargo":"Administrador","salario":4500.0,"matricula":"ADM001"}]
+[ {
+  "nome" : "João Silva",
+  "telefone" : "11987654321",
+  "endereco" : "Rua A, 123",
+  "cargo" : "Mecânico",
+  "salario" : 2500.0,
+  "matricula" : "MEC001"
+}, {
+  "nome" : "Maria Souza",
+  "telefone" : "11912345678",
+  "endereco" : "Rua B, 456",
+  "cargo" : "Administrador",
+  "salario" : 4500.0,
+  "matricula" : "ADM001"
+} ]

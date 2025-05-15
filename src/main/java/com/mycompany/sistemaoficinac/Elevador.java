@@ -84,14 +84,14 @@ public class Elevador {
      *
      * @return O elevador alocado ou null se nenhum estiver disponível.
      */
-    public static Elevador alocarElevador() {
-        for (Elevador elevador : elevadores) {
-            if (elevador != null && "Disponível".equalsIgnoreCase(elevador.getEstado())) {
-                elevador.setEstado("Ocupado");
-                return elevador;
+    public static Elevador alocarElevador(int index) {
+        if (index >= 0 && index < elevadores.length && elevadores[index] != null) {
+            if ("Disponível".equalsIgnoreCase(elevadores[index].getEstado())) {
+                elevadores[index].setEstado("Ocupado");
+                return elevadores[index];
             }
         }
-        System.out.println("Nenhum elevador disponível no momento.");
+        System.out.println("Elevador não disponível ou inválido.");
         return null;
     }
 
@@ -100,10 +100,10 @@ public class Elevador {
      *
      * @param elevador Elevador a ser liberado.
      */
-    public static void liberarElevador(Elevador elevador) {
-        if (elevador != null) {
-            elevador.setEstado("Disponível");
-            System.out.println("Elevador modelo " + elevador.getModelo() + " liberado.");
+    public static void liberarElevador(int index) {
+        if (index >= 0 && index < elevadores.length && elevadores[index] != null) {
+            elevadores[index].setEstado("Disponível");
+            elevadores[index].setModelo("Nenhum");
         }
     }
 

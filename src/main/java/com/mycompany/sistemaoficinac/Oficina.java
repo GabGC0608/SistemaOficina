@@ -2,8 +2,13 @@ package com.mycompany.sistemaoficinac;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * Classe que representa a oficina mecânica.
@@ -17,6 +22,7 @@ public class Oficina {
     private Agenda agenda; // Agenda de serviços
     private Estoque estoque; // Estoque de itens
     private Caixa caixa; // Caixa financeiro da oficina
+    private List<PontoFuncionario> registrosPonto; // Lista de registros de ponto dos funcionários
 
     /**
      * Construtor da classe Oficina.
@@ -24,12 +30,14 @@ public class Oficina {
      */
     public Oficina() {
         this.elevadores = new Elevador[3]; // Supondo que a oficina tenha 3 elevadores
+        Elevador.inicializarElevadores();
         this.funcionarios = new ArrayList<>();
         this.clientes = new ArrayList<>();
         this.servicos = new ArrayList<>();
         this.agenda = new Agenda();
         this.caixa = new Caixa();
         this.estoque = new Estoque();
+        this.registrosPonto = new ArrayList<>();
         inicializarServicosPadrao();
     }
 
@@ -41,7 +49,51 @@ public class Oficina {
         servicos.add(new Servico("Revisão Básica", "Revisão de 10 itens", 250.00, 60));
         servicos.add(new Servico("Revisão Completa", "Revisão de 30 itens", 450.00, 120));
         servicos.add(new Servico("Alinhamento", "Alinhamento e balanceamento", 180.00, 45));
+        servicos.add(new Servico("Troca de Pneus", "Troca de pneus e balanceamento", 600.00, 90));
+        servicos.add(new Servico("Troca de Pastilhas", "Troca de pastilhas de freio", 200.00, 60));
+        servicos.add(new Servico("Troca de Bateria", "Troca de bateria do veículo", 300.00, 45));
+        servicos.add(new Servico("Troca de Filtro de Ar", "Troca do filtro de ar do motor", 100.00, 30));
+        servicos.add(new Servico("Troca de Filtro de Combustível", "Troca do filtro de combustível", 150.00, 30));
+        servicos.add(new Servico("Troca de Velas", "Troca de velas de ignição", 120.00, 30));
+        servicos.add(new Servico("Troca de Correia Dentada", "Troca da correia dentada", 400.00, 120));
+        servicos.add(new Servico("Troca de Fluido de Freio", "Troca do fluido de freio", 150.00, 30));    
     }
+    /***
+     * 
+     * @param matricula
+     * @param isEntrada
+     */
+    public void registrarPonto(String matricula, boolean isEntrada) {
+        if (isEntrada) {
+            registrosPonto.add(new PontoFuncionario(matricula, LocalDateTime.now(), null));
+        } else {
+            // Busca o último registro aberto para esta matrícula
+            for (int i = registrosPonto.size() - 1; i >= 0; i--) {
+                PontoFuncionario ponto = registrosPonto.get(i);
+                if (ponto.getMatricula().equals(matricula) && ponto.getSaida() == null) {
+                    ponto.setSaida(LocalDateTime.now());
+                    break;
+                }
+            }
+        }
+    }
+    /***
+     * Retorna a lista de registros de ponto dos funcionários.
+     * @return Lista de registros de ponto.
+     */
+
+    public List<PontoFuncionario> getRegistrosPonto() {
+        return registrosPonto;
+    }
+    /***
+     * Define a lista de registros de ponto dos funcionários.
+     * @param registrosPonto
+     */
+    public void setRegistrosPonto(List<PontoFuncionario> registrosPonto) {
+        this.registrosPonto = registrosPonto;
+    }
+    
+
 
     // Métodos para gerenciar o estoque
     /**
@@ -125,38 +177,38 @@ public class Oficina {
     /**
      * Agenda um serviço para um cliente.
      *
-     * @param cliente Cliente do serviço.
+     * @param cliente Cliente que solicita o serviço.
      * @param veiculo Veículo do cliente.
-     * @param nomeServico Nome do serviço.
-     * @param responsavel Funcionário responsável.
-     * @param dataHora Data e hora do serviço.
-     * @param status Status do serviço.
+     * @param servicos Lista de serviços a serem realizados.
+     * @param responsavel Funcionário responsável pelo serviço.
+     * @param dataHora Data e hora do agendamento.
+     * @param status Status do agendamento.
+     * 
      */
-    public void agendarServico(Cliente cliente, Veiculo veiculo, String nomeServico, Funcionario responsavel, String dataHora, String status) {
-        Servico servico = servicos.stream()
-            .filter(s -> s.getNome().equalsIgnoreCase(nomeServico))
-            .findFirst()
-            .orElse(null);
+    public void agendarServico(Cliente cliente, Veiculo veiculo, List<Servico> servicos, Funcionario responsavel, String dataHora, String status) {
+        // Verificar se há serviços que requerem elevador
+        boolean requerElevador = servicos.stream()
+            .anyMatch(s -> s.getNome().toLowerCase().contains("elevador"));
 
-        if (servico != null) {
-            if (servico.getNome().toLowerCase().contains("elevador")) { // Verifica se o serviço precisa de elevador
-                Elevador elevadorDisponivel = obterElevadorDisponivel();
-                if (elevadorDisponivel != null) {
-                    //elevadorDisponivel.setPeso(veiculo.getPeso()); // Atribui o peso do veículo ao elevador
-                    elevadorDisponivel.setModelo(veiculo.getModelo()); // Atribui o modelo do veículo ao elevador
-                    System.out.println("Veículo atribuído ao " + elevadorDisponivel.getModelo());
-                } else {
-                    status = "Aguardo"; // Todos os elevadores estão ocupados
-                    System.out.println("Todos os elevadores estão ocupados. Serviço em status de 'Aguardo'.");
-                }
+        if (requerElevador) {
+            Elevador elevadorDisponivel = obterElevadorDisponivel();
+            if (elevadorDisponivel != null) {
+                elevadorDisponivel.setModelo(veiculo.getModelo());
+                System.out.println("Veículo atribuído ao " + elevadorDisponivel.getModelo());
+            } else {
+                status = "Aguardo";
+                System.out.println("Todos os elevadores estão ocupados. Serviço em status de 'Aguardo'.");
             }
-
-            agenda.adicionarAgendamento(cliente, veiculo, servico, responsavel, dataHora, status);
-            System.out.println("Serviço agendado com sucesso!");
-        } else {
-            System.out.println("Serviço não encontrado!");
         }
+
+        agenda.adicionarAgendamento(cliente, veiculo, servicos, responsavel, dataHora, status);
+        System.out.println("Serviço(s) agendado(s) com sucesso!");
+
+        // Calcular e mostrar valor total
+        double valorTotal = servicos.stream().mapToDouble(Servico::getValor).sum();
+        System.out.printf("Valor total dos serviços: R$%.2f%n", valorTotal);
     }
+
     /**
      * Cancela um agendamento e registra o valor retido no caixa.
      *
@@ -227,6 +279,34 @@ public class Oficina {
         clientes.forEach(System.out::println);
     }
 
+        /**
+     * Registra a compra de peças no estoque como despesa no caixa.
+     * 
+     * @param codigo Código do item
+     * @param nome Nome do item
+     * @param quantidade Quantidade comprada
+     * @param precoUnitario Preço unitário do item
+     * @param data Data da compra
+     */
+    public void registrarCompraPecas(String codigo, String nome, int quantidade, double precoUnitario, String data) {
+        double valorTotal = quantidade * precoUnitario;
+        estoque.adicionarItem(codigo, nome, quantidade);
+        caixa.registrarSaida(valorTotal, "Compra de peças: " + nome + " (" + quantidade + " un)", data);
+    }
+
+    /**
+     * Registra o pagamento de salários como despesa no caixa.
+     * 
+     * @param data Data do pagamento
+     */
+    public void registrarPagamentoSalarios(String data) {
+        double totalSalarios = funcionarios.stream()
+                                        .mapToDouble(Funcionario::getSalario)
+                                        .sum();
+        caixa.registrarSaida(totalSalarios, "Pagamento de salários", data);
+        System.out.println("Pagamento de salários registrado: R$" + totalSalarios);
+    }
+
     // Métodos para gerenciar serviços
     /**
      * Adiciona um novo serviço à lista de serviços.
@@ -262,6 +342,16 @@ public class Oficina {
     public void listarAgendamentos() {
         agenda.listarAgendamentos();
     }
+    
+    /***
+     * Método que retorna o CPF anonimizado.
+     * @return cpfAnonimizado
+     */
+    public String anonimizarCPF(String cpf) {
+        if (cpf == null || cpf.length() != 11) return "CPF INVÁLIDO";
+        return "***." + cpf.substring(3, 6) + ".***-" + cpf.substring(9, 11);
+    }
+        
 
     // Métodos para gerenciar finanças
     /**

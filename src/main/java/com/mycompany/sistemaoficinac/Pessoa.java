@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Classe que representa uma pessoa.
  * Contém informações básicas como nome, telefone e endereço.
  */
-public class Pessoa {
+public abstract class Pessoa {
     private String nome; // Nome da pessoa
     private String telefone; // Telefone da pessoa
     private String endereco; // Endereço da pessoa

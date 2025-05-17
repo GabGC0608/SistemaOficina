@@ -2,10 +2,13 @@ package com.mycompany.sistemaoficinac;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mycompany.sistemaoficinac.Agenda.Agendamento;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -214,11 +217,42 @@ public class Oficina {
      *
      * @param index Índice do agendamento a ser cancelado.
      */
-    public void cancelarAgendamento(int index) {
-        double valorRetido = agenda.cancelarAgendamento(index); // Cancela o agendamento e obtém o valor retido
-        if (valorRetido > 0) {
+    public void cancelarAgendamento(int index, String matriculaFuncionario) {
+        if (index >= 0 && index < agenda.getAgendamentos().size()) {
+            Agendamento agendamento = agenda.getAgendamentos().get(index);
+            double valorRetido = agendamento.getValorTotal() * 0.20;
+            
+            // Registrar a transação no caixa
             String dataAtual = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            caixa.registrarEntrada(valorRetido, "Cancelamento de agendamento", dataAtual);
+            String descricao = "Cancelamento agendamento - Cliente: " + agendamento.getCliente().getNome();
+            caixa.registrarEntrada(valorRetido, descricao, dataAtual, "Cancelamentos", matriculaFuncionario, null);
+            
+            // Remover o agendamento
+            agenda.getAgendamentos().remove(index);
+            System.out.println("Agendamento cancelado e valor retido registrado!");
+        }
+    }
+
+    /***
+     *  Conclui um agendamento e registra o pagamento no caixa.
+     * @param index
+     * @param matriculaFuncionario
+     */
+    public void concluirAgendamento(int index, String matriculaFuncionario) {
+        if (index >= 0 && index < agenda.getAgendamentos().size()) {
+            Agendamento agendamento = agenda.getAgendamentos().get(index);
+            agendamento.setStatus("Concluído");
+            
+            // Registrar a transação no caixa
+            String dataAtual = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            String servicosStr = agendamento.getServicos().stream()
+                                .map(Servico::getNome)
+                                .collect(Collectors.joining(", "));
+            String descricao = "Serviços: " + servicosStr + " - Cliente: " + agendamento.getCliente().getNome();
+            
+            caixa.registrarEntrada(agendamento.getValorTotal(), descricao, dataAtual, "Serviços", matriculaFuncionario,null);
+            
+            System.out.println("Agendamento concluído e pagamento registrado!");
         }
     }
 
@@ -277,6 +311,7 @@ public class Oficina {
      */
     public void listarClientes() {
         System.out.println("\n=== CLIENTES ===");
+        clientes.sort(Cliente.POR_NOME); // Ordena por nome antes de listar
         clientes.forEach(System.out::println);
     }
 
@@ -292,7 +327,7 @@ public class Oficina {
     public void registrarCompraPecas(String codigo, String nome, int quantidade, double precoUnitario, String data) {
         double valorTotal = quantidade * precoUnitario;
         estoque.adicionarItem(codigo, nome, quantidade);
-        caixa.registrarSaida(valorTotal, "Compra de peças: " + nome + " (" + quantidade + " un)", data);
+        caixa.registrarSaida(valorTotal, "Compra de peças: " + nome + " (" + quantidade + " un)", data,null,null,null);
     }
 
     /**
@@ -304,7 +339,7 @@ public class Oficina {
         double totalSalarios = funcionarios.stream()
                                         .mapToDouble(Funcionario::getSalario)
                                         .sum();
-        caixa.registrarSaida(totalSalarios, "Pagamento de salários", data);
+        caixa.registrarSaida(totalSalarios, "Pagamento de salários", data,null,null,null);
         System.out.println("Pagamento de salários registrado: R$" + totalSalarios);
     }
 
@@ -363,7 +398,7 @@ public class Oficina {
      * @param data Data do pagamento.
      */
     public void registrarPagamento(double valor, String descricao, String data) {
-        caixa.registrarEntrada(valor, descricao, data);
+        caixa.registrarEntrada(valor, descricao, data,null,null,null);
     }
 
     /**
@@ -374,7 +409,7 @@ public class Oficina {
      * @param data Data da despesa.
      */
     public void registrarDespesa(double valor, String descricao, String data) {
-        caixa.registrarSaida(valor, descricao, data);
+        caixa.registrarSaida(valor, descricao, data,null,null,null);
     }
 
     /**
@@ -487,4 +522,21 @@ public class Oficina {
     public Caixa getCaixa() {
         return caixa;
     }
+    public void ordenarTudo(List<Cliente> clientes, List<Agendamento> agendamentos, List<Servico> servicos) {
+        // 1. Ordenar clientes alfabeticamente
+        if (clientes != null) {
+            clientes.sort(Cliente.POR_NOME);
+        }
+
+        // 2. Ordenar agendamentos por data
+        if (agendamentos != null) {
+            agendamentos.sort(new Agenda.Agendamento.PorData());
+        }
+
+        // 3. Ordenar serviços por preço
+        if (servicos != null) {
+            servicos.sort(Comparator.comparingDouble(Servico::getValor));
+        }
+    }
+
 }

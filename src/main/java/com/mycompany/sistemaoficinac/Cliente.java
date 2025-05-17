@@ -3,6 +3,7 @@ package com.mycompany.sistemaoficinac;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Classe que representa um cliente da oficina.
@@ -112,6 +113,12 @@ public class Cliente extends Pessoa {
     public void setVeiculos(List<Veiculo> veiculos) {
         this.veiculos = veiculos;
     }
+
+    public static final Comparator<Cliente> POR_NOME = 
+        (Cliente c1, Cliente c2) -> c1.getNome().compareToIgnoreCase(c2.getNome());
+
+    public static final Comparator<Cliente> POR_QTD_VEICULOS =
+        (Cliente c1, Cliente c2) -> Integer.compare(c1.getVeiculos().size(), c2.getVeiculos().size());
 
     /**
      * Obtém o CPF anonimizado do cliente.

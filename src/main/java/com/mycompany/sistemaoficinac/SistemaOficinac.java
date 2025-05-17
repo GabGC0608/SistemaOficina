@@ -116,6 +116,7 @@ public class SistemaOficinac {
                         alterarSenha(); 
                         break;
                     case 0:
+                        oficina.ordenarTudo(oficina.getClientes(), oficina.getAgenda().getAgendamentos(), oficina.getServicos());
                         try {
                             salvarDados();
                         } catch (IOException e) {
@@ -123,9 +124,6 @@ public class SistemaOficinac {
                             System.out.println("Os dados não foram salvos. Verifique o problema e tente novamente.");
                         }
                         voltar = true;
-                        break;
-                    default:
-                        System.out.println("Opção inválida!");
                         break;
                 }
             }
@@ -513,7 +511,8 @@ public class SistemaOficinac {
             System.out.println("2. Registrar despesa geral");
             System.out.println("3. Registrar compra de peças");
             System.out.println("4. Registrar pagamento de salários");
-            System.out.println("5. Gerar relatório mensal");
+            System.out.println("5. Listar transações"); // Nova opção
+            System.out.println("6. Gerar relatório mensal");
             System.out.println("0. Voltar");
             
             int opcao = lerInteiro("Digite sua opção: ");
@@ -532,6 +531,9 @@ public class SistemaOficinac {
                     registrarPagamentoSalarios();
                     break;
                 case 5:
+                    menuListarTransacoes(); // Novo submenu
+                    break;
+                case 6:
                     menuRelatorios();
                     break;
                 case 0:
@@ -542,6 +544,44 @@ public class SistemaOficinac {
             }
         }
     }
+
+    private static void menuListarTransacoes() {
+    boolean voltar = false;
+    while (!voltar) {
+        System.out.println("\n=== LISTAR TRANSAÇÕES ===");
+        System.out.println("1. Listar todas as transações");
+        System.out.println("2. Filtrar por período");
+        System.out.println("3. Filtrar por categoria");
+        System.out.println("4. Filtrar por tipo (Entrada/Saída)");
+        System.out.println("5. Filtrar por responsável");
+        System.out.println("0. Voltar");
+        
+        int opcao = lerInteiro("Digite sua opção: ");
+        
+        switch (opcao) {
+            case 1:
+                listarTodasTransacoes();
+                break;
+            case 2:
+                listarTransacoesPorPeriodo();
+                break;
+            case 3:
+                listarTransacoesPorCategoria();
+                break;
+            case 4:
+                listarTransacoesPorTipo();
+                break;
+            case 5:
+                listarTransacoesPorResponsavel();
+                break;
+            case 0:
+                voltar = true;
+                break;
+            default:
+                System.out.println("Opção inválida!");
+        }
+    }
+}
     /***
      * Registra o pagamento de um cliente.
      */
@@ -1109,10 +1149,8 @@ public class SistemaOficinac {
      * Cancela um agendamento existente.
      */
     private static void cancelarAgendamento() {
-        // Listar agendamentos primeiro
         oficina.getAgenda().listarAgendamentos();
         
-        // Verificar se há agendamentos
         if (oficina.getAgenda().getAgendamentos().isEmpty()) {
             System.out.println("Não há agendamentos para cancelar.");
             return;
@@ -1120,27 +1158,24 @@ public class SistemaOficinac {
         
         int index = lerInteiro("Digite o número do agendamento a cancelar: ") - 1;
         
-        // Verificar se o índice é válido
         if (index < 0 || index >= oficina.getAgenda().getAgendamentos().size()) {
             System.out.println("Número de agendamento inválido!");
             return;
         }
         
-        // Verificar status do agendamento
         Agenda.Agendamento ag = oficina.getAgenda().getAgendamentos().get(index);
         if ("Concluído".equalsIgnoreCase(ag.getStatus())) {
             System.out.println("Não é possível cancelar um agendamento já concluído!");
             return;
         }
         
-        // Mostrar detalhes e confirmar
         System.out.println("\nAgendamento selecionado:");
         System.out.println(ag);
         String confirmacao = lerString("Deseja realmente cancelar este agendamento? (S/N): ");
         
         if (confirmacao.equalsIgnoreCase("S")) {
-            // Chama o método da classe Oficina para cancelar
-            oficina.cancelarAgendamento(index);
+            String matricula = lerString("Digite sua matrícula para confirmar: ");
+            oficina.cancelarAgendamento(index, matricula);
         } else {
             System.out.println("Cancelamento não realizado.");
         }
@@ -1151,10 +1186,8 @@ public class SistemaOficinac {
      * Conclui um agendamento existente.
      */
     private static void concluirAgendamento() {
-        // Listar agendamentos primeiro
         oficina.getAgenda().listarAgendamentos();
         
-        // Verificar se há agendamentos
         if (oficina.getAgenda().getAgendamentos().isEmpty()) {
             System.out.println("Não há agendamentos para concluir.");
             return;
@@ -1162,16 +1195,13 @@ public class SistemaOficinac {
         
         int index = lerInteiro("Digite o número do agendamento a concluir: ") - 1;
         
-        // Verificar se o índice é válido
         if (index < 0 || index >= oficina.getAgenda().getAgendamentos().size()) {
             System.out.println("Número de agendamento inválido!");
             return;
         }
         
-        // Obter o agendamento
         Agenda.Agendamento ag = oficina.getAgenda().getAgendamentos().get(index);
         
-        // Verificar status do agendamento
         if ("Concluído".equalsIgnoreCase(ag.getStatus())) {
             System.out.println("Este agendamento já foi concluído!");
             return;
@@ -1182,28 +1212,13 @@ public class SistemaOficinac {
             return;
         }
         
-        // Mostrar detalhes e confirmar
         System.out.println("\nAgendamento selecionado:");
         System.out.println(ag);
         String confirmacao = lerString("Deseja realmente concluir este agendamento? (S/N): ");
         
         if (confirmacao.equalsIgnoreCase("S")) {
-            // Conclui o agendamento
-            oficina.getAgenda().concluirAgendamento(index);
-            
-            // Registrar pagamento apenas se não estiver concluído
-            if (!"Concluído".equalsIgnoreCase(ag.getStatus())) {
-                String servicosStr = ag.getServicos().stream()
-                                    .map(Servico::getNome)
-                                    .collect(Collectors.joining(", "));
-                
-                String dataAtual = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                oficina.registrarPagamento(ag.getValorTotal(), 
-                                        "Serviços: " + servicosStr + " - Cliente: " + ag.getCliente().getNome(), 
-                                        dataAtual);
-                
-                System.out.println("Agendamento concluído e pagamento registrado com sucesso!");
-            }
+            String matricula = lerString("Digite sua matrícula para confirmar: ");
+            oficina.concluirAgendamento(index, matricula);
         } else {
             System.out.println("Conclusão não realizada.");
         }
@@ -1247,6 +1262,9 @@ public class SistemaOficinac {
  */
     public static void salvarDados() throws IOException {
         // Usando a classe JsonUtil que já tem a configuração de pretty print
+        
+        JsonUtil.salvarParaJson(oficina.getCaixa().getTransacoes(), "data/transacoes.json");
+        
         JsonUtil.salvarParaJson(oficina, "data/oficina.json");
         System.out.println("Dados da oficina salvos com sucesso!");
 
@@ -1294,6 +1312,7 @@ public class SistemaOficinac {
         File arquivoAgenda = new File("data/agenda.json");
         File arquivoCaixa = new File("data/caixa.json");
         File arquivoPonto = new File("data/pontos.json");
+        File arquivoTransacoes = new File("data/transacoes.json");
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -1431,6 +1450,182 @@ public class SistemaOficinac {
                 System.out.println("Por favor, digite um valor válido!");
             }
         }
+    }
+
+    private static void listarTodasTransacoes() {
+        System.out.println("\n=== TODAS AS TRANSAÇÕES ===");
+        List<Caixa.Transacao> transacoes = oficina.getCaixa().getTransacoes();
+        
+        if (transacoes.isEmpty()) {
+            System.out.println("Nenhuma transação registrada.");
+            return;
+        }
+        
+        // Formatar a saída para melhor visualização
+        System.out.println("Data       | Tipo    | Valor    | Categoria       | Descrição");
+        System.out.println("---------------------------------------------------------------");
+        for (Caixa.Transacao t : transacoes) {
+            System.out.printf("%-10s | %-7s | R$ %-6.2f | %-15s | %s\n",
+                    t.getData(),
+                    t.getTipo(),
+                    t.getValor(),
+                    t.getCategoria(),
+                    t.getDescricao());
+        }
+        
+        double saldoAtual = oficina.getCaixa().getSaldo();
+        System.out.printf("\nTotal: %d transações | Saldo atual: R$ %.2f\n",
+                        transacoes.size(), saldoAtual);
+    }
+
+    private static void listarTransacoesPorPeriodo() {
+        System.out.println("\n=== FILTRAR POR PERÍODO ===");
+        String dataInicio = lerString("Data inicial (dd/MM/yyyy): ");
+        String dataFim = lerString("Data final (dd/MM/yyyy): ");
+        
+        List<Caixa.Transacao> filtradas = oficina.getCaixa().getTransacoes().stream()
+                .filter(t -> t.getData().compareTo(dataInicio) >= 0 && t.getData().compareTo(dataFim) <= 0)
+                .collect(Collectors.toList());
+        
+        if (filtradas.isEmpty()) {
+            System.out.println("Nenhuma transação no período especificado.");
+            return;
+        }
+        
+        System.out.println("\nTransações no período de " + dataInicio + " a " + dataFim + ":");
+        System.out.println("Data       | Tipo    | Valor    | Categoria       | Descrição");
+        System.out.println("---------------------------------------------------------------");
+        for (Caixa.Transacao t : filtradas) {
+            System.out.printf("%-10s | %-7s | R$ %-6.2f | %-15s | %s\n",
+                    t.getData(),
+                    t.getTipo(),
+                    t.getValor(),
+                    t.getCategoria(),
+                    t.getDescricao());
+        }
+        
+        double totalEntradas = filtradas.stream()
+                .filter(t -> t.getTipo().equalsIgnoreCase("Entrada"))
+                .mapToDouble(Caixa.Transacao::getValor)
+                .sum();
+        
+        double totalSaidas = filtradas.stream()
+                .filter(t -> t.getTipo().equalsIgnoreCase("Saída"))
+                .mapToDouble(Caixa.Transacao::getValor)
+                .sum();
+        
+        System.out.printf("\nResumo do período:\n");
+        System.out.printf("Total de entradas: R$ %.2f\n", totalEntradas);
+        System.out.printf("Total de saídas:   R$ %.2f\n", totalSaidas);
+        System.out.printf("Saldo líquido:     R$ %.2f\n", (totalEntradas - totalSaidas));
+    }
+
+    private static void listarTransacoesPorCategoria() {
+        System.out.println("\n=== FILTRAR POR CATEGORIA ===");
+        
+        // Mostrar categorias disponíveis
+        List<String> categorias = oficina.getCaixa().getTransacoes().stream()
+                .map(t -> t.getCategoria())
+                .distinct()
+                .collect(Collectors.toList());
+        
+        System.out.println("Categorias disponíveis:");
+        categorias.forEach(System.out::println);
+        
+        String categoria = lerString("\nDigite a categoria: ");
+        
+        List<Caixa.Transacao> filtradas = oficina.getCaixa().getTransacoes().stream()
+                .filter(t -> t.getCategoria().equalsIgnoreCase(categoria))
+                .collect(Collectors.toList());
+        
+        if (filtradas.isEmpty()) {
+            System.out.println("Nenhuma transação nesta categoria.");
+            return;
+        }
+        
+        System.out.println("\nTransações na categoria '" + categoria + "':");
+        System.out.println("Data       | Tipo    | Valor    | Descrição");
+        System.out.println("-------------------------------------------");
+        for (Caixa.Transacao t : filtradas) {
+            System.out.printf("%-10s | %-7s | R$ %-6.2f | %s\n",
+                    t.getData(),
+                    t.getTipo(),
+                    t.getValor(),
+                    t.getDescricao());
+        }
+        
+        double total = filtradas.stream()
+                .mapToDouble(Caixa.Transacao::getValor)
+                .sum();
+        
+        System.out.printf("\nTotal na categoria '%s': R$ %.2f (%d transações)\n",
+                categoria, total, filtradas.size());
+    }
+
+    private static void listarTransacoesPorTipo() {
+        System.out.println("\n=== FILTRAR POR TIPO ===");
+        String tipo = lerString("Digite o tipo (Entrada/Saída): ");
+        
+        if (!tipo.equalsIgnoreCase("Entrada") && !tipo.equalsIgnoreCase("Saída")) {
+            System.out.println("Tipo inválido! Use 'Entrada' ou 'Saída'.");
+            return;
+        }
+        
+        List<Caixa.Transacao> filtradas = oficina.getCaixa().getTransacoes().stream()
+                .filter(t -> t.getTipo().equalsIgnoreCase(tipo))
+                .collect(Collectors.toList());
+        
+        if (filtradas.isEmpty()) {
+            System.out.println("Nenhuma transação deste tipo.");
+            return;
+        }
+        
+        System.out.println("\nTransações do tipo '" + tipo + "':");
+        System.out.println("Data       | Valor    | Categoria       | Descrição");
+        System.out.println("---------------------------------------------------");
+        for (Caixa.Transacao t : filtradas) {
+            System.out.printf("%-10s | R$ %-6.2f | %-15s | %s\n",
+                    t.getData(),
+                    t.getValor(),
+                    t.getCategoria(),
+                    t.getDescricao());
+        }
+        
+        double total = filtradas.stream()
+                .mapToDouble(Caixa.Transacao::getValor)
+                .sum();
+        
+        System.out.printf("\nTotal de '%s': R$ %.2f (%d transações)\n",
+                tipo, total, filtradas.size());
+    }
+
+    private static void listarTransacoesPorResponsavel() {
+        System.out.println("\n=== FILTRAR POR RESPONSÁVEL ===");
+        String responsavel = lerString("Digite o nome ou matrícula do responsável: ");
+        
+        List<Caixa.Transacao> filtradas = oficina.getCaixa().getTransacoes().stream()
+                .filter(t -> t.getResponsavel().toLowerCase().contains(responsavel.toLowerCase()))
+                .collect(Collectors.toList());
+        
+        if (filtradas.isEmpty()) {
+            System.out.println("Nenhuma transação encontrada para este responsável.");
+            return;
+        }
+        
+        System.out.println("\nTransações do responsável '" + responsavel + "':");
+        System.out.println("Data       | Tipo    | Valor    | Categoria       | Descrição");
+        System.out.println("---------------------------------------------------------------");
+        for (Caixa.Transacao t : filtradas) {
+            System.out.printf("%-10s | %-7s | R$ %-6.2f | %-15s | %s\n",
+                    t.getData(),
+                    t.getTipo(),
+                    t.getValor(),
+                    t.getCategoria(),
+                    t.getDescricao());
+        }
+        
+        System.out.printf("\nTotal para '%s': %d transações\n",
+                responsavel, filtradas.size());
     }
 
         /**

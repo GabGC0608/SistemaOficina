@@ -1,3 +1,12 @@
 {
-  "saldo" : -107000.0
+  "saldo" : -106030.0,
+  "transacoes" : [ {
+    "tipo" : "Entrada",
+    "valor" : 970.0,
+    "descricao" : "Serviços: Troca de Óleo, Revisão Básica, Troca de Pneus - Cliente: Carlos Oliveira",
+    "data" : "16/05/2025",
+    "categoria" : "Serviços",
+    "responsavel" : "MEC001",
+    "cliente" : null
+  } ]
 }

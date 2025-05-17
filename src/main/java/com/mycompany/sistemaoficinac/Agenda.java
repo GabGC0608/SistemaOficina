@@ -3,6 +3,7 @@ package com.mycompany.sistemaoficinac;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
@@ -147,6 +148,7 @@ public class Agenda {
             
         }
 
+
         /**
          * Obtém o funcionário responsável pelo agendamento.
          *
@@ -206,6 +208,20 @@ public class Agenda {
          */
         public double getValorTotal() {
             return servicos.stream().mapToDouble(Servico::getValor).sum();
+        }
+
+        public static class PorData implements Comparator<Agendamento> {
+            @Override
+            public int compare(Agendamento a1, Agendamento a2) {
+                return a1.getDataHora().compareTo(a2.getDataHora());
+            }
+        }
+
+        public static class PorCliente implements Comparator<Agendamento> {
+            @Override
+            public int compare(Agendamento a1, Agendamento a2) {
+                return a1.getCliente().getNome().compareToIgnoreCase(a2.getCliente().getNome());
+            }
         }
             /***
              * Retorna uma representação em string do agendamento.
@@ -286,6 +302,7 @@ public class Agenda {
      */
     public void listarAgendamentos() {
         System.out.println("\n=== LISTA DE AGENDAMENTOS ===");
+        agendamentos.sort(new Agendamento.PorData()); // Ordena por data
         for (int i = 0; i < agendamentos.size(); i++) {
             System.out.println("Agendamento " + (i + 1) + ": " + agendamentos.get(i));
         }

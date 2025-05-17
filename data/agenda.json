@@ -45,5 +45,57 @@
     "dataHora" : "10/10/2025 16:20",
     "status" : "Concluído",
     "valorTotal" : 300.0
+  }, {
+    "cliente" : {
+      "nome" : "Carlos Oliveira",
+      "telefone" : "11955556666",
+      "endereco" : "Rua C, 789",
+      "veiculos" : [ {
+        "modelo" : "Gol",
+        "placa" : "ABC1234",
+        "ano" : 2018,
+        "marca" : "Volkswagen",
+        "cor" : "Prata"
+      } ],
+      "cpfAnonimizado" : "12345678909",
+      "clienteId" : "CLI-0004"
+    },
+    "veiculo" : {
+      "modelo" : "Gol",
+      "placa" : "ABC1234",
+      "ano" : 2018,
+      "marca" : "Volkswagen",
+      "cor" : "Prata"
+    },
+    "servicos" : [ {
+      "nome" : "Troca de Óleo",
+      "descricao" : "Troca de óleo e filtro",
+      "valor" : 120.0,
+      "tempoEstimado" : 30,
+      "requerElevador" : false
+    }, {
+      "nome" : "Revisão Básica",
+      "descricao" : "Revisão de 10 itens",
+      "valor" : 250.0,
+      "tempoEstimado" : 60,
+      "requerElevador" : false
+    }, {
+      "nome" : "Troca de Pneus",
+      "descricao" : "Troca de pneus e balanceamento",
+      "valor" : 600.0,
+      "tempoEstimado" : 90,
+      "requerElevador" : false
+    } ],
+    "responsavel" : {
+      "nome" : "João Silva",
+      "telefone" : "11987654321",
+      "endereco" : "Rua A, 123",
+      "cargo" : "Mecânico",
+      "salario" : 2500.0,
+      "matricula" : "MEC001"
+    },
+    "dataHora" : "16/05/2025 10:00",
+    "status" : "Concluído",
+    "valorTotal" : 970.0
   } ]
 }

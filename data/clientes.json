@@ -1,17 +1,4 @@
 [ {
-  "nome" : "Carlos Oliveira",
-  "telefone" : "11955556666",
-  "endereco" : "Rua C, 789",
-  "veiculos" : [ {
-    "modelo" : "Gol",
-    "placa" : "ABC1234",
-    "ano" : 2018,
-    "marca" : "Volkswagen",
-    "cor" : "Prata"
-  } ],
-  "cpfAnonimizado" : "12345678909",
-  "clienteId" : "CLI-0004"
-}, {
   "nome" : "Ana Santos",
   "telefone" : "11944445555",
   "endereco" : "Rua D, 1011",
@@ -24,4 +11,17 @@
   } ],
   "cpfAnonimizado" : "98765432100",
   "clienteId" : "CLI-0005"
+}, {
+  "nome" : "Carlos Oliveira",
+  "telefone" : "11955556666",
+  "endereco" : "Rua C, 789",
+  "veiculos" : [ {
+    "modelo" : "Gol",
+    "placa" : "ABC1234",
+    "ano" : 2018,
+    "marca" : "Volkswagen",
+    "cor" : "Prata"
+  } ],
+  "cpfAnonimizado" : "12345678909",
+  "clienteId" : "CLI-0004"
 } ]

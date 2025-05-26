@@ -10,11 +10,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-
+import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +54,7 @@ public class SistemaOficinac {
     public static void main(String[] args) {
         
         try {
-            carregarDados();    // Carrega os dados da oficina e do login
+            oficina.carregarDados();    // Carrega os dados da oficina e do login
             
         } catch (IOException | ClassNotFoundException | IllegalArgumentException e) {
             System.err.println("Erro ao carregar os dados: " + e.getMessage());
@@ -64,7 +64,7 @@ public class SistemaOficinac {
                 System.out.println("Criando novo sistema...");
                 oficina = new Oficina();
                 loginManager = new Login();
-                inicializarDadosDemonstracao();
+                //inicializarDadosDemonstracao();
             } else {
                 System.out.println("Operação cancelada. O sistema será encerrado.");
                 System.exit(0);
@@ -101,7 +101,7 @@ public class SistemaOficinac {
             boolean voltar = false;
             while (!voltar) {
                 exibirMenuAdministrador();
-                int opcao = lerInteiro("Digite sua opção: ");
+                int opcao = Oficina.lerInteiro("Digite sua opção: ");
                 switch (opcao) {
                     case 1:
                         menuFuncionarios();
@@ -113,12 +113,12 @@ public class SistemaOficinac {
                         menuRelatorios();
                         break;
                     case 4:
-                        alterarSenha(); 
+                        oficina.alterarSenha(); 
                         break;
                     case 0:
-                        oficina.ordenarTudo(oficina.getClientes(), oficina.getAgenda().getAgendamentos(), oficina.getServicos());
+                        oficina.ordenarTudo(oficina.getClientes(), oficina.getAgenda().getAgendamentos() , oficina.getServicos());
                         try {
-                            salvarDados();
+                            oficina.salvarDados();
                         } catch (IOException e) {
                             System.err.println("Erro ao salvar os dados: " + e.getMessage());
                             System.out.println("Os dados não foram salvos. Verifique o problema e tente novamente.");
@@ -131,7 +131,7 @@ public class SistemaOficinac {
             boolean voltar = false;
             while (!voltar) {
                 exibirMenuFuncionario();
-                int opcao = lerInteiro("Digite sua opção: ");
+                int opcao = Oficina.lerInteiro("Digite sua opção: ");
                 switch (opcao) {
                     case 1:
                         menuAgendamentos();
@@ -155,7 +155,7 @@ public class SistemaOficinac {
                         break;
                     case 0:
                         try {
-                            salvarDados();
+                            oficina.salvarDados();
                         } catch (IOException e) {
                             System.err.println("Erro ao salvar os dados: " + e.getMessage());
                             System.out.println("Os dados não foram salvos. Verifique o problema e tente novamente.");
@@ -219,23 +219,23 @@ public class SistemaOficinac {
             System.out.println("5. Vender item");
             System.out.println("0. Voltar");
             
-            int opcao = lerInteiro("Digite sua opção: ");
+            int opcao = Oficina.lerInteiro("Digite sua opção: ");
             
             switch (opcao) {
                 case 1:
-                    adicionarItemEstoque();
+                    oficina.adicionarItemEstoque();
                     break;
                 case 2:
-                    removerItemEstoque();
+                    oficina.removerItemEstoque();
                     break;
                 case 3:
-                    atualizarItemEstoque();
+                    oficina.atualizarItemEstoque();
                     break;
                 case 4:
                     oficina.listarEstoque();
                     break;
                 case 5:
-                    venderItemEstoque();
+                    oficina.venderItemEstoque();
                 case 0:
                     voltar = true;
                     break;
@@ -258,16 +258,16 @@ public class SistemaOficinac {
             System.out.println("3. Listar registros");
             System.out.println("0. Voltar");
             
-            int opcao = lerInteiro("Digite sua opção: ");
+            int opcao = Oficina.lerInteiro("Digite sua opção: ");
             switch (opcao) {
                 case 1:
-                    registrarPonto(true);
+                    oficina.registrarPonto(true);
                     break;
                 case 2:
-                    registrarPonto(false);
+                    oficina.registrarPonto(false);
                     break;
                 case 3:
-                    listarRegistrosPonto();
+                    oficina.listarRegistrosPonto();
                     break;
                 case 0:
                     voltar = true;
@@ -291,7 +291,7 @@ public class SistemaOficinac {
             System.out.println("3. Liberar elevador");
             System.out.println("0. Voltar");
             
-            int opcao = lerInteiro("Digite sua opção: ");
+            int opcao = Oficina.lerInteiro("Digite sua opção: ");
             switch (opcao) {
                 case 1:
                     Elevador.listarElevadores();
@@ -300,7 +300,7 @@ public class SistemaOficinac {
                     alocarElevador();
                     break;
                 case 3:
-                    liberarElevador();
+                    oficina.liberarElevador();
                     break;
                 case 0:
                     voltar = true;
@@ -326,26 +326,26 @@ public class SistemaOficinac {
             System.out.println("6. Alterar dados do cliente");
             System.out.println("0. Voltar");
             
-            int opcao = lerInteiro("Digite sua opção: ");
+            int opcao = Oficina.lerInteiro("Digite sua opção: ");
             
             switch (opcao) {
                 case 1:
-                    cadastrarCliente();
+                    oficina.cadastrarCliente();
                     break;
                 case 2:
                     oficina.listarClientes();
                     break;
                 case 3:
-                    buscarClientePorNome();
+                    oficina.buscarClientePorNome();
                     break;
                 case 4:
-                    removerCliente();
+                    oficina.removerCliente();
                     break;
                 case 5:
-                    adicionarVeiculoACliente();
+                    oficina.adicionarVeiculoACliente();
                     break;
                 case 6:
-                    alterarDadosCliente();
+                    oficina.alterarDadosCliente();
                     break;
                 case 0:
                     voltar = true;
@@ -366,14 +366,14 @@ public class SistemaOficinac {
             System.out.println("2. Buscar veículo por placa");
             System.out.println("0. Voltar");
             
-            int opcao = lerInteiro("Digite sua opção: ");
+            int opcao = Oficina.lerInteiro("Digite sua opção: ");
             
             switch (opcao) {
                 case 1:
-                    listarTodosVeiculos();
+                    oficina.listarTodosVeiculos();
                     break;
                 case 2:
-                    buscarVeiculoPorPlaca();
+                    oficina.buscarVeiculoPorPlaca();
                     break;
                 case 0:
                     voltar = true;
@@ -390,31 +390,31 @@ public class SistemaOficinac {
         boolean voltar = false;
         while (!voltar) {
             System.out.println("\n=== MENU FUNCIONÁRIOS ===");
-            System.out.println("1. Cadastrar novo funcionário");
+            System.out.println("1. Contratar novo funcionário");
             System.out.println("2. Listar todos os funcionários");
             System.out.println("3. Buscar funcionário por nome");
-            System.out.println("4. Remover funcionário");
+            System.out.println("4. Demitir funcionário");
             System.out.println("5. Alterar dados do funcionário");
             System.out.println("0. Voltar");
 
             
-            int opcao = lerInteiro("Digite sua opção: ");
+            int opcao = Oficina.lerInteiro("Digite sua opção: ");
             
             switch (opcao) {
                 case 1:
-                    cadastrarFuncionario();
+                    oficina.contratarFuncionario();
                     break;
                 case 2:
                     oficina.listarFuncionarios();
                     break;
                 case 3:
-                    buscarFuncionarioPorNome();
+                   oficina.buscarFuncionarioPorNome();
                     break;
                 case 4:
-                    removerFuncionario();
+                    oficina.demitirFuncionario();
                     break;
                 case 5:
-                    alterarDadosFuncionario();
+                   oficina.alterarDadosFuncionario();
                     break;   
                 case 0:
                     voltar = true;
@@ -436,17 +436,17 @@ public class SistemaOficinac {
             System.out.println("3. Remover serviço");
             System.out.println("0. Voltar");
             
-            int opcao = lerInteiro("Digite sua opção: ");
+            int opcao = Oficina.lerInteiro("Digite sua opção: ");
             
             switch (opcao) {
                 case 1:
-                    cadastrarServico();
+                    oficina.adicionarServico();
                     break;
                 case 2:
                     oficina.listarServicos();
                     break;
                 case 3:
-                    removerServico();
+                    oficina.removerServico();
                     break;
                 case 0:
                     voltar = true;
@@ -471,26 +471,26 @@ public class SistemaOficinac {
             System.out.println("6. Concluir agendamento");
             System.out.println("0. Voltar");
             
-            int opcao = lerInteiro("Digite sua opção: ");
+            int opcao = Oficina.lerInteiro("Digite sua opção: ");
             
             switch (opcao) {
                 case 1:
-                    realizarAgendamento();
+                    oficina.agendarServico();
                     break;
                 case 2:
                     oficina.getAgenda().listarAgendamentos();
                     break;
                 case 3:
-                    listarAgendamentosPorCliente();
+                    oficina.listarAgendamentosPorCliente();
                     break;
                 case 4:
-                    listarAgendamentosPorStatus();
+                    oficina.listarAgendamentosPorStatus();
                     break;
                 case 5:
-                    cancelarAgendamento();
+                   oficina.cancelarAgendamento();
                     break;
                 case 6:
-                    concluirAgendamento();
+                   oficina.concluirAgendamento();
                     break;
                 case 0:
                     voltar = true;
@@ -515,20 +515,20 @@ public class SistemaOficinac {
             System.out.println("6. Gerar relatório mensal");
             System.out.println("0. Voltar");
             
-            int opcao = lerInteiro("Digite sua opção: ");
+            int opcao = Oficina.lerInteiro("Digite sua opção: ");
             
             switch (opcao) {
                 case 1:
-                    registrarPagamento();
+                    oficina.registrarPagamento();
                     break;
                 case 2:
-                    registrarDespesa();
+                    oficina.registrarDespesa();
                     break;
                 case 3:
-                    registrarCompraPecas();
+                    oficina.registrarCompraPecas();
                     break;
                 case 4:
-                    registrarPagamentoSalarios();
+                    oficina.registrarPagamentoSalarios();
                     break;
                 case 5:
                     menuListarTransacoes(); // Novo submenu
@@ -556,23 +556,23 @@ public class SistemaOficinac {
         System.out.println("5. Filtrar por responsável");
         System.out.println("0. Voltar");
         
-        int opcao = lerInteiro("Digite sua opção: ");
+        int opcao = Oficina.lerInteiro("Digite sua opção: ");
         
         switch (opcao) {
             case 1:
-                listarTodasTransacoes();
+                oficina.listarTodasTransacoes();
                 break;
             case 2:
-                listarTransacoesPorPeriodo();
+                oficina.listarTransacoesPorPeriodo();
                 break;
             case 3:
-                listarTransacoesPorCategoria();
+                oficina.listarTransacoesPorCategoria();
                 break;
             case 4:
-                listarTransacoesPorTipo();
+                oficina.listarTransacoesPorTipo();
                 break;
             case 5:
-                listarTransacoesPorResponsavel();
+               oficina.listarTransacoesPorResponsavel();
                 break;
             case 0:
                 voltar = true;
@@ -581,31 +581,7 @@ public class SistemaOficinac {
                 System.out.println("Opção inválida!");
         }
     }
-}
-    /***
-     * Registra o pagamento de um cliente.
-     */
-    private static void registrarCompraPecas() {
-        System.out.println("\n=== REGISTRAR COMPRA DE PEÇAS ===");
-        String codigo = lerString("Código da peça: ");
-        String nome = lerString("Nome da peça: ");
-        int quantidade = lerInteiro("Quantidade: ");
-        double precoUnitario = lerDouble("Preço unitário: ");
-        String data = lerString("Data da compra (dd/MM/yyyy): ");
-        
-        oficina.registrarCompraPecas(codigo, nome, quantidade, precoUnitario, data);
     }
-
-    /***
-     * Registra o pagamento de um cliente.  
-     */
-    private static void registrarPagamentoSalarios() {
-        String data = lerString("Digite a data do pagamento (dd/MM/yyyy): ");
-        oficina.registrarPagamentoSalarios(data);
-    }
-    /**
-     * Exibe o menu de opções para gerar relatórios.
-     */
     private static void menuRelatorios() {
         boolean voltar = false;
         while (!voltar) {
@@ -616,14 +592,14 @@ public class SistemaOficinac {
             System.out.println("4. Relatório de funcionários");
             System.out.println("0. Voltar");
             
-            int opcao = lerInteiro("Digite sua opção: ");
+            int opcao = Oficina.lerInteiro("Digite sua opção: ");
             
             switch (opcao) {
                 case 1:
-                    gerarRelatorioDiario();
+                    oficina.gerarRelatorioDiario();
                     break;
                 case 2:
-                    gerarRelatorioMensal();
+                    oficina.gerarRelatorioMensal();
                     break;
                 case 3:
                     oficina.listarClientes();
@@ -647,7 +623,7 @@ public class SistemaOficinac {
     private static void alocarElevador() {
         System.out.println("\n=== ALOCAR ELEVADOR ===");
         Elevador.listarElevadores();
-        int numero = lerInteiro("Digite o número do elevador a ser alocado (1-3): ");
+        int numero = Oficina.lerInteiro("Digite o número do elevador a ser alocado (1-3): ");
         
         if (numero < 1 || numero > 3) {
             System.out.println("Número inválido!");
@@ -656,986 +632,13 @@ public class SistemaOficinac {
         
         Elevador elevador = Elevador.alocarElevador(numero - 1); // Índice base 0
         if (elevador != null) {
-            String modeloVeiculo = lerString("Digite o modelo do veículo para o elevador: ");
+            String modeloVeiculo = Oficina.lerString("Digite o modelo do veículo para o elevador: ");
             elevador.setModelo(modeloVeiculo);
             System.out.println("Elevador " + numero + " alocado para o veículo: " + modeloVeiculo);
         }
     }
-    /***
-     *  Libera o elevador
-     */
-    private static void liberarElevador() {
-        System.out.println("\n=== LIBERAR ELEVADOR ===");
-        Elevador.listarElevadores();
-        int numero = lerInteiro("Digite o número do elevador a ser liberado (1-3): ");
-        
-        if (numero < 1 || numero > 3) {
-            System.out.println("Número inválido!");
-            return;
-        }
-        
-        Elevador.liberarElevador(numero - 1); // Índice base 0
-        System.out.println("Elevador " + numero + " liberado com sucesso!");
-    }
-    /**
-     * Adiciona um item ao estoque da oficina.
-     */
-    private static void venderItemEstoque() {
-        System.out.println("\n=== VENDER ITEM ===");
-        String codigo = lerString("Código: ");
-        int quantidade = lerInteiro("Quantidade: ");
-        
-        oficina.venderItemEstoque(codigo, quantidade);
-    } 
-    private static void adicionarItemEstoque() {
-        System.out.println("\n=== ADICIONAR ITEM ===");
-        String codigo = lerString("Código: ");
-        String nome = lerString("Nome: ");
-        int quantidade = lerInteiro("Quantidade: ");
-        
-        oficina.adicionarItemEstoque(codigo, nome, quantidade);
-    }
-    /**
-     * Remove um item do estoque da oficina.
-     */
-    private static void removerItemEstoque() {
-        String codigo = lerString("Digite o código do item a remover: ");
-        oficina.removerItemEstoque(codigo);
-        System.out.println("Item removido do estoque!");
-    }
-    /**
-     * Atualiza a quantidade de um item no estoque da oficina.
-     */
-    private static void atualizarItemEstoque() {
-        String codigo = lerString("Digite o código do item: ");
-        int quantidade = lerInteiro("Nova quantidade: ");
-        oficina.atualizarItemEstoque(codigo, quantidade);
-        System.out.println("Quantidade atualizada!");
-    }
-    /**
-     * Cadastra um novo cliente na oficina.
-     */    
-    
-    private static void cadastrarCliente() {
-        System.out.println("\n=== CADASTRAR CLIENTE ===");
-        String nome = lerString("Nome: ");
-        String telefone = lerString("Telefone: ");
-        String endereco = lerString("Endereço: ");
-        String cpf = lerString("CPF (11 dígitos): ");
 
-    
-
-
-        String cpfAnonimizado = oficina.anonimizarCPF(cpf);
-        
-        Cliente novoCliente = new Cliente(nome, telefone, endereco, null, cpfAnonimizado);
-        oficina.cadastrarCliente(novoCliente);
-       
-    }
-    /**
-     * Busca um cliente pelo nome.
-     */
-    private static void buscarClientePorNome() {
-        String nome = lerString("Digite o nome do cliente: ");
-        oficina.getClientes().stream()
-            .filter(c -> c.getNome().equalsIgnoreCase(nome))
-            .forEach(System.out::println);
-    }
-    /**
-     * Remove um cliente da oficina.
-     */
-    private static void removerCliente() {
-        String telefone = lerString("Digite o telefone do cliente a ser removido: ");
-        oficina.removerCliente(telefone);
-    }
-    /**
-     * Adiciona um veículo a um cliente existente.
-     */
-    private static void adicionarVeiculoACliente() {
-        String telefone = lerString("Digite o telefone do cliente: ");
-        Cliente cliente = oficina.getClientes().stream()
-            .filter(c -> c.getTelefone().equals(telefone))
-            .findFirst()
-            .orElse(null);
-        
-        if (cliente != null) {
-            System.out.println("\n=== CADASTRAR VEÍCULO ===");
-            String modelo = lerString("Modelo: ");
-            String placa = lerString("Placa: ");
-            int ano = lerInteiro("Ano: ");
-            String marca = lerString("Marca: ");
-            String cor = lerString("Cor: ");
-            
-            Veiculo novoVeiculo = new Veiculo(modelo, placa, ano, marca, cor);
-            cliente.adicionarVeiculo(novoVeiculo);
-        } else {
-            System.out.println("Cliente não encontrado!");
-        }
-    }
-    /***
-     * Método que retorna o contador de veículos.
-     */
-    protected static void incrementarContadorVeiculos() {
-        contadorVeiculos++;
-    }
-    /***
-     * Método que retorna o contador de veículos.
-     * @return contadorVeiculos
-     * @see #incrementarContadorVeiculos()
-     */
-    public static int getContadorVeiculos() {
-        return contadorVeiculos;
-    }
-    /**
-     * Lista todos os veículos cadastrados na oficina.
-     */
-    /**
- * Lista todos os veículos cadastrados na oficina.
- */
-    private static void listarTodosVeiculos() {
-        System.out.println("\n=== TODOS OS VEÍCULOS ===");
-        boolean encontrouVeiculos = false;
-
-        for (Cliente cliente : oficina.getClientes()) {
-            if (cliente.getVeiculos() != null && !cliente.getVeiculos().isEmpty()) {
-                System.out.println("\nCliente: " + cliente.getNome());
-                for (Veiculo veiculo : cliente.getVeiculos()) {
-                    System.out.println("Modelo: " + veiculo.getModelo() + ", Placa: " + veiculo.getPlaca());
-                }
-                encontrouVeiculos = true;
-        }
-    }
-
-        if (!encontrouVeiculos) {
-            System.out.println("Nenhum veículo cadastrado.");
-        }
-    }
-    /**
-     * Busca um veículo pelo número da placa.
-     */
-    private static void buscarVeiculoPorPlaca() {
-        String placa = lerString("Digite a placa do veículo: ");
-        oficina.getClientes().stream()
-            .flatMap(cliente -> cliente.getVeiculos().stream())
-            .filter(v -> ((Veiculo)v).getPlaca().equalsIgnoreCase(placa))
-            .forEach(System.out::println);
-    }
-    /**
-     * Cadastra um novo funcionário na oficina.
-     */
-    private static void cadastrarFuncionario() {
-        System.out.println("\n=== CADASTRAR FUNCIONÁRIO ===");
-        String nome = lerString("Nome: ");
-        String telefone = lerString("Telefone: ");
-        String endereco = lerString("Endereço: ");
-        String cargo = lerString("Cargo: ");
-        double salario = lerDouble("Salário: ");
-        String matricula = lerString("Matrícula: ");
-        
-        Funcionario novoFuncionario;
-        if (cargo.equalsIgnoreCase("Administrador")) {
-            novoFuncionario = new Administrador(nome, telefone, endereco, salario, matricula);
-        } else {
-            novoFuncionario = new Funcionario(nome, telefone, endereco, cargo, salario, matricula);
-        }
-        
-        oficina.contratarFuncionario(novoFuncionario);
-    }
-    /**
- * Altera os dados de um cliente existente.
- */
-    private static void alterarDadosCliente() {
-        System.out.println("\n=== ALTERAR DADOS DO CLIENTE ===");
-        String telefone = lerString("Digite o telefone do cliente: ");
-        
-        // Busca o cliente pelo telefone
-        Cliente cliente = oficina.getClientes().stream()
-            .filter(c -> c.getTelefone().equals(telefone))
-            .findFirst()
-            .orElse(null);
-        
-        if (cliente == null) {
-            System.out.println("Cliente não encontrado!");
-            return;
-        }
-        
-        boolean alterar = true;
-        while (alterar) {
-            System.out.println("\nCliente encontrado: " + cliente);
-            System.out.println("1. Alterar nome");
-            System.out.println("2. Alterar telefone");
-            System.out.println("3. Alterar endereço");
-            System.out.println("4. Alterar ID do cliente");
-            System.out.println("0. Voltar");
-            
-            int opcao = lerInteiro("Digite sua opção: ");
-            switch (opcao) {
-                case 1:
-                    String novoNome = lerString("Novo nome: ");
-                    cliente.setNome(novoNome);
-                    break;
-                case 2:
-                    String novoTelefone = lerString("Novo telefone: ");
-                    cliente.setTelefone(novoTelefone);
-                    break;
-                case 3:
-                    String novoEndereco = lerString("Novo endereço: ");
-                    cliente.setEndereco(novoEndereco);
-                    break;
-                case 4:
-                    String novoId = lerString("Novo ID do cliente: ");
-                    cliente.setClienteId(novoId);
-                    break;
-                case 0:
-                    alterar = false;
-                    break;
-                default:
-                    System.out.println("Opção inválida!");
-            }
-        }
-        System.out.println("Dados do cliente atualizados com sucesso!");
-    }
-    /**
- * Altera os dados de um funcionário existente.
- */
-    private static void alterarDadosFuncionario() {
-        System.out.println("\n=== ALTERAR DADOS DO FUNCIONÁRIO ===");
-        String matricula = lerString("Digite a matrícula do funcionário: ");
-        
-        // Busca o funcionário pela matrícula
-        Funcionario funcionario = oficina.getFuncionarios().stream()
-            .filter(f -> f.getMatricula().equalsIgnoreCase(matricula))
-            .findFirst()
-            .orElse(null);
-        
-        if (funcionario == null) {
-            System.out.println("Funcionário não encontrado!");
-            return;
-        }
-        
-        boolean alterar = true;
-        while (alterar) {
-            System.out.println("\nFuncionário encontrado: " + funcionario);
-            System.out.println("1. Alterar nome");
-            System.out.println("2. Alterar telefone");
-            System.out.println("3. Alterar endereço");
-            System.out.println("4. Alterar cargo");
-            System.out.println("5. Alterar salário");
-            System.out.println("0. Voltar");
-            
-            int opcao = lerInteiro("Digite sua opção: ");
-            switch (opcao) {
-                case 1:
-                    String novoNome = lerString("Novo nome: ");
-                    funcionario.setNome(novoNome);
-                    break;
-                case 2:
-                    String novoTelefone = lerString("Novo telefone: ");
-                    funcionario.setTelefone(novoTelefone);
-                    break;
-                case 3:
-                    String novoEndereco = lerString("Novo endereço: ");
-                    funcionario.setEndereco(novoEndereco);
-                    break;
-                case 4:
-                    String novoCargo = lerString("Novo cargo: ");
-                    funcionario.setCargo(novoCargo);
-                    break;
-                case 5:
-                    double novoSalario = lerDouble("Novo salário: ");
-                    funcionario.setSalario(novoSalario);
-                    break;
-                case 0:
-                    alterar = false;
-                    break;
-                default:
-                    System.out.println("Opção inválida!");
-            }
-        }
-        System.out.println("Dados do funcionário atualizados com sucesso!");
-    }
-    
-    /***
-     * Registra o ponto do funcionário.
-     * <p>
-     * @param isEntrada
-     */
-    private static void registrarPonto(boolean isEntrada) {
-        String matricula = lerString("Digite a matrícula: ");
-        oficina.registrarPonto(matricula, isEntrada);
-        System.out.println(isEntrada ? "Entrada registrada!" : "Saída registrada!");
-    }
-
-    /***
-     * Lista os registros de ponto dos funcionários.
-     * <p>
-     */
-    private static void listarRegistrosPonto() {
-        System.out.println("\n=== REGISTROS DE PONTO ===");
-        oficina.getRegistrosPonto().forEach(System.out::println);
-    }
-
-    /**
-     * Busca um funcionário pelo nome.
-     */
-    private static void buscarFuncionarioPorNome() {
-        String nome = lerString("Digite o nome do funcionário: ");
-        oficina.getFuncionarios().stream()
-            .filter(f -> f.getNome().equalsIgnoreCase(nome))
-            .forEach(System.out::println);
-    }
-
-
-    /**
-     * Remove um funcionário da oficina.
-     */
-    private static void removerFuncionario() {
-        String matricula = lerString("Digite a matrícula do funcionário a ser removido: ");
-        oficina.demitirFuncionario(matricula);
-    }
-
-    /**
-     * Cadastra um novo serviço na oficina.
-     */
-    private static void cadastrarServico() {
-        System.out.println("\n=== CADASTRAR SERVIÇO ===");
-        String nome = lerString("Nome: ");
-        String descricao = lerString("Descrição: ");
-        double valor = lerDouble("Valor: ");
-        int tempo = lerInteiro("Tempo estimado (minutos): ");
-        
-        Servico novoServico = new Servico(nome, descricao, valor, tempo);
-        oficina.adicionarServico(novoServico);
-    }
-    /**
-     * Remove um serviço da oficina.
-     */
-    private static void removerServico() {
-        String nome = lerString("Digite o nome do serviço a ser removido: ");
-        oficina.removerServico(nome);
-    }
-    /**
-     * Realiza um agendamento de serviço na oficina.
-     */
-    private static void realizarAgendamento() {
-        System.out.println("\n=== REALIZAR AGENDAMENTO ===");
-
-        // Listar clientes para seleção
-        System.out.println("\nClientes disponíveis:");
-        oficina.listarClientes();
-        String clienteId = lerString("Digite o ID do cliente: ");
-        Cliente cliente = oficina.getClientes().stream()
-            .filter(c -> c.getClienteId() != null && c.getClienteId().equalsIgnoreCase(clienteId))
-            .findFirst()
-            .orElse(null);
-
-        if (cliente == null) {
-            System.out.println("Cliente não encontrado!");
-            return;
-        }
-
-        // Listar veículos do cliente
-        System.out.println("\nVeículos do cliente:");
-        if (cliente.getVeiculos().isEmpty()) {
-            System.out.println("Este cliente não possui veículos cadastrados!");
-            return;
-        }
-        cliente.listarVeiculos();
-
-        String placa = lerString("Digite a placa do veículo (ex: ABC1D23): ");
-        Veiculo veiculo = cliente.getVeiculos().stream()
-            .filter(v -> v.getPlaca() != null && v.getPlaca().equalsIgnoreCase(placa.replace(" ", "")))
-            .findFirst()
-            .orElse(null);
-
-        if (veiculo == null) {
-            System.out.println("Veículo não encontrado! Verifique a placa digitada.");
-            return;
-        }
-
-        // Selecionar múltiplos serviços
-        List<Servico> servicosSelecionados = new ArrayList<>();
-        boolean adicionarMaisServicos = true;
-        
-        while (adicionarMaisServicos) {
-            System.out.println("\nServiços disponíveis:");
-            List<Servico> servicos = oficina.getServicos();
-            for (int i = 0; i < servicos.size(); i++) {
-                System.out.println((i+1) + ". " + servicos.get(i).getNome() + " - R$" + servicos.get(i).getValor());
-            }
-
-            int opcaoServico = lerInteiro("Digite o número do serviço a adicionar: ");
-            if (opcaoServico < 1 || opcaoServico > servicos.size()) {
-                System.out.println("Número de serviço inválido!");
-                continue;
-            }
-            
-            servicosSelecionados.add(servicos.get(opcaoServico - 1));
-            System.out.println("Serviço adicionado: " + servicos.get(opcaoServico - 1).getNome());
-
-            String resposta = lerString("Deseja adicionar outro serviço? (S/N): ");
-            adicionarMaisServicos = resposta.equalsIgnoreCase("S");
-        }
-
-        if (servicosSelecionados.isEmpty()) {
-            System.out.println("Nenhum serviço selecionado!");
-            return;
-        }
-
-        // Listar funcionários disponíveis
-        System.out.println("\nFuncionários disponíveis:");
-        oficina.listarFuncionarios();
-        String matriculaFuncionario = lerString("Digite a matrícula do funcionário: ");
-        Funcionario funcionario = oficina.getFuncionarios().stream()
-            .filter(f -> f.getMatricula() != null && f.getMatricula().equalsIgnoreCase(matriculaFuncionario))
-            .findFirst()
-            .orElse(null);
-
-        if (funcionario == null) {
-            System.out.println("Funcionário não encontrado!");
-            return;
-        }
-
-        // Solicitar data e hora
-        String data = lerData("Digite a data do agendamento (dd/MM/yyyy): ");
-        String hora = lerHora("Digite a hora do agendamento (HH:mm): ");
-        String dataHora = data + " " + hora;
-
-        // Verificar disponibilidade do funcionário
-        if (!oficina.getAgenda().verificarDisponibilidadeFuncionario(funcionario, dataHora)) {
-            System.out.println("Este funcionário já possui um agendamento neste horário!");
-            return;
-        }
-
-        String status = "A fazer";
-        oficina.agendarServico(cliente, veiculo, servicosSelecionados, funcionario, dataHora, status);
-    }
-
-    // Métodos auxiliares para validar data e hora
-    private static String lerData(String mensagem) {
-        while (true) {
-            String input = lerString(mensagem);
-            if (input.matches("\\d{2}/\\d{2}/\\d{4}")) {
-                return input;
-            }
-            System.out.println("Formato inválido! Use dd/MM/yyyy (ex: 15/05/2025)");
-        }
-    }
-
-    private static String lerHora(String mensagem) {
-        while (true) {
-            String input = lerString(mensagem);
-            if (input.matches("\\d{2}:\\d{2}")) {
-                return input;
-            }
-            System.out.println("Formato inválido! Use HH:mm (ex: 14:30)");
-        }
-    }
-    /**
-     * Lista os agendamentos por cliente.
-     */
-    private static void listarAgendamentosPorCliente() {
-        String nome = lerString("Digite o nome do cliente: ");
-        oficina.getAgenda().listarAgendamentosPorCliente(nome);
-    }
-    /**
-     * Lista os agendamentos por status.
-     */
-    private static void listarAgendamentosPorStatus() {
-        String status = lerString("Digite o status (Agendado/Concluído/Cancelado): ");
-        oficina.getAgenda().listarAgendamentosPorStatus(status);
-    }
-        /**
-     * Cancela um agendamento existente.
-     */
-    private static void cancelarAgendamento() {
-        oficina.getAgenda().listarAgendamentos();
-        
-        if (oficina.getAgenda().getAgendamentos().isEmpty()) {
-            System.out.println("Não há agendamentos para cancelar.");
-            return;
-        }
-        
-        int index = lerInteiro("Digite o número do agendamento a cancelar: ") - 1;
-        
-        if (index < 0 || index >= oficina.getAgenda().getAgendamentos().size()) {
-            System.out.println("Número de agendamento inválido!");
-            return;
-        }
-        
-        Agenda.Agendamento ag = oficina.getAgenda().getAgendamentos().get(index);
-        if ("Concluído".equalsIgnoreCase(ag.getStatus())) {
-            System.out.println("Não é possível cancelar um agendamento já concluído!");
-            return;
-        }
-        
-        System.out.println("\nAgendamento selecionado:");
-        System.out.println(ag);
-        String confirmacao = lerString("Deseja realmente cancelar este agendamento? (S/N): ");
-        
-        if (confirmacao.equalsIgnoreCase("S")) {
-            String matricula = lerString("Digite sua matrícula para confirmar: ");
-            oficina.cancelarAgendamento(index, matricula);
-        } else {
-            System.out.println("Cancelamento não realizado.");
-        }
-    }
-
-    
-    /**
-     * Conclui um agendamento existente.
-     */
-    private static void concluirAgendamento() {
-        oficina.getAgenda().listarAgendamentos();
-        
-        if (oficina.getAgenda().getAgendamentos().isEmpty()) {
-            System.out.println("Não há agendamentos para concluir.");
-            return;
-        }
-        
-        int index = lerInteiro("Digite o número do agendamento a concluir: ") - 1;
-        
-        if (index < 0 || index >= oficina.getAgenda().getAgendamentos().size()) {
-            System.out.println("Número de agendamento inválido!");
-            return;
-        }
-        
-        Agenda.Agendamento ag = oficina.getAgenda().getAgendamentos().get(index);
-        
-        if ("Concluído".equalsIgnoreCase(ag.getStatus())) {
-            System.out.println("Este agendamento já foi concluído!");
-            return;
-        }
-        
-        if ("Cancelado".equalsIgnoreCase(ag.getStatus())) {
-            System.out.println("Não é possível concluir um agendamento cancelado!");
-            return;
-        }
-        
-        System.out.println("\nAgendamento selecionado:");
-        System.out.println(ag);
-        String confirmacao = lerString("Deseja realmente concluir este agendamento? (S/N): ");
-        
-        if (confirmacao.equalsIgnoreCase("S")) {
-            String matricula = lerString("Digite sua matrícula para confirmar: ");
-            oficina.concluirAgendamento(index, matricula);
-        } else {
-            System.out.println("Conclusão não realizada.");
-        }
-    }
-    /**
-     * Registra um pagamento na oficina.
-     */
-    private static void registrarPagamento() {
-        double valor = lerDouble("Valor: ");
-        String descricao = lerString("Descrição: ");
-        String data = lerString("Data (dd/MM/yyyy): ");
-        oficina.registrarPagamento(valor, descricao, data);
-    }
-    /**
-     * Registra uma despesa na oficina.
-     */
-    private static void registrarDespesa() {
-        double valor = lerDouble("Valor: ");
-        String descricao = lerString("Descrição: ");
-        String data = lerString("Data (dd/MM/yyyy): ");
-        oficina.registrarDespesa(valor, descricao, data);
-    }
-    /**
-     * Gera um relatório diário de serviços realizados.
-     */
-    private static void gerarRelatorioDiario() {
-        String data = lerString("Digite a data (dd/MM/yyyy): ");
-        oficina.gerarRelatorioDiario(data);
-    }
-    /**
-     * Gera um relatório mensal de serviços realizados.
-     */
-    private static void gerarRelatorioMensal() {
-        int mes = lerInteiro("Digite o mês (1-12): ");
-        int ano = lerInteiro("Digite o ano: ");
-        oficina.gerarRelatorioMensal(mes, ano);
-    }
-    /**
- * Salva os dados de todas as classes em arquivos JSON separados.
- * @throws IOException Se ocorrer um erro durante a escrita nos arquivos.
- */
-    public static void salvarDados() throws IOException {
-        // Usando a classe JsonUtil que já tem a configuração de pretty print
-        
-        JsonUtil.salvarParaJson(oficina.getCaixa().getTransacoes(), "data/transacoes.json");
-        
-        JsonUtil.salvarParaJson(oficina, "data/oficina.json");
-        System.out.println("Dados da oficina salvos com sucesso!");
-
-        JsonUtil.salvarParaJson(oficina.getRegistrosPonto(), "data/pontos.json");
-        System.out.println("Dados de ponto salvos com sucesso!");
-
-        JsonUtil.salvarParaJson(loginManager, "data/login.json");
-        System.out.println("Dados de login salvos com sucesso!");
-
-        JsonUtil.salvarParaJson(contadorVeiculos, "data/contadorVeiculos.json");
-        System.out.println("Contador de veículos salvo com sucesso!");
-
-        JsonUtil.salvarParaJson(oficina.getClientes(), "data/clientes.json");
-        System.out.println("Dados dos clientes salvos com sucesso!");
-
-        JsonUtil.salvarParaJson(oficina.getFuncionarios(), "data/funcionarios.json");
-        System.out.println("Dados dos funcionários salvos com sucesso!");
-
-        JsonUtil.salvarParaJson(oficina.getServicos(), "data/servicos.json");
-        System.out.println("Dados dos serviços salvos com sucesso!");
-
-        JsonUtil.salvarParaJson(oficina.getEstoque(), "data/estoque.json");
-        System.out.println("Dados do estoque salvos com sucesso!");
-
-        JsonUtil.salvarParaJson(oficina.getAgenda(), "data/agenda.json");
-        System.out.println("Dados da agenda salvos com sucesso!");
-
-        JsonUtil.salvarParaJson(oficina.getCaixa(), "data/caixa.json");
-        System.out.println("Dados do caixa salvos com sucesso!");
-    }
-
-
-/**
- * Carrega os dados de todas as classes a partir de arquivos JSON separados.
- * @throws IOException Se ocorrer um erro durante a leitura dos arquivos.
- * @throws ClassNotFoundException Se ocorrer um erro na desserialização dos objetos.
- */
-    private static void carregarDados() throws IOException, ClassNotFoundException {
-        File arquivoOficina = new File("data/oficina.json");
-        File arquivoLogin = new File("data/login.json");
-        File arquivoClientes = new File("data/clientes.json");
-        File arquivoFuncionarios = new File("data/funcionarios.json");
-        File arquivoServicos = new File("data/servicos.json");
-        File arquivoEstoque = new File("data/estoque.json");
-        File arquivoAgenda = new File("data/agenda.json");
-        File arquivoCaixa = new File("data/caixa.json");
-        File arquivoPonto = new File("data/pontos.json");
-        File arquivoTransacoes = new File("data/transacoes.json");
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        if (!arquivoOficina.exists() || !arquivoLogin.exists()) {
-            System.out.println("Arquivos de dados não encontrados. Criando novo sistema...");
-            oficina = new Oficina();
-            loginManager = new Login();
-            contadorVeiculos = 0;
-            return;
-        }
-
-        // Carrega os dados da oficina
-        oficina = mapper.readValue(arquivoOficina, Oficina.class);
-        System.out.println("Dados da oficina carregados com sucesso!");
-
-        // Carrega os dados de login
-        loginManager = mapper.readValue(arquivoLogin, Login.class);
-        System.out.println("Dados de login carregados com sucesso!");
-
-        // Carrega o contador de veículos
-        File arquivoContador = new File("data/contadorVeiculos.json");
-        if (arquivoContador.exists()) {
-            contadorVeiculos = mapper.readValue(arquivoContador, Integer.class);
-            System.out.println("Contador de veículos carregado com sucesso!");
-        } else {
-            contadorVeiculos = 0;
-        }
-
-        // Carrega os dados de clientes
-        if (arquivoClientes.exists()) {
-            List<Cliente> clientes = mapper.readValue(arquivoClientes, new TypeReference<List<Cliente>>() {});
-            oficina.setClientes(clientes);
-            System.out.println("Dados dos clientes carregados com sucesso!");
-        } else {
-            oficina.setClientes(new ArrayList<>());
-        }
-
-        // Carrega os dados de funcionários
-        if (arquivoFuncionarios.exists()) {
-            List<Funcionario> funcionarios = mapper.readValue(arquivoFuncionarios, new TypeReference<List<Funcionario>>() {});
-            oficina.setFuncionarios(funcionarios);
-            System.out.println("Dados dos funcionários carregados com sucesso!");
-        } else {
-            oficina.setFuncionarios(new ArrayList<>());
-        }
-
-        // Carrega os dados de serviços
-        if (arquivoServicos.exists()) {
-            List<Servico> servicos = mapper.readValue(arquivoServicos, new TypeReference<List<Servico>>() {});
-            oficina.setServicos(servicos);
-            System.out.println("Dados dos serviços carregados com sucesso!");
-        } else {
-            oficina.setServicos(new ArrayList<>());
-        }
-
-        // Carrega os dados do estoque
-        if (arquivoEstoque.exists()) {
-            Estoque estoque = mapper.readValue(arquivoEstoque, Estoque.class);
-            oficina.setEstoque(estoque);
-            System.out.println("Dados do estoque carregados com sucesso!");
-        } else {
-            oficina.setEstoque(new Estoque());
-        }
-
-        // Carrega os dados da agenda
-        if (arquivoAgenda.exists()) {
-            Agenda agenda = mapper.readValue(arquivoAgenda, Agenda.class);
-            oficina.setAgenda(agenda);
-            System.out.println("Dados da agenda carregados com sucesso!");
-        } else {
-            oficina.setAgenda(new Agenda());
-        }
-
-        // Carrega os dados do caixa
-        if (arquivoCaixa.exists()) {
-            Caixa caixa = mapper.readValue(arquivoCaixa, Caixa.class);
-            oficina.setCaixa(caixa);
-            System.out.println("Dados do caixa carregados com sucesso!");
-        } else {
-            oficina.setCaixa(new Caixa());
-        }
-    }
-    
-    /***
-     * Altera a senha do usuário.
-     */
-    private static void alterarSenha() {
-        System.out.println("\n=== ALTERAR SENHA ===");
-        String usuario = lerString("Digite o nome de usuário: ");
-        String senhaAtual = lerString("Digite a senha atual: ");
-        String novaSenha = lerString("Digite a nova senha: ");
-        
-        // Chama o método da classe Login para alterar a senha
-        loginManager.alterarSenha(usuario, senhaAtual, novaSenha);
-    }  
-    // Métodos auxiliares para leitura de entrada
-    /**
-     * Lê uma string do console.
-     * 
-     * @param mensagem Mensagem a ser exibida ao usuário
-     * @return A string lida do console
-     */
-    private static String lerString(String mensagem) {
-        System.out.print(mensagem);
-        return scanner.nextLine();
-    }
-    /**
-     * Lê um inteiro do console.
-     * 
-     * @param mensagem Mensagem a ser exibida ao usuário
-     * @return O inteiro lido do console
-     */
-    private static int lerInteiro(String mensagem) {
-        while (true) {
-            try {
-                System.out.print(mensagem);
-                return Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Por favor, digite um número válido!");
-            }
-        }
-    }
-    /**
-     * Lê um número decimal do console.
-     * 
-     * @param mensagem Mensagem a ser exibida ao usuário
-     * @return O número decimal lido do console
-     */
-    private static double lerDouble(String mensagem) {
-        while (true) {
-            try {
-                System.out.print(mensagem);
-                return Double.parseDouble(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Por favor, digite um valor válido!");
-            }
-        }
-    }
-
-    private static void listarTodasTransacoes() {
-        System.out.println("\n=== TODAS AS TRANSAÇÕES ===");
-        List<Caixa.Transacao> transacoes = oficina.getCaixa().getTransacoes();
-        
-        if (transacoes.isEmpty()) {
-            System.out.println("Nenhuma transação registrada.");
-            return;
-        }
-        
-        // Formatar a saída para melhor visualização
-        System.out.println("Data       | Tipo    | Valor    | Categoria       | Descrição");
-        System.out.println("---------------------------------------------------------------");
-        for (Caixa.Transacao t : transacoes) {
-            System.out.printf("%-10s | %-7s | R$ %-6.2f | %-15s | %s\n",
-                    t.getData(),
-                    t.getTipo(),
-                    t.getValor(),
-                    t.getCategoria(),
-                    t.getDescricao());
-        }
-        
-        double saldoAtual = oficina.getCaixa().getSaldo();
-        System.out.printf("\nTotal: %d transações | Saldo atual: R$ %.2f\n",
-                        transacoes.size(), saldoAtual);
-    }
-
-    private static void listarTransacoesPorPeriodo() {
-        System.out.println("\n=== FILTRAR POR PERÍODO ===");
-        String dataInicio = lerString("Data inicial (dd/MM/yyyy): ");
-        String dataFim = lerString("Data final (dd/MM/yyyy): ");
-        
-        List<Caixa.Transacao> filtradas = oficina.getCaixa().getTransacoes().stream()
-                .filter(t -> t.getData().compareTo(dataInicio) >= 0 && t.getData().compareTo(dataFim) <= 0)
-                .collect(Collectors.toList());
-        
-        if (filtradas.isEmpty()) {
-            System.out.println("Nenhuma transação no período especificado.");
-            return;
-        }
-        
-        System.out.println("\nTransações no período de " + dataInicio + " a " + dataFim + ":");
-        System.out.println("Data       | Tipo    | Valor    | Categoria       | Descrição");
-        System.out.println("---------------------------------------------------------------");
-        for (Caixa.Transacao t : filtradas) {
-            System.out.printf("%-10s | %-7s | R$ %-6.2f | %-15s | %s\n",
-                    t.getData(),
-                    t.getTipo(),
-                    t.getValor(),
-                    t.getCategoria(),
-                    t.getDescricao());
-        }
-        
-        double totalEntradas = filtradas.stream()
-                .filter(t -> t.getTipo().equalsIgnoreCase("Entrada"))
-                .mapToDouble(Caixa.Transacao::getValor)
-                .sum();
-        
-        double totalSaidas = filtradas.stream()
-                .filter(t -> t.getTipo().equalsIgnoreCase("Saída"))
-                .mapToDouble(Caixa.Transacao::getValor)
-                .sum();
-        
-        System.out.printf("\nResumo do período:\n");
-        System.out.printf("Total de entradas: R$ %.2f\n", totalEntradas);
-        System.out.printf("Total de saídas:   R$ %.2f\n", totalSaidas);
-        System.out.printf("Saldo líquido:     R$ %.2f\n", (totalEntradas - totalSaidas));
-    }
-
-    private static void listarTransacoesPorCategoria() {
-        System.out.println("\n=== FILTRAR POR CATEGORIA ===");
-        
-        // Mostrar categorias disponíveis
-        List<String> categorias = oficina.getCaixa().getTransacoes().stream()
-                .map(t -> t.getCategoria())
-                .distinct()
-                .collect(Collectors.toList());
-        
-        System.out.println("Categorias disponíveis:");
-        categorias.forEach(System.out::println);
-        
-        String categoria = lerString("\nDigite a categoria: ");
-        
-        List<Caixa.Transacao> filtradas = oficina.getCaixa().getTransacoes().stream()
-                .filter(t -> t.getCategoria().equalsIgnoreCase(categoria))
-                .collect(Collectors.toList());
-        
-        if (filtradas.isEmpty()) {
-            System.out.println("Nenhuma transação nesta categoria.");
-            return;
-        }
-        
-        System.out.println("\nTransações na categoria '" + categoria + "':");
-        System.out.println("Data       | Tipo    | Valor    | Descrição");
-        System.out.println("-------------------------------------------");
-        for (Caixa.Transacao t : filtradas) {
-            System.out.printf("%-10s | %-7s | R$ %-6.2f | %s\n",
-                    t.getData(),
-                    t.getTipo(),
-                    t.getValor(),
-                    t.getDescricao());
-        }
-        
-        double total = filtradas.stream()
-                .mapToDouble(Caixa.Transacao::getValor)
-                .sum();
-        
-        System.out.printf("\nTotal na categoria '%s': R$ %.2f (%d transações)\n",
-                categoria, total, filtradas.size());
-    }
-
-    private static void listarTransacoesPorTipo() {
-        System.out.println("\n=== FILTRAR POR TIPO ===");
-        String tipo = lerString("Digite o tipo (Entrada/Saída): ");
-        
-        if (!tipo.equalsIgnoreCase("Entrada") && !tipo.equalsIgnoreCase("Saída")) {
-            System.out.println("Tipo inválido! Use 'Entrada' ou 'Saída'.");
-            return;
-        }
-        
-        List<Caixa.Transacao> filtradas = oficina.getCaixa().getTransacoes().stream()
-                .filter(t -> t.getTipo().equalsIgnoreCase(tipo))
-                .collect(Collectors.toList());
-        
-        if (filtradas.isEmpty()) {
-            System.out.println("Nenhuma transação deste tipo.");
-            return;
-        }
-        
-        System.out.println("\nTransações do tipo '" + tipo + "':");
-        System.out.println("Data       | Valor    | Categoria       | Descrição");
-        System.out.println("---------------------------------------------------");
-        for (Caixa.Transacao t : filtradas) {
-            System.out.printf("%-10s | R$ %-6.2f | %-15s | %s\n",
-                    t.getData(),
-                    t.getValor(),
-                    t.getCategoria(),
-                    t.getDescricao());
-        }
-        
-        double total = filtradas.stream()
-                .mapToDouble(Caixa.Transacao::getValor)
-                .sum();
-        
-        System.out.printf("\nTotal de '%s': R$ %.2f (%d transações)\n",
-                tipo, total, filtradas.size());
-    }
-
-    private static void listarTransacoesPorResponsavel() {
-        System.out.println("\n=== FILTRAR POR RESPONSÁVEL ===");
-        String responsavel = lerString("Digite o nome ou matrícula do responsável: ");
-        
-        List<Caixa.Transacao> filtradas = oficina.getCaixa().getTransacoes().stream()
-                .filter(t -> t.getResponsavel().toLowerCase().contains(responsavel.toLowerCase()))
-                .collect(Collectors.toList());
-        
-        if (filtradas.isEmpty()) {
-            System.out.println("Nenhuma transação encontrada para este responsável.");
-            return;
-        }
-        
-        System.out.println("\nTransações do responsável '" + responsavel + "':");
-        System.out.println("Data       | Tipo    | Valor    | Categoria       | Descrição");
-        System.out.println("---------------------------------------------------------------");
-        for (Caixa.Transacao t : filtradas) {
-            System.out.printf("%-10s | %-7s | R$ %-6.2f | %-15s | %s\n",
-                    t.getData(),
-                    t.getTipo(),
-                    t.getValor(),
-                    t.getCategoria(),
-                    t.getDescricao());
-        }
-        
-        System.out.printf("\nTotal para '%s': %d transações\n",
-                responsavel, filtradas.size());
-    }
-
-        /**
-     * Inicializa dados de demonstração para facilitar o uso do sistema.
-     * <p>
-     * Este método cria funcionários, clientes, veículos, serviços e agendamentos de exemplo
-     * para demonstrar as funcionalidades do sistema.
-     * </p>
-     */
-    private static void inicializarDadosDemonstracao() {
+    /*private static void inicializarDadosDemonstracao() {
         // Cadastrar funcionários de demonstração
         Funcionario mecanico = new Funcionario("João Silva", "11987654321", "Rua A, 123", 
                                             "Mecânico", 2500.00, "MEC001");
@@ -1682,6 +685,6 @@ public class SistemaOficinac {
 
         System.out.println("\nDados de demonstração cadastrados com sucesso!");
     }
-
+    */
     
 }

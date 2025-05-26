@@ -1,3 +1,4 @@
+com\mycompany\sistemaoficinac\Oficina$3.class
 com\mycompany\sistemaoficinac\Funcionario.class
 com\mycompany\sistemaoficinac\Agenda$Agendamento$PorData.class
 com\mycompany\sistemaoficinac\Login.class
@@ -6,15 +7,14 @@ com\mycompany\sistemaoficinac\Veiculo.class
 com\mycompany\sistemaoficinac\Caixa$Transacao.class
 com\mycompany\sistemaoficinac\Servico.class
 com\mycompany\sistemaoficinac\Cliente.class
+com\mycompany\sistemaoficinac\Oficina$1.class
 com\mycompany\sistemaoficinac\PontoFuncionario.class
-com\mycompany\sistemaoficinac\SistemaOficinac$2.class
 com\mycompany\sistemaoficinac\Oficina.class
 com\mycompany\sistemaoficinac\Estoque.class
-com\mycompany\sistemaoficinac\SistemaOficinac$3.class
+com\mycompany\sistemaoficinac\Oficina$2.class
 com\mycompany\sistemaoficinac\Administrador.class
 com\mycompany\sistemaoficinac\Agenda$Agendamento$PorCliente.class
 com\mycompany\sistemaoficinac\Estoque$ItemEstoque.class
-com\mycompany\sistemaoficinac\SistemaOficinac$1.class
 com\mycompany\sistemaoficinac\Elevador.class
 com\mycompany\sistemaoficinac\Agenda$Agendamento.class
 com\mycompany\sistemaoficinac\JsonUtil.class

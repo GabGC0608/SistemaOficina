@@ -1,22 +1,4 @@
 [ {
-  "nome" : "Troca de Filtro de Ar",
-  "descricao" : "Substituição do filtro de ar",
-  "valor" : 50.0,
-  "tempoEstimado" : 20,
-  "requerElevador" : false
-}, {
-  "nome" : "Troca de Vela de Ignição",
-  "descricao" : "Substituição das velas de ignição",
-  "valor" : 60.0,
-  "tempoEstimado" : 30,
-  "requerElevador" : false
-}, {
-  "nome" : "Troca de Filtro de Combustível",
-  "descricao" : "Substituição do filtro de combustível",
-  "valor" : 70.0,
-  "tempoEstimado" : 25,
-  "requerElevador" : false
-}, {
   "nome" : "Balanceamento",
   "descricao" : "Balanceamento de rodas",
   "valor" : 80.0,
@@ -47,6 +29,12 @@
   "tempoEstimado" : 30,
   "requerElevador" : false
 }, {
+  "nome" : "Troca de Óleo",
+  "descricao" : "Troca do óleo do motor",
+  "valor" : 120.0,
+  "tempoEstimado" : 45,
+  "requerElevador" : false
+}, {
   "nome" : "Troca de Filtro de Combustível",
   "descricao" : "Troca do filtro de combustível",
   "valor" : 150.0,
@@ -59,10 +47,10 @@
   "tempoEstimado" : 30,
   "requerElevador" : false
 }, {
-  "nome" : "Diagnóstico Eletrônico",
-  "descricao" : "Leitura de falhas do sistema",
+  "nome" : "Diagnóstico Elétrico",
+  "descricao" : "Diagnóstico do sistema elétrico",
   "valor" : 150.0,
-  "tempoEstimado" : 30,
+  "tempoEstimado" : 60,
   "requerElevador" : false
 }, {
   "nome" : "Alinhamento",
@@ -74,7 +62,7 @@
   "nome" : "Troca de Pastilhas",
   "descricao" : "Troca das pastilhas de freio",
   "valor" : 180.0,
-  "tempoEstimado" : 45,
+  "tempoEstimado" : 60,
   "requerElevador" : false
 }, {
   "nome" : "Troca de Pastilhas",
@@ -83,8 +71,8 @@
   "tempoEstimado" : 60,
   "requerElevador" : false
 }, {
-  "nome" : "Troca de Óleo",
-  "descricao" : "Troca do óleo do motor",
+  "nome" : "Limpeza de Bicos",
+  "descricao" : "Limpeza dos bicos injetores",
   "valor" : 200.0,
   "tempoEstimado" : 60,
   "requerElevador" : false
@@ -95,16 +83,22 @@
   "tempoEstimado" : 60,
   "requerElevador" : false
 }, {
-  "nome" : "Troca de Bateria",
-  "descricao" : "Substituição da bateria do veículo",
-  "valor" : 250.0,
-  "tempoEstimado" : 60,
+  "nome" : "Troca de Correia",
+  "descricao" : "Troca da correia dentada",
+  "valor" : 280.0,
+  "tempoEstimado" : 90,
   "requerElevador" : false
 }, {
   "nome" : "Troca de Bateria",
   "descricao" : "Troca de bateria do veículo",
   "valor" : 300.0,
   "tempoEstimado" : 45,
+  "requerElevador" : false
+}, {
+  "nome" : "Revisão Completa",
+  "descricao" : "Revisão geral do veículo",
+  "valor" : 350.0,
+  "tempoEstimado" : 120,
   "requerElevador" : false
 }, {
   "nome" : "Troca de Correia Dentada",

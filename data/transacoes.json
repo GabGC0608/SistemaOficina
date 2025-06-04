@@ -1,9 +1,235 @@
 [ {
   "tipo" : "Entrada",
-  "valor" : 970.0,
-  "descricao" : "Serviços: Troca de Óleo, Revisão Básica, Troca de Pneus - Cliente: Carlos Oliveira",
-  "data" : "16/05/2025",
+  "valor" : 2845.0,
+  "descricao" : "Troca de óleo e revisão geral",
+  "data" : "08/05/2024",
   "categoria" : "Serviços",
-  "responsavel" : "MEC001",
-  "cliente" : null
+  "responsavel" : "João Silva",
+  "cliente" : "Roberto Oliveira",
+  "agendamento" : {
+    "cliente" : {
+      "nome" : "Roberto Oliveira",
+      "telefone" : "11955556666",
+      "endereco" : "Rua E, 789",
+      "clienteId" : "CLI0001",
+      "veiculos" : [ {
+        "modelo" : "Gol",
+        "placa" : "ABC1234",
+        "ano" : 2018,
+        "marca" : "Volkswagen",
+        "cor" : "Prata"
+      } ],
+      "cpfAnonimizado" : "***.456.***-09"
+    },
+    "veiculo" : {
+      "modelo" : "Gol",
+      "placa" : "ABC1234",
+      "ano" : 2018,
+      "marca" : "Volkswagen",
+      "cor" : "Prata"
+    },
+    "servicos" : [ {
+      "nome" : "Inspeção Inicial",
+      "descricao" : "Inspeção obrigatória do veículo",
+      "valor" : 50.0,
+      "tempoEstimado" : 60,
+      "requerElevador" : false
+    }, {
+      "nome" : "Troca de Óleo",
+      "descricao" : "Troca de óleo e filtro",
+      "valor" : 120.0,
+      "tempoEstimado" : 30,
+      "requerElevador" : false
+    }, {
+      "nome" : "Revisão Básica",
+      "descricao" : "Revisão de 10 itens",
+      "valor" : 250.0,
+      "tempoEstimado" : 60,
+      "requerElevador" : false
+    } ],
+    "responsavel" : {
+      "nome" : "João Silva",
+      "telefone" : "11987654321",
+      "endereco" : "Rua A, 123",
+      "cargo" : "Mecânico",
+      "salario" : 2500.0,
+      "matricula" : "MEC001",
+      "departamento" : "Motor"
+    },
+    "dataHora" : "10/05/2024 09:00",
+    "status" : "Agendado",
+    "valorTotal" : 420.0,
+    "inspetorResponsavel" : {
+      "nome" : "Carlos Oliveira",
+      "telefone" : "11987654323",
+      "endereco" : "Rua C, 345",
+      "cargo" : "Mecânico",
+      "salario" : 2500.0,
+      "matricula" : "MEC003",
+      "departamento" : "Suspensão"
+    },
+    "resultadoInspecao" : null
+  },
+  "itensUtilizados" : [ {
+    "codigo" : "F001",
+    "nome" : "Filtro de Óleo",
+    "quantidade" : 15,
+    "preco" : 45.0,
+    "descricao" : "Filtro de óleo para motor"
+  }, {
+    "codigo" : "O001",
+    "nome" : "Óleo Motor 5W30",
+    "quantidade" : 50,
+    "preco" : 35.0,
+    "descricao" : "Óleo sintético 5W30"
+  } ],
+  "notaFiscalGerada" : false
+}, {
+  "tipo" : "Entrada",
+  "valor" : 5150.0,
+  "descricao" : "Reparo elétrico e troca de bateria",
+  "data" : "09/05/2024",
+  "categoria" : "Serviços",
+  "responsavel" : "Pedro Santos",
+  "cliente" : "Ana Santos",
+  "agendamento" : {
+    "cliente" : {
+      "nome" : "Ana Santos",
+      "telefone" : "11944445555",
+      "endereco" : "Rua F, 1011",
+      "clienteId" : "CLI0002",
+      "veiculos" : [ {
+        "modelo" : "Civic",
+        "placa" : "XYZ5678",
+        "ano" : 2020,
+        "marca" : "Honda",
+        "cor" : "Preto"
+      } ],
+      "cpfAnonimizado" : "***.654.***-00"
+    },
+    "veiculo" : {
+      "modelo" : "Civic",
+      "placa" : "XYZ5678",
+      "ano" : 2020,
+      "marca" : "Honda",
+      "cor" : "Preto"
+    },
+    "servicos" : [ {
+      "nome" : "Inspeção Inicial",
+      "descricao" : "Inspeção obrigatória do veículo",
+      "valor" : 50.0,
+      "tempoEstimado" : 60,
+      "requerElevador" : false
+    }, {
+      "nome" : "Troca de Pneus",
+      "descricao" : "Troca de pneus e balanceamento",
+      "valor" : 600.0,
+      "tempoEstimado" : 90,
+      "requerElevador" : false
+    } ],
+    "responsavel" : {
+      "nome" : "Pedro Santos",
+      "telefone" : "11987654322",
+      "endereco" : "Rua B, 234",
+      "cargo" : "Mecânico",
+      "salario" : 2500.0,
+      "matricula" : "MEC002",
+      "departamento" : "Elétrica"
+    },
+    "dataHora" : "11/05/2024 14:00",
+    "status" : "Agendado",
+    "valorTotal" : 650.0,
+    "inspetorResponsavel" : {
+      "nome" : "João Silva",
+      "telefone" : "11987654321",
+      "endereco" : "Rua A, 123",
+      "cargo" : "Mecânico",
+      "salario" : 2500.0,
+      "matricula" : "MEC001",
+      "departamento" : "Motor"
+    },
+    "resultadoInspecao" : null
+  },
+  "itensUtilizados" : [ {
+    "codigo" : "B001",
+    "nome" : "Bateria 60Ah",
+    "quantidade" : 10,
+    "preco" : 450.0,
+    "descricao" : "Bateria selada 60Ah"
+  } ],
+  "notaFiscalGerada" : false
+}, {
+  "tipo" : "Entrada",
+  "valor" : 3050.0,
+  "descricao" : "Manutenção de suspensão e alinhamento",
+  "data" : "09/05/2024",
+  "categoria" : "Serviços",
+  "responsavel" : "Carlos Oliveira",
+  "cliente" : "Roberto Oliveira",
+  "agendamento" : {
+    "cliente" : {
+      "nome" : "Roberto Oliveira",
+      "telefone" : "11955556666",
+      "endereco" : "Rua E, 789",
+      "clienteId" : "CLI0001",
+      "veiculos" : [ {
+        "modelo" : "Gol",
+        "placa" : "ABC1234",
+        "ano" : 2018,
+        "marca" : "Volkswagen",
+        "cor" : "Prata"
+      } ],
+      "cpfAnonimizado" : "***.456.***-09"
+    },
+    "veiculo" : {
+      "modelo" : "Gol",
+      "placa" : "ABC1234",
+      "ano" : 2018,
+      "marca" : "Volkswagen",
+      "cor" : "Prata"
+    },
+    "servicos" : [ {
+      "nome" : "Inspeção Inicial",
+      "descricao" : "Inspeção obrigatória do veículo",
+      "valor" : 50.0,
+      "tempoEstimado" : 60,
+      "requerElevador" : false
+    }, {
+      "nome" : "Troca de Pastilhas",
+      "descricao" : "Troca de pastilhas de freio",
+      "valor" : 200.0,
+      "tempoEstimado" : 60,
+      "requerElevador" : false
+    } ],
+    "responsavel" : {
+      "nome" : "Pedro Santos",
+      "telefone" : "11987654322",
+      "endereco" : "Rua B, 234",
+      "cargo" : "Mecânico",
+      "salario" : 2500.0,
+      "matricula" : "MEC002",
+      "departamento" : "Elétrica"
+    },
+    "dataHora" : "12/05/2024 10:00",
+    "status" : "Agendado",
+    "valorTotal" : 250.0,
+    "inspetorResponsavel" : {
+      "nome" : "João Silva",
+      "telefone" : "11987654321",
+      "endereco" : "Rua A, 123",
+      "cargo" : "Mecânico",
+      "salario" : 2500.0,
+      "matricula" : "MEC001",
+      "departamento" : "Motor"
+    },
+    "resultadoInspecao" : null
+  },
+  "itensUtilizados" : [ {
+    "codigo" : "A001",
+    "nome" : "Amortecedor",
+    "quantidade" : 8,
+    "preco" : 350.0,
+    "descricao" : "Amortecedor dianteiro"
+  } ],
+  "notaFiscalGerada" : false
 } ]

@@ -61,11 +61,13 @@ public class Login {
         }
         return null;
     }
-    /***
+    /**
+     * Altera a senha de um usuário no sistema.
      * 
-     * @param usuario
-     * @param novaSenha
-    */
+     * @param usuario Nome do usuário que deseja alterar a senha
+     * @param senhaAtual Senha atual do usuário para verificação
+     * @param novaSenha Nova senha a ser definida
+     */
     public void alterarSenha(String usuario, String senhaAtual, String novaSenha) {
         // Verifica se o usuário existe e a senha atual está correta
         if (credenciais.containsKey(usuario) && credenciais.get(usuario).equals(senhaAtual)) {

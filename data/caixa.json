@@ -1,12 +1,59 @@
 {
-  "saldo" : -106030.0,
-  "transacoes" : [ {
+  "saldo" : -4570.0,
+  "ordensServico" : [ {
     "tipo" : "Entrada",
-    "valor" : 970.0,
-    "descricao" : "Serviços: Troca de Óleo, Revisão Básica, Troca de Pneus - Cliente: Carlos Oliveira",
-    "data" : "16/05/2025",
+    "valor" : 0.0,
+    "descricao" : "Venda de óleo",
+    "data" : "07/05/2024",
+    "categoria" : "Produtos",
+    "responsavel" : "João Silva",
+    "cliente" : null,
+    "agendamento" : null,
+    "itensUtilizados" : [ ],
+    "notaFiscalGerada" : false
+  }, {
+    "tipo" : "Entrada",
+    "valor" : 0.0,
+    "descricao" : "Diagnóstico simples",
+    "data" : "07/05/2024",
     "categoria" : "Serviços",
-    "responsavel" : "MEC001",
-    "cliente" : null
+    "responsavel" : "Pedro Santos",
+    "cliente" : null,
+    "agendamento" : null,
+    "itensUtilizados" : [ ],
+    "notaFiscalGerada" : false
+  }, {
+    "tipo" : "Saída",
+    "valor" : 0.0,
+    "descricao" : "Compra de ferramentas",
+    "data" : "05/05/2024",
+    "categoria" : "Equipamentos",
+    "responsavel" : "Maria Souza",
+    "cliente" : null,
+    "agendamento" : null,
+    "itensUtilizados" : [ ],
+    "notaFiscalGerada" : false
+  }, {
+    "tipo" : "Saída",
+    "valor" : 0.0,
+    "descricao" : "Conta de energia",
+    "data" : "06/05/2024",
+    "categoria" : "Despesas Fixas",
+    "responsavel" : "Maria Souza",
+    "cliente" : null,
+    "agendamento" : null,
+    "itensUtilizados" : [ ],
+    "notaFiscalGerada" : false
+  }, {
+    "tipo" : "Saída",
+    "valor" : 0.0,
+    "descricao" : "Compra de peças diversas",
+    "data" : "07/05/2024",
+    "categoria" : "Estoque",
+    "responsavel" : "Maria Souza",
+    "cliente" : null,
+    "agendamento" : null,
+    "itensUtilizados" : [ ],
+    "notaFiscalGerada" : false
   } ]
 }

@@ -1,7 +1,8 @@
 [ {
   "nome" : "Ana Santos",
   "telefone" : "11944445555",
-  "endereco" : "Rua D, 1011",
+  "endereco" : "Rua F, 1011",
+  "clienteId" : "CLI0002",
   "veiculos" : [ {
     "modelo" : "Civic",
     "placa" : "XYZ5678",
@@ -9,12 +10,12 @@
     "marca" : "Honda",
     "cor" : "Preto"
   } ],
-  "cpfAnonimizado" : "98765432100",
-  "clienteId" : "CLI-0005"
+  "cpfAnonimizado" : "***.654.***-00"
 }, {
-  "nome" : "Carlos Oliveira",
+  "nome" : "Roberto Oliveira",
   "telefone" : "11955556666",
-  "endereco" : "Rua C, 789",
+  "endereco" : "Rua E, 789",
+  "clienteId" : "CLI0001",
   "veiculos" : [ {
     "modelo" : "Gol",
     "placa" : "ABC1234",
@@ -22,6 +23,5 @@
     "marca" : "Volkswagen",
     "cor" : "Prata"
   } ],
-  "cpfAnonimizado" : "12345678909",
-  "clienteId" : "CLI-0004"
+  "cpfAnonimizado" : "***.456.***-09"
 } ]

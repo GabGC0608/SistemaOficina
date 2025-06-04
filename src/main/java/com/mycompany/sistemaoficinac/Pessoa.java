@@ -1,38 +1,47 @@
 package com.mycompany.sistemaoficinac;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Classe que representa uma pessoa.
- * Contém informações básicas como nome, telefone e endereço.
+ * Classe abstrata que representa uma pessoa no sistema.
+ * Serve como base para as classes Cliente e Funcionario.
+ * Contém os atributos e métodos comuns a todas as pessoas no sistema.
  */
 public abstract class Pessoa {
-    private String nome; // Nome da pessoa
-    private String telefone; // Telefone da pessoa
-    private String endereco; // Endereço da pessoa
+    /** Nome completo da pessoa */
+    @JsonProperty("nome")
+    private String nome;
+    
+    /** Número de telefone para contato */
+    @JsonProperty("telefone")
+    private String telefone;
+    
+    /** Endereço completo da pessoa */
+    @JsonProperty("endereco")
+    private String endereco;
 
     /**
      * Construtor da classe Pessoa.
-     *
-     * @param nome Nome da pessoa.
-     * @param telefone Telefone da pessoa.
-     * @param endereco Endereço da pessoa.
+     * @param nome Nome completo da pessoa
+     * @param telefone Número de telefone para contato
+     * @param endereco Endereço completo da pessoa
      */
-    @JsonCreator
-    public Pessoa(
-            @JsonProperty("nome") String nome,
-            @JsonProperty("telefone") String telefone,
-            @JsonProperty("endereco") String endereco) {
+    public Pessoa(String nome, String telefone, String endereco) {
         this.nome = nome;
         this.telefone = telefone;
         this.endereco = endereco;
     }
 
     /**
-     * Obtém o nome da pessoa.
-     *
-     * @return Nome da pessoa.
+     * Construtor vazio para o Jackson.
+     * Necessário para a serialização/desserialização JSON.
+     */
+    protected Pessoa() {
+    }
+
+    /**
+     * Retorna o nome da pessoa.
+     * @return Nome completo da pessoa
      */
     public String getNome() {
         return nome;
@@ -40,17 +49,15 @@ public abstract class Pessoa {
 
     /**
      * Define o nome da pessoa.
-     *
-     * @param nome Novo nome da pessoa.
+     * @param nome Novo nome a ser definido
      */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
     /**
-     * Obtém o telefone da pessoa.
-     *
-     * @return Telefone da pessoa.
+     * Retorna o telefone da pessoa.
+     * @return Número de telefone para contato
      */
     public String getTelefone() {
         return telefone;
@@ -58,17 +65,15 @@ public abstract class Pessoa {
 
     /**
      * Define o telefone da pessoa.
-     *
-     * @param telefone Novo telefone da pessoa.
+     * @param telefone Novo número de telefone
      */
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 
     /**
-     * Obtém o endereço da pessoa.
-     *
-     * @return Endereço da pessoa.
+     * Retorna o endereço da pessoa.
+     * @return Endereço completo
      */
     public String getEndereco() {
         return endereco;
@@ -76,21 +81,22 @@ public abstract class Pessoa {
 
     /**
      * Define o endereço da pessoa.
-     *
-     * @param endereco Novo endereço da pessoa.
+     * @param endereco Novo endereço
      */
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
 
-
     /**
-     * Retorna uma representação textual da pessoa.
-     *
-     * @return String representando a pessoa.
+     * Retorna uma representação em string dos dados da pessoa.
+     * @return String contendo nome, telefone e endereço da pessoa
      */
     @Override
     public String toString() {
-        return "Nome: " + nome + ", Telefone: " + telefone + ", Endereço: " + endereco;
+        return "Pessoa{" +
+                "nome='" + nome + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", endereco='" + endereco + '\'' +
+                '}';
     }
 }

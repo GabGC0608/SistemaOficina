@@ -1,11 +1,14 @@
 package com.mycompany.sistemaoficinac;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 
 /**
  * Classe que representa um administrador, que é um tipo de funcionário.
  */
+@JsonTypeName("administrador")
 public class Administrador extends Funcionario {
 
     /**
@@ -17,12 +20,18 @@ public class Administrador extends Funcionario {
      * @param salario Salário do administrador.
      * @param matricula Matrícula do administrador.
      */
+    @JsonCreator
     public Administrador(@JsonProperty("nome") String nome,
                          @JsonProperty("telefone") String telefone,
                          @JsonProperty("endereco") String endereco,
                          @JsonProperty("salario") double salario,
                          @JsonProperty("matricula") String matricula) {
-        super(nome, telefone, endereco, "Administrador", salario, matricula);
+        super(nome, telefone, endereco, "Administrador", salario, matricula, "Administração");
+    }
+
+    // Construtor vazio para o Jackson
+    protected Administrador() {
+        super();
     }
 
     /**
@@ -69,6 +78,7 @@ public class Administrador extends Funcionario {
         System.out.println("Total de funcionários: " + funcionarios.size());
         System.out.println("Total de clientes: " + clientes.size());
     }
+
     @Override
     public String toString() {
         return "Administrador{" +
@@ -78,6 +88,7 @@ public class Administrador extends Funcionario {
                 ", cargo='" + getCargo() + '\'' +
                 ", salario=" + getSalario() +
                 ", matricula='" + getMatricula() + '\'' +
+                ", departamento='" + getDepartamento() + '\'' +
                 '}';
     }
 }

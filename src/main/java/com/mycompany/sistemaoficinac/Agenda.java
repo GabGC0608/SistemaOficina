@@ -15,7 +15,23 @@ import java.time.format.DateTimeParseException;
  * Classe que gerencia os agendamentos da oficina.
  */
 public class Agenda {
+    @JsonProperty("agendamentos")
     private List<Agendamento> agendamentos = new ArrayList<>();
+
+    /**
+     * Construtor padrão.
+     */
+    public Agenda() {
+        this.agendamentos = new ArrayList<>();
+    }
+
+    /**
+     * Construtor para deserialização JSON.
+     */
+    @JsonCreator
+    public Agenda(@JsonProperty("agendamentos") List<Agendamento> agendamentos) {
+        this.agendamentos = agendamentos != null ? agendamentos : new ArrayList<>();
+    }
 
     /**
      * Obtém a lista de agendamentos.
@@ -47,16 +63,57 @@ public class Agenda {
     }
 
     /**
+     * Adiciona um novo agendamento à lista, incluindo inspeção obrigatória.
+     *
+     * @param cliente Cliente do agendamento.
+     * @param veiculo Veículo do agendamento.
+     * @param servicos Lista de serviços a serem realizados.
+     * @param responsavel Funcionário responsável.
+     * @param dataHora Data e hora do agendamento.
+     * @param status Status do agendamento.
+     * @param inspetorResponsavel Funcionário responsável pela inspeção inicial.
+     */
+    public Agendamento adicionarAgendamento(Cliente cliente, Veiculo veiculo, List<Servico> servicos, 
+                                   Funcionario responsavel, String dataHora, String status, 
+                                   Funcionario inspetorResponsavel) {
+        // Criar serviço de inspeção obrigatório
+        Servico servicoInspecao = new Servico("Inspeção Inicial", "Inspeção obrigatória do veículo", 50.0, 60);
+        
+        // Adicionar inspeção como primeiro serviço
+        List<Servico> servicosComInspecao = new ArrayList<>();
+        servicosComInspecao.add(servicoInspecao);
+        servicosComInspecao.addAll(servicos);
+        
+        Agendamento agendamento = new Agendamento(cliente, veiculo, servicosComInspecao, responsavel, dataHora, status);
+        agendamento.setInspetorResponsavel(inspetorResponsavel);
+        agendamentos.add(agendamento);
+        
+        System.out.println("Agendamento registrado: " + agendamento);
+        return agendamento;
+    }
+
+    /**
      * Classe interna que representa um agendamento.
      */
     public static class Agendamento {
+        @JsonProperty("cliente")
         private Cliente cliente; // Cliente relacionado ao agendamento
+        @JsonProperty("veiculo")
         private Veiculo veiculo; // Veículo relacionado ao agendamento
-         private List<Servico> servicos; // Serviço a ser realizado
+        @JsonProperty("servicos")
+        private List<Servico> servicos; // Serviço a ser realizado
+        @JsonProperty("responsavel")
         private Funcionario responsavel; // Funcionário responsável pelo serviço
+        @JsonProperty("dataHora")
         private String dataHora; // Data e hora do agendamento
+        @JsonProperty("status")
         private String status; // Status do agendamento (ex.: "Pendente", "Concluído")
-        private double valorTotal; 
+        @JsonProperty("valorTotal")
+        private double valorTotal;
+        @JsonProperty("inspetorResponsavel")
+        private Funcionario inspetorResponsavel;
+        @JsonProperty("resultadoInspecao")
+        private String resultadoInspecao;
 
         /**
          * Construtor da classe Agendamento.
@@ -210,6 +267,42 @@ public class Agenda {
             return servicos.stream().mapToDouble(Servico::getValor).sum();
         }
 
+        /**
+         * Define o inspetor responsável pela inspeção inicial.
+         *
+         * @param inspetorResponsavel Funcionário responsável pela inspeção.
+         */
+        public void setInspetorResponsavel(Funcionario inspetorResponsavel) {
+            this.inspetorResponsavel = inspetorResponsavel;
+        }
+
+        /**
+         * Obtém o inspetor responsável pela inspeção inicial.
+         *
+         * @return Funcionário responsável pela inspeção.
+         */
+        public Funcionario getInspetorResponsavel() {
+            return inspetorResponsavel;
+        }
+
+        /**
+         * Registra o resultado da inspeção.
+         *
+         * @param resultado Resultado da inspeção realizada.
+         */
+        public void registrarResultadoInspecao(String resultado) {
+            this.resultadoInspecao = resultado;
+        }
+
+        /**
+         * Obtém o resultado da inspeção.
+         *
+         * @return Resultado da inspeção.
+         */
+        public String getResultadoInspecao() {
+            return resultadoInspecao;
+        }
+
         public static class PorData implements Comparator<Agendamento> {
             @Override
             public int compare(Agendamento a1, Agendamento a2) {
@@ -232,33 +325,26 @@ public class Agenda {
                 .map(Servico::getNome)
                 .collect(Collectors.joining(", "));
             
-            return String.format("Cliente: %s | Veículo: %s | Serviços: %s | Responsável: %s | Data/Hora: %s | Status: %s | Valor Total: R$%.2f",
+            String inspetorInfo = inspetorResponsavel != null ? 
+                " | Inspetor: " + inspetorResponsavel.getNome() : "";
+            
+            String resultadoInfo = resultadoInspecao != null ? 
+                " | Resultado Inspeção: " + resultadoInspecao : "";
+            
+            return String.format("Cliente: %s | Veículo: %s | Serviços: %s | Responsável: %s%s | Data/Hora: %s | Status: %s | Valor Total: R$%.2f%s",
                     cliente.getNome(),
                     veiculo.getModelo(),
                     servicosStr,
                     responsavel.getNome(),
+                    inspetorInfo,
                     dataHora,
                     status,
-                    getValorTotal());
+                    getValorTotal(),
+                    resultadoInfo);
         }
     }
 
     /**
-     * Adiciona um novo agendamento à lista.
-     *
-     * @param cliente Cliente do agendamento.
-     * @param veiculo Veículo do agendamento.
-     * @param servico Serviço a ser realizado.
-     * @param responsavel Funcionário responsável.
-     * @param dataHora Data e hora do agendamento.
-     * @param status Status do agendamento.
-     */
-    public void adicionarAgendamento(Cliente cliente, Veiculo veiculo, List<Servico> servicos, Funcionario responsavel, String dataHora, String status) {
-        agendamentos.add(new Agendamento(cliente, veiculo, servicos, responsavel, dataHora, status));
-        System.out.println("Agendamento adicionado com sucesso!");
-    }
-
-        /**
      * Cancela um agendamento com base no índice, retendo 20% do valor do serviço.
      *
      * @param index Índice do agendamento a ser cancelado.
@@ -301,10 +387,17 @@ public class Agenda {
      * Lista todos os agendamentos.
      */
     public void listarAgendamentos() {
-        System.out.println("\n=== LISTA DE AGENDAMENTOS ===");
-        agendamentos.sort(new Agendamento.PorData()); // Ordena por data
+        System.out.println("\n=== AGENDAMENTOS ===");
+        if (agendamentos.isEmpty()) {
+            System.out.println("Nenhum agendamento registrado.");
+            return;
+        }
+        
+        agendamentos.sort(new Comparadores.AgendamentoPorData()); // Ordena por data
+        
         for (int i = 0; i < agendamentos.size(); i++) {
-            System.out.println("Agendamento " + (i + 1) + ": " + agendamentos.get(i));
+            System.out.println("\nAgendamento #" + (i + 1));
+            System.out.println(agendamentos.get(i));
         }
     }
 

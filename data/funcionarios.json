@@ -4,12 +4,30 @@
   "endereco" : "Rua A, 123",
   "cargo" : "Mecânico",
   "salario" : 2500.0,
-  "matricula" : "MEC001"
+  "matricula" : "MEC001",
+  "departamento" : "Motor"
+}, {
+  "nome" : "Pedro Santos",
+  "telefone" : "11987654322",
+  "endereco" : "Rua B, 234",
+  "cargo" : "Mecânico",
+  "salario" : 2500.0,
+  "matricula" : "MEC002",
+  "departamento" : "Elétrica"
+}, {
+  "nome" : "Carlos Oliveira",
+  "telefone" : "11987654323",
+  "endereco" : "Rua C, 345",
+  "cargo" : "Mecânico",
+  "salario" : 2500.0,
+  "matricula" : "MEC003",
+  "departamento" : "Suspensão"
 }, {
   "nome" : "Maria Souza",
   "telefone" : "11912345678",
-  "endereco" : "Rua B, 456",
-  "cargo" : "Administrador",
+  "endereco" : "Rua D, 456",
   "salario" : 4500.0,
-  "matricula" : "ADM001"
+  "matricula" : "ADM001",
+  "cargo" : "Administrador",
+  "departamento" : "Administração"
 } ]

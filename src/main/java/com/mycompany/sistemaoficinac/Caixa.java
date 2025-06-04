@@ -11,102 +11,118 @@ import java.util.stream.Collectors;
  */
 public class Caixa {
     private double saldo; // Saldo atual do caixa
-    private List<Transacao> transacoes; // Lista de transações realizadas
+    private List<OrdemServico> ordensServico; // Lista de ordens de serviço
 
     public Caixa() {
         this.saldo = 0;
-        this.transacoes = new ArrayList<>();
+        this.ordensServico = new ArrayList<>();
     }
 
-    public static class Transacao {
-        private String tipo;
-        private double valor;
-        private String descricao;
-        private String data;
-        private String categoria;
-        private String responsavel;
-        private String cliente;
+    // Métodos para manipular ordens de serviço
+    public List<OrdemServico> getOrdensServico() {
+        return new ArrayList<>(ordensServico);
+    }
 
-        @JsonCreator
-        public Transacao(@JsonProperty("tipo") String tipo,
-                        @JsonProperty("valor") double valor,
-                        @JsonProperty("descricao") String descricao,
-                        @JsonProperty("data") String data,
-                        @JsonProperty("categoria") String categoria,
-                        @JsonProperty("responsavel") String responsavel,
-                        @JsonProperty("cliente") String cliente) {
-            this.tipo = tipo;
-            this.valor = valor;
-            this.descricao = descricao;
-            this.data = data;
-            this.categoria = categoria;
-            this.responsavel = responsavel;
-            this.cliente = cliente;
+    // Método atualizado para registrar entrada com agendamento e itens
+    public void registrarEntrada(String descricao, String data, String categoria, 
+                               String responsavel, String cliente, Agenda.Agendamento agendamento,
+                               List<Estoque.ItemEstoque> itens) {
+        OrdemServico os = new OrdemServico(
+            "Entrada", 
+            descricao, 
+            data, 
+            categoria, 
+            responsavel, 
+            cliente, 
+            agendamento
+        );
+        
+        if (itens != null) {
+            for (Estoque.ItemEstoque item : itens) {
+                os.adicionarItemEstoque(item, item.getQuantidade());
+            }
         }
+        ordensServico.add(os);
+        saldo += os.getValor();
+        System.out.println("Entrada registrada: " + os);
+    }
 
-        // Getters
-        public String getTipo() { return tipo; }
-        public double getValor() { return valor; }
-        public String getDescricao() { return descricao; }
-        public String getData() { return data; }
-        public String getCategoria() { return categoria; }
-        public String getResponsavel() { return responsavel; }
-        public String getCliente() { return cliente; }
-
-        @Override
-        public String toString() {
-            return String.format("%s: R$ %.2f - %s (%s) [%s]", tipo, valor, descricao, data, categoria);
+    // Método atualizado para registrar saída com agendamento e itens
+    public void registrarSaida(String descricao, String data, String categoria, 
+                             String responsavel, String cliente, Agenda.Agendamento agendamento,
+                             List<Estoque.ItemEstoque> itens) {
+        OrdemServico os = new OrdemServico(
+            "Saída", 
+            descricao, 
+            data, 
+            categoria, 
+            responsavel, 
+            cliente, 
+            agendamento
+        );
+        
+        if (itens != null) {
+            for (Estoque.ItemEstoque item : itens) {
+                os.adicionarItemEstoque(item, item.getQuantidade());
+            }
         }
+        ordensServico.add(os);
+        saldo -= os.getValor();
+        System.out.println("Saída registrada: " + os);
     }
 
-    // Métodos para manipular transações
-    public List<Transacao> getTransacoes() {
-        return new ArrayList<>(transacoes);
-    }
-
-    // Método único para registrar entrada
-    public void registrarEntrada(double valor, String descricao, String data, String categoria, String responsavel, String cliente) {
-        Transacao t = new Transacao("Entrada", valor, descricao, data, categoria, responsavel, cliente);
-        transacoes.add(t);
+    // Método simplificado para registrar entrada
+    public void registrarEntrada(double valor, String descricao, String data, 
+                               String categoria, String responsavel, Agenda.Agendamento agendamento) {
+        OrdemServico os = new OrdemServico(
+            "Entrada", 
+            descricao, 
+            data, 
+            categoria, 
+            responsavel, 
+            null,  // cliente não informado
+            agendamento
+        );
+        ordensServico.add(os);
         saldo += valor;
-        System.out.println("Entrada registrada: " + t);
+        System.out.println("Entrada registrada: " + os);
     }
 
-    // Método único para registrar saída
-    public void registrarSaida(double valor, String descricao, String data, String categoria, String responsavel, String cliente) {
-        Transacao t = new Transacao("Saída", valor, descricao, data, categoria, responsavel, cliente);
-        transacoes.add(t);
+    // Método simplificado para registrar saída
+    public void registrarSaida(double valor, String descricao, String data, 
+                             String categoria, String responsavel, Agenda.Agendamento agendamento) {
+        OrdemServico os = new OrdemServico(
+            "Saída", 
+            descricao, 
+            data, 
+            categoria, 
+            responsavel, 
+            null,  // cliente não informado
+            agendamento
+        );
+        ordensServico.add(os);
         saldo -= valor;
-        System.out.println("Saída registrada: " + t);
+        System.out.println("Saída registrada: " + os);
     }
 
-    // Métodos simplificados (chamam o método completo com valores padrão)
-    public void registrarEntrada(double valor, String descricao, String data, String categoria) {
-        registrarEntrada(valor, descricao, data, categoria, "Sistema", null);
-    }
-
-    public void registrarSaida(double valor, String descricao, String data, String categoria) {
-        registrarSaida(valor, descricao, data, categoria, "Sistema", null);
-    }
-
-    // Métodos de filtro
-    public List<Transacao> getTransacoesPorPeriodo(String dataInicio, String dataFim) {
-        return transacoes.stream()
-                .filter(t -> t.data.compareTo(dataInicio) >= 0 && t.data.compareTo(dataFim) <= 0)
+    // Métodos de filtro (mantidos iguais)
+    public List<OrdemServico> getOrdensPorPeriodo(String dataInicio, String dataFim) {
+        return ordensServico.stream()
+                .filter(t -> t.getData().compareTo(dataInicio) >= 0 && t.getData().compareTo(dataFim) <= 0)
                 .collect(Collectors.toList());
     }
 
-    public List<Transacao> getTransacoesPorCategoria(String categoria) {
-        return transacoes.stream()
-                .filter(t -> t.categoria.equalsIgnoreCase(categoria))
+    public List<OrdemServico> getOrdensPorCategoria(String categoria) {
+        return ordensServico.stream()
+                .filter(t -> t.getCategoria().equalsIgnoreCase(categoria))
                 .collect(Collectors.toList());
     }
 
-    // Métodos de relatório
+    // Métodos de relatório (mantidos iguais)
     public void gerarRelatorioDiario(String data) {
         System.out.println("\n=== RELATÓRIO DIÁRIO (" + data + ") ===");
-        transacoes.stream()
-            .filter(t -> t.data.equals(data))
+        ordensServico.stream()
+            .filter(t -> t.getData().equals(data))
             .forEach(System.out::println);
         
         System.out.println("Total de entradas: R$" + getTotalEntradas(data));
@@ -115,16 +131,16 @@ public class Caixa {
     }
 
     private double getTotalEntradas(String data) {
-        return transacoes.stream()
-                .filter(t -> t.tipo.equals("Entrada") && t.data.equals(data))
-                .mapToDouble(t -> t.valor)
+        return ordensServico.stream()
+                .filter(t -> t.getTipo().equals("Entrada") && t.getData().equals(data))
+                .mapToDouble(OrdemServico::getValor)
                 .sum();
     }
 
     private double getTotalSaidas(String data) {
-        return transacoes.stream()
-                .filter(t -> t.tipo.equals("Saída") && t.data.equals(data))
-                .mapToDouble(t -> t.valor)
+        return ordensServico.stream()
+                .filter(t -> t.getTipo().equals("Saída") && t.getData().equals(data))
+                .mapToDouble(OrdemServico::getValor)
                 .sum();
     }
 
@@ -140,35 +156,33 @@ public class Caixa {
         double totalPecas = 0;
         double outrasDespesas = 0;
         
-        for (Transacao transacao : transacoes) {
-            String[] dataParts = transacao.data.split("/");
-            int transacaoMes = Integer.parseInt(dataParts[1]);
-            int transacaoAno = Integer.parseInt(dataParts[2]);
+        for (OrdemServico ordem : ordensServico) {
+            String[] dataParts = ordem.getData().split("/");
+            int ordemMes = Integer.parseInt(dataParts[1]);
+            int ordemAno = Integer.parseInt(dataParts[2]);
             
-            if (transacaoMes == mes && transacaoAno == ano) {
-                System.out.println(transacao);
+            if (ordemMes == mes && ordemAno == ano) {
+                System.out.println(ordem);
                 
-                if (transacao.tipo.equals("Entrada")) {
-                    totalEntradas += transacao.valor;
+                if (ordem.getTipo().equals("Entrada")) {
+                    totalEntradas += ordem.getValor();
                 } else {
-                    if (transacao.descricao.contains("Pagamento de salários")) {
-                        totalSalarios += transacao.valor;
-                    } else if (transacao.descricao.contains("Compra de peças")) {
-                        totalPecas += transacao.valor;
+                    if (ordem.getDescricao().contains("Pagamento de salários")) {
+                        totalSalarios += ordem.getValor();
+                    } else if (ordem.getDescricao().contains("Compra de peças")) {
+                        totalPecas += ordem.getValor();
                     } else {
-                        outrasDespesas += transacao.valor;
+                        outrasDespesas += ordem.getValor();
                     }
                 }
             }
         }
         
-        System.out.println("\n=== RESUMO FINANCEIRO ===");
-        System.out.printf("Total de entradas: R$ %.2f%n", totalEntradas);
-        System.out.printf("Total de despesas: R$ %.2f%n", (totalSalarios + totalPecas + outrasDespesas));
-        System.out.println("\nDetalhamento de despesas:");
-        System.out.printf("- Salários: R$ %.2f%n", totalSalarios);
-        System.out.printf("- Peças e materiais: R$ %.2f%n", totalPecas);
-        System.out.printf("- Outras despesas: R$ %.2f%n", outrasDespesas);
-        System.out.printf("\nSaldo final: R$ %.2f%n", (totalEntradas - (totalSalarios + totalPecas + outrasDespesas)));
+        System.out.println("\nRESUMO DO MÊS:");
+        System.out.println("Total de entradas: R$ " + totalEntradas);
+        System.out.println("Total de despesas com salários: R$ " + totalSalarios);
+        System.out.println("Total de despesas com peças: R$ " + totalPecas);
+        System.out.println("Outras despesas: R$ " + outrasDespesas);
+        System.out.println("Saldo do mês: R$ " + (totalEntradas - (totalSalarios + totalPecas + outrasDespesas)));
     }
 }

@@ -2,18 +2,56 @@
   "itens" : [ {
     "codigo" : "P001",
     "nome" : "Pastilha de Freio",
-    "quantidade" : 20
+    "quantidade" : 20,
+    "preco" : 150.0,
+    "descricao" : "Pastilha de freio de alta performance"
   }, {
     "codigo" : "F001",
     "nome" : "Filtro de Óleo",
-    "quantidade" : 15
+    "quantidade" : 15,
+    "preco" : 45.0,
+    "descricao" : "Filtro de óleo para motor"
+  }, {
+    "codigo" : "O001",
+    "nome" : "Óleo Motor 5W30",
+    "quantidade" : 50,
+    "preco" : 35.0,
+    "descricao" : "Óleo sintético 5W30"
   }, {
     "codigo" : "V001",
     "nome" : "Vela de Ignição",
-    "quantidade" : 30
+    "quantidade" : 30,
+    "preco" : 25.0,
+    "descricao" : "Vela de ignição de iridium"
   }, {
-    "codigo" : "1",
-    "nome" : "retrovisor",
-    "quantidade" : 1000
+    "codigo" : "B001",
+    "nome" : "Bateria 60Ah",
+    "quantidade" : 10,
+    "preco" : 450.0,
+    "descricao" : "Bateria selada 60Ah"
+  }, {
+    "codigo" : "C001",
+    "nome" : "Correia Dentada",
+    "quantidade" : 15,
+    "preco" : 180.0,
+    "descricao" : "Correia dentada de alta durabilidade"
+  }, {
+    "codigo" : "A001",
+    "nome" : "Amortecedor",
+    "quantidade" : 8,
+    "preco" : 350.0,
+    "descricao" : "Amortecedor dianteiro"
+  }, {
+    "codigo" : "R001",
+    "nome" : "Radiador",
+    "quantidade" : 5,
+    "preco" : 600.0,
+    "descricao" : "Radiador de água completo"
+  }, {
+    "codigo" : "FA001",
+    "nome" : "Filtro de Ar",
+    "quantidade" : 25,
+    "preco" : 45.0,
+    "descricao" : "Filtro de ar do motor"
   } ]
 }

@@ -1,8 +1,44 @@
 [ {
-  "nome" : "Balanceamento",
-  "descricao" : "Balanceamento de rodas",
-  "valor" : 80.0,
+  "nome" : "Troca de Óleo",
+  "descricao" : "Troca de óleo e filtro",
+  "valor" : 120.0,
   "tempoEstimado" : 30,
+  "requerElevador" : false
+}, {
+  "nome" : "Revisão Básica",
+  "descricao" : "Revisão de 10 itens",
+  "valor" : 250.0,
+  "tempoEstimado" : 60,
+  "requerElevador" : false
+}, {
+  "nome" : "Revisão Completa",
+  "descricao" : "Revisão de 30 itens",
+  "valor" : 450.0,
+  "tempoEstimado" : 120,
+  "requerElevador" : false
+}, {
+  "nome" : "Alinhamento",
+  "descricao" : "Alinhamento e balanceamento",
+  "valor" : 180.0,
+  "tempoEstimado" : 45,
+  "requerElevador" : false
+}, {
+  "nome" : "Troca de Pneus",
+  "descricao" : "Troca de pneus e balanceamento",
+  "valor" : 600.0,
+  "tempoEstimado" : 90,
+  "requerElevador" : false
+}, {
+  "nome" : "Troca de Pastilhas",
+  "descricao" : "Troca de pastilhas de freio",
+  "valor" : 200.0,
+  "tempoEstimado" : 60,
+  "requerElevador" : false
+}, {
+  "nome" : "Troca de Bateria",
+  "descricao" : "Troca de bateria do veículo",
+  "valor" : 300.0,
+  "tempoEstimado" : 45,
   "requerElevador" : false
 }, {
   "nome" : "Troca de Filtro de Ar",
@@ -11,15 +47,9 @@
   "tempoEstimado" : 30,
   "requerElevador" : false
 }, {
-  "nome" : "Alinhamento",
-  "descricao" : "Alinhamento de direção",
-  "valor" : 100.0,
-  "tempoEstimado" : 30,
-  "requerElevador" : false
-}, {
-  "nome" : "Troca de Óleo",
-  "descricao" : "Troca de óleo e filtro",
-  "valor" : 120.0,
+  "nome" : "Troca de Filtro de Combustível",
+  "descricao" : "Troca do filtro de combustível",
+  "valor" : 150.0,
   "tempoEstimado" : 30,
   "requerElevador" : false
 }, {
@@ -29,16 +59,10 @@
   "tempoEstimado" : 30,
   "requerElevador" : false
 }, {
-  "nome" : "Troca de Óleo",
-  "descricao" : "Troca do óleo do motor",
-  "valor" : 120.0,
-  "tempoEstimado" : 45,
-  "requerElevador" : false
-}, {
-  "nome" : "Troca de Filtro de Combustível",
-  "descricao" : "Troca do filtro de combustível",
-  "valor" : 150.0,
-  "tempoEstimado" : 30,
+  "nome" : "Troca de Correia Dentada",
+  "descricao" : "Troca da correia dentada",
+  "valor" : 400.0,
+  "tempoEstimado" : 120,
   "requerElevador" : false
 }, {
   "nome" : "Troca de Fluido de Freio",
@@ -47,39 +71,39 @@
   "tempoEstimado" : 30,
   "requerElevador" : false
 }, {
-  "nome" : "Diagnóstico Elétrico",
-  "descricao" : "Diagnóstico do sistema elétrico",
-  "valor" : 150.0,
-  "tempoEstimado" : 60,
-  "requerElevador" : false
-}, {
-  "nome" : "Alinhamento",
-  "descricao" : "Alinhamento e balanceamento",
-  "valor" : 180.0,
-  "tempoEstimado" : 45,
-  "requerElevador" : false
-}, {
   "nome" : "Troca de Pastilhas",
   "descricao" : "Troca das pastilhas de freio",
   "valor" : 180.0,
   "tempoEstimado" : 60,
   "requerElevador" : false
 }, {
-  "nome" : "Troca de Pastilhas",
-  "descricao" : "Troca de pastilhas de freio",
-  "valor" : 200.0,
-  "tempoEstimado" : 60,
+  "nome" : "Troca de Óleo",
+  "descricao" : "Troca do óleo do motor",
+  "valor" : 120.0,
+  "tempoEstimado" : 45,
   "requerElevador" : false
 }, {
-  "nome" : "Limpeza de Bicos",
-  "descricao" : "Limpeza dos bicos injetores",
-  "valor" : 200.0,
-  "tempoEstimado" : 60,
+  "nome" : "Alinhamento",
+  "descricao" : "Alinhamento de direção",
+  "valor" : 100.0,
+  "tempoEstimado" : 30,
   "requerElevador" : false
 }, {
-  "nome" : "Revisão Básica",
-  "descricao" : "Revisão de 10 itens",
-  "valor" : 250.0,
+  "nome" : "Balanceamento",
+  "descricao" : "Balanceamento de rodas",
+  "valor" : 80.0,
+  "tempoEstimado" : 30,
+  "requerElevador" : false
+}, {
+  "nome" : "Revisão Completa",
+  "descricao" : "Revisão geral do veículo",
+  "valor" : 350.0,
+  "tempoEstimado" : 120,
+  "requerElevador" : false
+}, {
+  "nome" : "Diagnóstico Elétrico",
+  "descricao" : "Diagnóstico do sistema elétrico",
+  "valor" : 150.0,
   "tempoEstimado" : 60,
   "requerElevador" : false
 }, {
@@ -89,33 +113,9 @@
   "tempoEstimado" : 90,
   "requerElevador" : false
 }, {
-  "nome" : "Troca de Bateria",
-  "descricao" : "Troca de bateria do veículo",
-  "valor" : 300.0,
-  "tempoEstimado" : 45,
-  "requerElevador" : false
-}, {
-  "nome" : "Revisão Completa",
-  "descricao" : "Revisão geral do veículo",
-  "valor" : 350.0,
-  "tempoEstimado" : 120,
-  "requerElevador" : false
-}, {
-  "nome" : "Troca de Correia Dentada",
-  "descricao" : "Troca da correia dentada",
-  "valor" : 400.0,
-  "tempoEstimado" : 120,
-  "requerElevador" : false
-}, {
-  "nome" : "Revisão Completa",
-  "descricao" : "Revisão de 30 itens",
-  "valor" : 450.0,
-  "tempoEstimado" : 120,
-  "requerElevador" : false
-}, {
-  "nome" : "Troca de Pneus",
-  "descricao" : "Troca de pneus e balanceamento",
-  "valor" : 600.0,
-  "tempoEstimado" : 90,
+  "nome" : "Limpeza de Bicos",
+  "descricao" : "Limpeza dos bicos injetores",
+  "valor" : 200.0,
+  "tempoEstimado" : 60,
   "requerElevador" : false
 } ]

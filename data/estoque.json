@@ -53,5 +53,23 @@
     "quantidade" : 25,
     "preco" : 45.0,
     "descricao" : "Filtro de ar do motor"
+  }, {
+    "codigo" : "P002",
+    "nome" : "Filtro de Óleo",
+    "quantidade" : 15,
+    "preco" : 45.0,
+    "descricao" : "Filtro de óleo para motor"
+  }, {
+    "codigo" : "P003",
+    "nome" : "Óleo Motor",
+    "quantidade" : 30,
+    "preco" : 35.0,
+    "descricao" : "Óleo sintético 5W30"
+  }, {
+    "codigo" : "p123",
+    "nome" : "a",
+    "quantidade" : 15,
+    "preco" : 0.0,
+    "descricao" : ""
   } ]
 }

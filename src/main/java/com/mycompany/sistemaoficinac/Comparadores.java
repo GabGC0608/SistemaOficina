@@ -71,7 +71,7 @@ public class Comparadores {
     /**
      * Comparador que ordena agendamentos por data e hora.
      */
-    public static class AgendamentoPorData implements Comparator<Agenda.Agendamento> {
+    public static class ordemPorData implements Comparator<OrdemServico> {
         /**
          * Compara dois agendamentos pela data e hora.
          * @param a1 Primeiro agendamento a ser comparado
@@ -79,13 +79,13 @@ public class Comparadores {
          * @return Resultado da comparação das datas no formato string
          */
         @Override
-        public int compare(Agenda.Agendamento a1, Agenda.Agendamento a2) {
+        public int compare(OrdemServico a1, OrdemServico a2) {
             if (a1 == null && a2 == null) return 0;
             if (a1 == null) return -1;
             if (a2 == null) return 1;
             
-            String data1 = a1.getDataHora();
-            String data2 = a2.getDataHora();
+            String data1 = a1.getData();
+            String data2 = a2.getData();
             
             if (data1 == null && data2 == null) return 0;
             if (data1 == null) return -1;

@@ -1,5 +1,9 @@
 package com.mycompany.sistemaoficinac;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Classe que representa um elevador utilizado na oficina.
  */
@@ -8,6 +12,8 @@ public class Elevador {
     private float peso; // Peso suportado pelo elevador
     private String modelo; // Modelo do elevador
     private String estado; // Estado do elevador ("Disponível", "Ocupado", "Manutenção")
+    private LocalDateTime horarioAlocacao; // Horário em que o elevador foi alocado
+    private List<String> historicoUso; // Histórico de uso do elevador
 
     // Array estático para gerenciar os 3 elevadores da oficina
     private static final Elevador[] elevadores = new Elevador[3];
@@ -23,6 +29,7 @@ public class Elevador {
         this.peso = peso;
         this.modelo = modelo;
         this.estado = estado;
+        this.historicoUso = new ArrayList<>();
     }
 
     /**
@@ -80,6 +87,51 @@ public class Elevador {
     }
 
     /**
+     * Verifica se o elevador está ocupado.
+     *
+     * @return true se o elevador estiver ocupado, false caso contrário.
+     */
+    public boolean isOcupado() {
+        return "Ocupado".equalsIgnoreCase(estado);
+    }
+
+    /**
+     * Obtém o horário em que o elevador foi alocado.
+     *
+     * @return Horário de alocação.
+     */
+    public LocalDateTime getHorarioAlocacao() {
+        return horarioAlocacao;
+    }
+
+    /**
+     * Define o horário de alocação do elevador.
+     *
+     * @param horarioAlocacao Novo horário de alocação.
+     */
+    public void setHorarioAlocacao(LocalDateTime horarioAlocacao) {
+        this.horarioAlocacao = horarioAlocacao;
+    }
+
+    /**
+     * Obtém o histórico de uso do elevador.
+     *
+     * @return Lista com o histórico de uso.
+     */
+    public List<String> getHistoricoUso() {
+        return historicoUso;
+    }
+
+    /**
+     * Adiciona um registro ao histórico de uso do elevador.
+     *
+     * @param registro Registro a ser adicionado.
+     */
+    public void adicionarRegistroHistorico(String registro) {
+        this.historicoUso.add(registro);
+    }
+
+    /**
      * Aloca um elevador disponível para um serviço.
      *
      * @return O elevador alocado ou null se nenhum estiver disponível.
@@ -88,6 +140,12 @@ public class Elevador {
         if (index >= 0 && index < elevadores.length && elevadores[index] != null) {
             if ("Disponível".equalsIgnoreCase(elevadores[index].getEstado())) {
                 elevadores[index].setEstado("Ocupado");
+                elevadores[index].setHorarioAlocacao(LocalDateTime.now());
+                elevadores[index].adicionarRegistroHistorico(
+                    String.format("Alocado em %s para o veículo: %s",
+                        elevadores[index].getHorarioAlocacao(),
+                        elevadores[index].getModelo())
+                );
                 return elevadores[index];
             }
         }
@@ -103,7 +161,10 @@ public class Elevador {
     public static void liberarElevador(int index) {
         if (index >= 0 && index < elevadores.length && elevadores[index] != null) {
             elevadores[index].setEstado("Disponível");
-            elevadores[index].setModelo("Nenhum");
+            elevadores[index].adicionarRegistroHistorico(
+                String.format("Liberado em %s",
+                    LocalDateTime.now())
+            );
         }
     }
 
@@ -128,5 +189,17 @@ public class Elevador {
                                    " | Estado: " + elevador.getEstado());
             }
         }
+    }
+
+    /**
+     * Obtém um elevador específico do array estático.
+     * @param index Índice do elevador (0-2)
+     * @return O elevador no índice especificado
+     */
+    public static Elevador getElevador(int index) {
+        if (index >= 0 && index < elevadores.length) {
+            return elevadores[index];
+        }
+        return null;
     }
 }

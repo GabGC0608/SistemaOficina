@@ -1,6 +1,7 @@
 package com.mycompany.sistemaoficinac;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Map;
  * @version 1.0
  * @author Gabriel
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 public class Login {
     /**
      * Mapa que armazena as credenciais de acesso (usuário como chave e senha como valor).

@@ -1,4 +1,5 @@
 {
+  "@class" : "com.mycompany.sistemaoficinac.Login",
   "credenciais" : {
     "func" : "func123",
     "admin" : "admin123"

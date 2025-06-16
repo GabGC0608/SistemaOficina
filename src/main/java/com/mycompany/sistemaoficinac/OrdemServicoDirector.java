@@ -9,13 +9,15 @@ public class OrdemServicoDirector {
         this.builder = builder;
     }
 
-    public void construirOrdemComPecas(String tipo, String descricao, String data, String categoria,
+    public void construirOrdemComPecas(String tipo, String data,String horario, String categoria,
                                        String responsavel, String cliente,
                                        List<Estoque.ItemEstoque> pecas) {
         builder.reset();
         builder.setTipo(tipo);
-        builder.setDescricao(descricao);
+        builder.setDescricao("Apenas peças utilizadas");
         builder.setData(data);
+        builder.setHorario(horario);
+        builder.adicionarItem(null, 0);
         builder.setCategoria(categoria);
         builder.setResponsavel(responsavel);
         builder.setCliente(cliente);
@@ -24,26 +26,42 @@ public class OrdemServicoDirector {
         }
     }
 
-    public void construirOrdemComServicos(String tipo, String descricao, String data, String categoria,
+    public void construirOrdemComServicos(String tipo, String data,String horario, String categoria,
                                           String responsavel, String cliente,
-                                          Agenda.Agendamento agendamento) {
+                                          String status,
+                                          List<Servico> servicos) {
         builder.reset();
         builder.setTipo(tipo);
-        builder.setDescricao(descricao);
+        builder.setDescricao("penas servicos");
         builder.setData(data);
         builder.setCategoria(categoria);
         builder.setResponsavel(responsavel);
         builder.setCliente(cliente);
-        builder.setAgendamento(agendamento);
+        builder.setStatus(status);
+        for (Servico servico : servicos)
+            builder.adicionarServico(servico);
     }
 
-    public void construirOrdemCompleta(String tipo, String descricao, String data, String categoria,
+    public void construirOrdemCompleta(String tipo , String data,String horario, String categoria,
                                        String responsavel, String cliente,
-                                       Agenda.Agendamento agendamento,
-                                       List<Estoque.ItemEstoque> pecas) {
-        construirOrdemComServicos(tipo, descricao, data, categoria, responsavel, cliente, agendamento);
+                                       String status,
+                                       List<Estoque.ItemEstoque> pecas,
+                                       List<Servico> servicos) {
+       builder.reset();
+        builder.setTipo(tipo);
+        builder.setDescricao("Servicos e peças");
+        builder.setData(data);
+        builder.setHorario(horario);
+        builder.setStatus(status);
+        builder.setCategoria(categoria);
+        builder.setResponsavel(responsavel);
+        builder.setCliente(cliente);
         for (Estoque.ItemEstoque item : pecas) {
             builder.adicionarItem(item, item.getQuantidade());
         }
+        for(Servico servico : servicos){
+            builder.adicionarServico(servico);
+        }
+
     }
 }

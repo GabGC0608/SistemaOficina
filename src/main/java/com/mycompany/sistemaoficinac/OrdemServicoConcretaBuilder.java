@@ -1,7 +1,5 @@
 package com.mycompany.sistemaoficinac;
 
-import java.util.ArrayList;
-
 public class OrdemServicoConcretaBuilder implements OrdemDeServicoBuilder {
     private OrdemServico ordem;
 
@@ -11,8 +9,7 @@ public class OrdemServicoConcretaBuilder implements OrdemDeServicoBuilder {
 
     @Override
     public void reset() {
-        ordem = new OrdemServico();
-        ordem.setItensUtilizados(new ArrayList<>());
+        this.ordem = new OrdemServico();
     }
 
     @Override
@@ -31,23 +28,32 @@ public class OrdemServicoConcretaBuilder implements OrdemDeServicoBuilder {
     }
 
     @Override
+    public void setHorario(String hora) {
+        ordem.setHorario(hora);
+    }
+
+    @Override
     public void setCategoria(String categoria) {
         ordem.setCategoria(categoria);
     }
 
     @Override
     public void setResponsavel(String responsavel) {
-        ordem.setResponsavel(responsavel);
+        // Create a temporary Funcionario object with the name
+        Funcionario func = new Funcionario(responsavel, "", "", "Mecânico", 0.0, "TEMP", "Temporário");
+        ordem.setResponsavel(func);
     }
 
     @Override
     public void setCliente(String cliente) {
-        ordem.setCliente(cliente);
+        // Create a temporary Cliente object with the name
+        Cliente cli = new Cliente(cliente, "", "", "");
+        ordem.setCliente(cli);
     }
 
     @Override
-    public void setAgendamento(Agenda.Agendamento agendamento) {
-        ordem.setAgendamento(agendamento);
+    public void setStatus(String status) {
+        ordem.setStatus(status);
     }
 
     @Override
@@ -56,10 +62,12 @@ public class OrdemServicoConcretaBuilder implements OrdemDeServicoBuilder {
     }
 
     @Override
+    public void adicionarServico(Servico servico) {
+        ordem.adicionarServico(servico);
+    }
+
+    @Override
     public OrdemServico build() {
-        ordem.setValor(ordem.getValor()); // força recálculo
-        OrdemServico resultado = ordem;
-        this.reset();
-        return resultado;
+        return ordem;
     }
 }

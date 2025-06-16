@@ -1,17 +1,4 @@
 [ {
-  "nome" : "Ana Santos",
-  "telefone" : "11944445555",
-  "endereco" : "Rua F, 1011",
-  "clienteId" : "CLI0002",
-  "veiculos" : [ {
-    "modelo" : "Civic",
-    "placa" : "XYZ5678",
-    "ano" : 2020,
-    "marca" : "Honda",
-    "cor" : "Preto"
-  } ],
-  "cpfAnonimizado" : "***.654.***-00"
-}, {
   "nome" : "Roberto Oliveira",
   "telefone" : "11955556666",
   "endereco" : "Rua E, 789",
@@ -24,4 +11,17 @@
     "cor" : "Prata"
   } ],
   "cpfAnonimizado" : "***.456.***-09"
+}, {
+  "nome" : "Ana Santos",
+  "telefone" : "11944445555",
+  "endereco" : "Rua F, 1011",
+  "clienteId" : "CLI0002",
+  "veiculos" : [ {
+    "modelo" : "Civic",
+    "placa" : "XYZ5678",
+    "ano" : 2020,
+    "marca" : "Honda",
+    "cor" : "Preto"
+  } ],
+  "cpfAnonimizado" : "***.654.***-00"
 } ]

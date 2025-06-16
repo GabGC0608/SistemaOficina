@@ -1,0 +1,271 @@
+[ {
+  "numeroOrdem" : null,
+  "cliente" : {
+    "nome" : "Roberto Oliveira",
+    "telefone" : "",
+    "endereco" : "",
+    "clienteId" : "CLI0003",
+    "veiculos" : [ ],
+    "cpfAnonimizado" : ""
+  },
+  "veiculo" : null,
+  "servicos" : [ ],
+  "responsavel" : {
+    "nome" : "João Silva",
+    "telefone" : "",
+    "endereco" : "",
+    "cargo" : "Mecânico",
+    "salario" : 0.0,
+    "matricula" : "TEMP",
+    "departamento" : "Temporário"
+  },
+  "data" : "Troca de óleo e revisão geral",
+  "horario" : "08/05/2024",
+  "status" : "Concluído",
+  "elevadorAlocado" : null,
+  "itensUtilizados" : [ {
+    "codigo" : "F001",
+    "nome" : "Filtro de Óleo",
+    "quantidade" : 15,
+    "preco" : 45.0,
+    "descricao" : "Filtro de óleo para motor"
+  }, {
+    "codigo" : "O001",
+    "nome" : "Óleo Motor 5W30",
+    "quantidade" : 50,
+    "preco" : 35.0,
+    "descricao" : "Óleo sintético 5W30"
+  } ],
+  "tipo" : "Entrada",
+  "categoria" : "16:00",
+  "descricao" : "Servicos e peças",
+  "valor" : 0.0
+}, {
+  "numeroOrdem" : null,
+  "cliente" : {
+    "nome" : "Ana Santos",
+    "telefone" : "",
+    "endereco" : "",
+    "clienteId" : "CLI0004",
+    "veiculos" : [ ],
+    "cpfAnonimizado" : ""
+  },
+  "veiculo" : null,
+  "servicos" : [ ],
+  "responsavel" : {
+    "nome" : "Pedro Santos",
+    "telefone" : "",
+    "endereco" : "",
+    "cargo" : "Mecânico",
+    "salario" : 0.0,
+    "matricula" : "TEMP",
+    "departamento" : "Temporário"
+  },
+  "data" : "Reparo elétrico e troca de bateria",
+  "horario" : "09/05/2024",
+  "status" : "Concluído",
+  "elevadorAlocado" : null,
+  "itensUtilizados" : [ {
+    "codigo" : "B001",
+    "nome" : "Bateria 60Ah",
+    "quantidade" : 10,
+    "preco" : 450.0,
+    "descricao" : "Bateria selada 60Ah"
+  } ],
+  "tipo" : "Entrada",
+  "categoria" : "10:00",
+  "descricao" : "Servicos e peças",
+  "valor" : 0.0
+}, {
+  "numeroOrdem" : null,
+  "cliente" : {
+    "nome" : "Roberto Oliveira",
+    "telefone" : "",
+    "endereco" : "",
+    "clienteId" : "CLI0005",
+    "veiculos" : [ ],
+    "cpfAnonimizado" : ""
+  },
+  "veiculo" : null,
+  "servicos" : [ ],
+  "responsavel" : {
+    "nome" : "Carlos Oliveira",
+    "telefone" : "",
+    "endereco" : "",
+    "cargo" : "Mecânico",
+    "salario" : 0.0,
+    "matricula" : "TEMP",
+    "departamento" : "Temporário"
+  },
+  "data" : "Manutenção de suspensão e alinhamento",
+  "horario" : "09/05/2024",
+  "status" : "Concluído",
+  "elevadorAlocado" : null,
+  "itensUtilizados" : [ {
+    "codigo" : "A001",
+    "nome" : "Amortecedor",
+    "quantidade" : 8,
+    "preco" : 350.0,
+    "descricao" : "Amortecedor dianteiro"
+  } ],
+  "tipo" : "Entrada",
+  "categoria" : "14:00",
+  "descricao" : "Servicos e peças",
+  "valor" : 0.0
+}, {
+  "numeroOrdem" : "df00cfb7",
+  "cliente" : {
+    "nome" : "Ricardo",
+    "telefone" : "11922222222",
+    "endereco" : "Rua I, 606",
+    "clienteId" : "CLI0010",
+    "veiculos" : [ ],
+    "cpfAnonimizado" : "999.888.777-66"
+  },
+  "veiculo" : {
+    "modelo" : "Onix",
+    "placa" : "GHI3456",
+    "ano" : 2023,
+    "marca" : "Chevrolet",
+    "cor" : "Vermelho"
+  },
+  "servicos" : [ {
+    "nome" : "Troca de óleo",
+    "descricao" : "Troca de óleo e filtro",
+    "valor" : 150.0,
+    "tempoEstimado" : 60,
+    "requerElevador" : false
+  } ],
+  "responsavel" : {
+    "nome" : "José",
+    "telefone" : "11911111111",
+    "endereco" : "Rua J, 707",
+    "cargo" : "Mecânico",
+    "salario" : 3200.0,
+    "matricula" : "MEC005",
+    "departamento" : "Mecânica"
+  },
+  "data" : "2024-03-17",
+  "horario" : "11:00",
+  "status" : "Agendado",
+  "elevadorAlocado" : null,
+  "itensUtilizados" : [ ],
+  "tipo" : "Entrada",
+  "categoria" : "Serviços",
+  "descricao" : null,
+  "valor" : 150.0
+}, {
+  "numeroOrdem" : null,
+  "cliente" : {
+    "nome" : "Nome cliente3",
+    "telefone" : "",
+    "endereco" : "",
+    "clienteId" : "CLI0011",
+    "veiculos" : [ ],
+    "cpfAnonimizado" : ""
+  },
+  "veiculo" : null,
+  "servicos" : [ ],
+  "responsavel" : {
+    "nome" : "Nome funcionario3",
+    "telefone" : "",
+    "endereco" : "",
+    "cargo" : "Mecânico",
+    "salario" : 0.0,
+    "matricula" : "TEMP",
+    "departamento" : "Temporário"
+  },
+  "data" : "Troca de óleo e revisão geral",
+  "horario" : "08/05/2024",
+  "status" : "Concluído",
+  "elevadorAlocado" : null,
+  "itensUtilizados" : [ {
+    "codigo" : "F001",
+    "nome" : "Filtro de Óleo",
+    "quantidade" : 15,
+    "preco" : 45.0,
+    "descricao" : "Filtro de óleo para motor"
+  }, {
+    "codigo" : "O001",
+    "nome" : "Óleo Motor 5W30",
+    "quantidade" : 50,
+    "preco" : 35.0,
+    "descricao" : "Óleo sintético 5W30"
+  } ],
+  "tipo" : "Entrada",
+  "categoria" : "16:00",
+  "descricao" : "Servicos e peças",
+  "valor" : 0.0
+}, {
+  "numeroOrdem" : null,
+  "cliente" : {
+    "nome" : "Nome cliente2",
+    "telefone" : "",
+    "endereco" : "",
+    "clienteId" : "CLI0012",
+    "veiculos" : [ ],
+    "cpfAnonimizado" : ""
+  },
+  "veiculo" : null,
+  "servicos" : [ ],
+  "responsavel" : {
+    "nome" : "Nome funcionario2",
+    "telefone" : "",
+    "endereco" : "",
+    "cargo" : "Mecânico",
+    "salario" : 0.0,
+    "matricula" : "TEMP",
+    "departamento" : "Temporário"
+  },
+  "data" : "Reparo elétrico e troca de bateria",
+  "horario" : "09/05/2024",
+  "status" : "Concluído",
+  "elevadorAlocado" : null,
+  "itensUtilizados" : [ {
+    "codigo" : "B001",
+    "nome" : "Bateria 60Ah",
+    "quantidade" : 10,
+    "preco" : 450.0,
+    "descricao" : "Bateria selada 60Ah"
+  } ],
+  "tipo" : "Entrada",
+  "categoria" : "10:00",
+  "descricao" : "Servicos e peças",
+  "valor" : 0.0
+}, {
+  "numeroOrdem" : null,
+  "cliente" : {
+    "nome" : "Nome cliente",
+    "telefone" : "",
+    "endereco" : "",
+    "clienteId" : "CLI0013",
+    "veiculos" : [ ],
+    "cpfAnonimizado" : ""
+  },
+  "veiculo" : null,
+  "servicos" : [ ],
+  "responsavel" : {
+    "nome" : "Nome funcionario",
+    "telefone" : "",
+    "endereco" : "",
+    "cargo" : "Mecânico",
+    "salario" : 0.0,
+    "matricula" : "TEMP",
+    "departamento" : "Temporário"
+  },
+  "data" : "Manutenção de suspensão e alinhamento",
+  "horario" : "09/05/2024",
+  "status" : "Concluído",
+  "elevadorAlocado" : null,
+  "itensUtilizados" : [ {
+    "codigo" : "A001",
+    "nome" : "Amortecedor",
+    "quantidade" : 8,
+    "preco" : 350.0,
+    "descricao" : "Amortecedor dianteiro"
+  } ],
+  "tipo" : "Entrada",
+  "categoria" : "14:00",
+  "descricao" : "Servicos e peças",
+  "valor" : 0.0
+} ]

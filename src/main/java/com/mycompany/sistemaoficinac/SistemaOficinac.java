@@ -31,8 +31,6 @@ import java.util.stream.Collectors;
  * @author Gabriel
  */
 public class SistemaOficinac {
-    /** Caminho do arquivo de dados principal do sistema */
-    private static final String ARQUIVO_DADOS = "data/ficina.json";
     
     /** Instância principal da oficina que gerencia todas as operações */
     private static Oficina oficina = new Oficina();
@@ -45,24 +43,33 @@ public class SistemaOficinac {
     
     /** Contador do total de veículos cadastrados no sistema */
     private static int contadorVeiculosPrivate = 0;
-/**
- * Ponto de entrada principal do sistema de oficina.
- * <p>
- * Este método inicia a aplicação, carrega os dados existentes e controla
- * o loop principal do menu interativo.
- * </p>
- * 
- * @param args Argumentos da linha de comando (não utilizados neste sistema)
- * @throws IOException Se ocorrer um erro durante o carregamento dos dados
- * @see #carregarDados()
- * @see #inicializarDadosDemonstracao()
- */
+
+    /**
+     * Obtém a instância da oficina.
+     * @return A instância da oficina
+     */
+    public static Oficina getOficina() {
+        return oficina;
+    }
+
+    /**
+     * Ponto de entrada principal do sistema de oficina.
+     * <p>
+     * Este método inicia a aplicação, carrega os dados existentes e controla
+     * o loop principal do menu interativo.
+     * </p>
+     * 
+     * @param args Argumentos da linha de comando (não utilizados neste sistema)
+     * @throws IOException Se ocorrer um erro durante o carregamento dos dados
+     * @see #carregarDados()
+     * @see #inicializarDadosDemonstracao()
+     */
     
      public static void main(String[] args) {
         
         try {
             oficina.carregarDados();    // Carrega os dados da oficina e do login
-            //inicializarDadosDemonstracao();
+            oficina.salvarDados(); // Salva os dados após inicialização
         } catch (IOException | ClassNotFoundException | IllegalArgumentException e) {
             System.err.println("Erro ao carregar os dados: " + e.getMessage());
             System.out.println("Deseja criar um novo sistema? (S/N)");
@@ -72,118 +79,126 @@ public class SistemaOficinac {
                 oficina = new Oficina();
                 loginManager = new Login();
                 inicializarDadosDemonstracao();
+                try {
+                    oficina.salvarDados(); // Salva os dados após inicialização
+                } catch (IOException ex) {
+                    System.err.println("Erro ao salvar os dados: " + ex.getMessage());
+                }
             } else {
                 System.out.println("Operação cancelada. O sistema será encerrado.");
                 System.exit(0);
             }
         }
-        System.out.println("=== SISTEMA DE GERENCIAMENTO DE OFICINA ===");
-    
-        // Solicita credenciais de login
-        System.out.println("=== SISTEMA DE LOGIN ===");
-        System.out.println("Login padrao: admin/admin123  ou  func/func123");
-        boolean log = false;
-        String tipoUsuario = null;
-        while(!log){
-            System.out.print("Usuário: ");
-            String usuario = scanner.nextLine();
-            System.out.print("Senha: ");
-            String senha = scanner.nextLine();  
-            
-            
-            tipoUsuario = loginManager.login(usuario, senha);
+
+
         
-            if (tipoUsuario == null) {
-                System.out.println("Login falhou! Usuário ou senha inválidos.");
-            }else{
-                System.out.println("Login bem-sucedido! Tipo de usuário: " + tipoUsuario);
-                log = true;
-            }
-        }
-        
-    
-  
+
+            // Solicita credenciais de login
+            System.out.println("=== SISTEMA DE LOGIN ===");
+            System.out.println("Login padrao: admin/admin123  ou  func/func123");
+            boolean log = false;
+            String tipoUsuario = null;
+            while(!log){
+                System.out.print("Usuário: ");
+                String usuario = scanner.nextLine();
+                System.out.print("Senha: ");
+                String senha = scanner.nextLine();  
+                
+                
+                tipoUsuario = loginManager.login(usuario, senha);
             
-        if (tipoUsuario.equals("Administrador")) {
-            boolean voltar = false;
-            while (!voltar) {
-                exibirMenuAdministrador();
-                int opcao = Oficina.lerInteiro("Digite sua opção: ");
-                switch (opcao) {
-                    case 1:
-                        menuFuncionarios();
-                        break;
-                    case 2:
-                        menuFinanceiro();
-                        break;
-                    case 3:
-                        menuRelatorios();
-                        break;
-                    case 4:
-                        oficina.alterarSenha(); 
-                        break;
-                    case 0:
-                        oficina.ordenarTudo(oficina.getClientes(), oficina.getAgenda().getAgendamentos() , oficina.getServicos());
-                        try {
-                            oficina.salvarDados();
-                        } catch (IOException e) {
-                            System.err.println("Erro ao salvar os dados: " + e.getMessage());
-                            System.out.println("Os dados não foram salvos. Verifique o problema e tente novamente.");
-                        }
-                        voltar = true;
-                        break;
+                if (tipoUsuario == null) {
+                    System.out.println("Login falhou! Usuário ou senha inválidos.");
+                }else{
+                    System.out.println("Login bem-sucedido! Tipo de usuário: " + tipoUsuario);
+                    log = true;
                 }
             }
-        } else if (tipoUsuario.equals("Funcionario")) {
-            boolean voltar = false;
-            while (!voltar) {
-                exibirMenuFuncionario();
-                int opcao = Oficina.lerInteiro("Digite sua opção: ");
-                switch (opcao) {
-                    case 1:
-                        menuAgendamentos();
-                        break;
-                    case 2:
-                        menuVeiculos();
-                        break;
-                    case 3:
-                        menuEstoque();
-                        break;
-                    case 4:
-                        menuClientes();
-                        break;
-                    case 5:
-                        menuServicos();
-                        break;
-                    case 6: 
-                        menuElevadores();
-                        break;
-                    case 7:
-                        menuPonto();
-                        break;
-                    case 0:
-                        try {
-                            oficina.salvarDados();
-                        } catch (IOException e) {
-                            System.err.println("Erro ao salvar os dados: " + e.getMessage());
-                            System.out.println("Os dados não foram salvos. Verifique o problema e tente novamente.");
-                        }
-                        voltar = true;
-                        break;
-                    default:
-                        System.out.println("Opção inválida!");
-                        break;
+            
+        
+    
+                
+            if (tipoUsuario.equals("Administrador")) {
+                boolean voltar = false;
+                while (!voltar) {
+                    exibirMenuAdministrador();
+                    int opcao = Oficina.lerInteiro("Digite sua opção: ");
+                    switch (opcao) {
+                        case 1:
+                            menuFuncionarios();
+                            break;
+                        case 2:
+                            menuFinanceiro();
+                            break;
+                        case 3:
+                            menuRelatorios();
+                            break;
+                        case 4:
+                            oficina.alterarSenha(); 
+                            break;
+                        case 0:
+                            try {
+                                oficina.salvarDados();
+                                System.out.println("Dados salvos com sucesso!");
+                            } catch (IOException e) {
+                                System.err.println("Erro ao salvar os dados: " + e.getMessage());
+                                System.out.println("Os dados não foram salvos. Verifique o problema e tente novamente.");
+                            }
+                            voltar = true;
+                            break;
+                    }
                 }
+            } else if (tipoUsuario.equals("Funcionario")) {
+                boolean voltar = false;
+                while (!voltar) {
+                    exibirMenuFuncionario();
+                    int opcao = Oficina.lerInteiro("Digite sua opção: ");
+                    switch (opcao) {
+                        case 1:
+                            menuAgendamentos();
+                            break;
+                        case 2:
+                            menuVeiculos();
+                            break;
+                        case 3:
+                            menuEstoque();
+                            break;
+                        case 4:
+                            menuClientes();
+                            break;
+                        case 5:
+                            menuServicos();
+                            break;
+                        case 6: 
+                            menuElevadores();
+                            break;
+                        case 7:
+                            menuPonto();
+                            break;
+                        case 0:
+                            try {
+                                oficina.salvarDados();
+                            } catch (IOException e) {
+                                System.err.println("Erro ao salvar os dados: " + e.getMessage());
+                                System.out.println("Os dados não foram salvos. Verifique o problema e tente novamente.");
+                            }
+                            voltar = true;
+                            break;
+                        default:
+                            System.out.println("Opção inválida!");
+                            break;
+                    }
+                }
+            
+            } else {
+                System.out.println("Tipo de usuário inválido!");
             }
-        
-        } else {
-            System.out.println("Tipo de usuário inválido!");
+           
         }
-            
-            
-            
+                
+                
         
-    }
+        
 
     /** 
      * Exibe o menu principal do administrador.
@@ -197,6 +212,7 @@ public class SistemaOficinac {
         System.out.println("4. Alterar senha");
         System.out.println("0. Salvar e sair");
     }
+   
     /**
      * Exibe o menu principal do funcionário.
      * Apresenta opções para gerenciar agendamentos, veículos, estoque, clientes, serviços, elevadores e ponto.
@@ -420,10 +436,12 @@ public class SistemaOficinac {
         while (!voltar) {
             System.out.println("\n=== MENU FUNCIONÁRIOS ===");
             System.out.println("1. Contratar funcionário");
-            System.out.println("2. Demitir funcionário");
-            System.out.println("3. Listar funcionários");
-            System.out.println("4. Buscar funcionário por nome");
-            System.out.println("5. Alterar dados de funcionário");
+            System.out.println("2. Listar todos os funcionários");
+            System.out.println("3. Buscar funcionário por nome");
+            System.out.println("4. Demitir funcionário");
+            System.out.println("5. Alterar dados do funcionário");
+            System.out.println("6. Registrar ponto");
+            System.out.println("7. Mostrar registros de ponto");
             System.out.println("0. Voltar");
             
             int opcao = Oficina.lerInteiro("Digite sua opção: ");
@@ -433,12 +451,9 @@ public class SistemaOficinac {
                     oficina.contratarFuncionario();
                     break;
                 case 2:
-                    oficina.demitirFuncionario();
-                    break;
-                case 3:
                     oficina.listarFuncionarios();
                     break;
-                case 4:
+                case 3:
                     String nome = Oficina.lerString("Digite o nome do funcionário: ");
                     Funcionario funcionario = oficina.buscarFuncionarioPorNome(nome);
                     if (funcionario != null) {
@@ -447,8 +462,27 @@ public class SistemaOficinac {
                         System.out.println("Funcionário não encontrado!");
                     }
                     break;
+                case 4:
+                    oficina.demitirFuncionario();
+                    break;
                 case 5:
                     oficina.alterarDadosFuncionario();
+                    break;
+                case 6:
+                    System.out.println("\n=== REGISTRAR PONTO ===");
+                    System.out.println("1. Registrar entrada");
+                    System.out.println("2. Registrar saída");
+                    int opcaoPonto = Oficina.lerInteiro("Digite sua opção: ");
+                    if (opcaoPonto == 1) {
+                        oficina.registrarPonto(true);
+                    } else if (opcaoPonto == 2) {
+                        oficina.registrarPonto(false);
+                    } else {
+                        System.out.println("Opção inválida!");
+                    }
+                    break;
+                case 7:
+                    oficina.mostrarRegistroPonto();
                     break;
                 case 0:
                     voltar = true;
@@ -498,13 +532,14 @@ public class SistemaOficinac {
     private static void menuAgendamentos() {
         boolean voltar = false;
         while (!voltar) {
-            System.out.println("\n=== MENU AGENDAMENTOS ===");
+            System.out.println("\n=== MENU ORDENS DE SERVICO ===");
             System.out.println("1. Agendar serviço");
-            System.out.println("2. Cancelar agendamento");
-            System.out.println("3. Concluir agendamento");
+            System.out.println("2. Cancelar ordem de serviço");
+            System.out.println("3. Concluir ordem   de serviço");
             System.out.println("4. Listar todos agendamentos");
             System.out.println("5. Listar agendamentos por cliente");
             System.out.println("6. Listar agendamentos por status");
+            System.out  .println("7. Adicionar peça a ordem de serviço");    
             System.out.println("0. Voltar");
             
             int opcao = Oficina.lerInteiro("Digite sua opção: ");
@@ -513,19 +548,22 @@ public class SistemaOficinac {
                     oficina.agendarServico();
                     break;
                 case 2:
-                    oficina.cancelarAgendamento();
+                    oficina.cancelarOrdemServico();
                     break;
                 case 3:
-                    oficina.concluirAgendamento();
+                    oficina.concluirOrdemServico();
                     break;
                 case 4:
-                    oficina.listarAgendamentos();
+                    oficina.listarOrdens();
                     break;
                 case 5:
-                    oficina.listarAgendamentosPorCliente();
+                    oficina.listarOrdensPorCliente();
                     break;
                 case 6:
-                    oficina.listarAgendamentosPorStatus();
+                    oficina.listarOrdensPorStatus();
+                    break;
+                case 7:
+                    oficina.adicionarPecaAOrdemServico();
                     break;
                 case 0:
                     voltar = true;
@@ -556,7 +594,7 @@ public class SistemaOficinac {
             int opcao = Oficina.lerInteiro("Digite sua opção: ");
             switch (opcao) {
                 case 1:
-                    oficina.registrarPagamento();
+                    //oficina.registrarPagamento();
                     break;
                 case 2:
                     oficina.registrarDespesa();
@@ -702,7 +740,6 @@ public class SistemaOficinac {
      * @param oficina Instância da oficina a ser inicializada com dados de demonstração
      */
     public static void inicializarDadosDemonstracao() {
-        
         // Cadastrar funcionários de demonstração com especialidades
         Funcionario mecanicoMotor = new Funcionario("João Silva", "11987654321", "Rua A, 123", 
                                             "Mecânico", 2500.00, "MEC001", "Motor");
@@ -725,7 +762,6 @@ public class SistemaOficinac {
             "Rua E, 789",
             oficina.anonimizarCPF("12345678909")
         );
-                
         Veiculo veiculo1 = new Veiculo("Gol", "ABC1234", 2018, "Volkswagen", "Prata");
         cliente1.adicionarVeiculo(veiculo1);
         incrementarContadorVeiculosPrivate();
@@ -736,7 +772,6 @@ public class SistemaOficinac {
             "Rua F, 1011",
             oficina.anonimizarCPF("98765432100")
         );
-                
         Veiculo veiculo2 = new Veiculo("Civic", "XYZ5678", 2020, "Honda", "Preto");
         cliente2.adicionarVeiculo(veiculo2);
         incrementarContadorVeiculosPrivate();
@@ -765,111 +800,80 @@ public class SistemaOficinac {
         oficina.getServicos().add(new Servico("Troca de Correia", "Troca da correia dentada", 280.00, 90));
         oficina.getServicos().add(new Servico("Limpeza de Bicos", "Limpeza dos bicos injetores", 200.00, 60));
     
-        // Criar alguns agendamentos de demonstração
-        List<Servico> servicosAgendamento1 = new ArrayList<>();
-        servicosAgendamento1.add(oficina.getServicos().get(0)); // Troca de Pastilhas
-        servicosAgendamento1.add(oficina.getServicos().get(1)); // Troca de Óleo
-        
-        Agenda.Agendamento agendamento1 = oficina.getAgenda().adicionarAgendamento(
-            cliente1, veiculo1, servicosAgendamento1, mecanicoMotor,
-            "10/05/2024 09:00", "Agendado", mecanicoSuspensao
-        );
-    
-        List<Servico> servicosAgendamento2 = new ArrayList<>();
-        servicosAgendamento2.add(oficina.getServicos().get(4)); // Revisão Completa
-        
-        Agenda.Agendamento agendamento2 = oficina.getAgenda().adicionarAgendamento(
-            cliente2, veiculo2, servicosAgendamento2, mecanicoEletrica,
-            "11/05/2024 14:00", "Agendado", mecanicoMotor
-        );
-
-        List<Servico> servicosAgendamento3 = new ArrayList<>();
-        servicosAgendamento3.add(oficina.getServicos().get(5)); // Diagnóstico Elétrico
-        
-        Agenda.Agendamento agendamento3 = oficina.getAgenda().adicionarAgendamento(
-            cliente1, veiculo1, servicosAgendamento3, mecanicoEletrica,
-            "12/05/2024 10:00", "Agendado", mecanicoMotor
-        );
-    
         // Adicionar registros de ponto de demonstração
-        // MEC001 - Dois dias de registros
         oficina.getRegistrosPonto().add(new PontoFuncionario("MEC001", 
             LocalDateTime.of(2024, 5, 8, 8, 0), 
             LocalDateTime.of(2024, 5, 8, 17, 0)));
         oficina.getRegistrosPonto().add(new PontoFuncionario("MEC001", 
             LocalDateTime.of(2024, 5, 9, 8, 15), 
             LocalDateTime.of(2024, 5, 9, 17, 30)));
-            
-        // MEC002 - Um dia de registro
         oficina.getRegistrosPonto().add(new PontoFuncionario("MEC002", 
             LocalDateTime.of(2024, 5, 8, 7, 45), 
             LocalDateTime.of(2024, 5, 8, 16, 45)));
-            
-        // MEC003 - Um dia de registro
         oficina.getRegistrosPonto().add(new PontoFuncionario("MEC003", 
             LocalDateTime.of(2024, 5, 9, 8, 30), 
             LocalDateTime.of(2024, 5, 9, 17, 30)));
     
         // Criar ordens de serviço de demonstração diretamente
-        // OS001: Troca de óleo e revisão geral
         OrdemDeServicoBuilder builder = new OrdemServicoConcretaBuilder();
         OrdemServicoDirector director = new OrdemServicoDirector(builder);
 
-    // OS001: Troca de óleo e revisão geral
-    List<Estoque.ItemEstoque> itensOS1 = new ArrayList<>();
-    itensOS1.add(oficina.getEstoque().getItens().get(1)); // Filtro de Óleo
-    itensOS1.add(oficina.getEstoque().getItens().get(2)); // Óleo Motor
-    
-    director.construirOrdemCompleta(
-        "Entrada",
-        "Troca de óleo e revisão geral",
-        "08/05/2024",
-        "Serviços",
-        mecanicoMotor.getNome(),
-        cliente1.getNome(),
-        agendamento1,
-        itensOS1
-    );
-    OrdemServico os1 = builder.build();
-    oficina.getOrdensServico().add(os1);
+        // OS001: Troca de óleo e revisão geral
+        List<Estoque.ItemEstoque> itensOS1 = new ArrayList<>();
+        itensOS1.add(oficina.getEstoque().getItens().get(1)); // Filtro de Óleo
+        itensOS1.add(oficina.getEstoque().getItens().get(2)); // Óleo Motor
+        director.construirOrdemCompleta(
+            "Entrada",
+            "Troca de óleo e revisão geral",
+            "08/05/2024",
+            "16:00",
 
-    // OS002: Reparo elétrico e troca de bateria
-    List<Estoque.ItemEstoque> itensOS2 = new ArrayList<>();
-    itensOS2.add(oficina.getEstoque().getItens().get(4)); // Bateria
-    
-    director.construirOrdemCompleta(
-        "Entrada",
-        "Reparo elétrico e troca de bateria",
-        "09/05/2024",
-        "Serviços",
-        mecanicoEletrica.getNome(),
-        cliente2.getNome(),
-        agendamento2,
-        itensOS2
-    );
-    OrdemServico os2 = builder.build();
-    oficina.getOrdensServico().add(os2);
+            mecanicoMotor.getNome(),
+            cliente1.getNome(),
+            "Concluído",
+            itensOS1,
+            new ArrayList<>()
+        );
+        OrdemServico os1 = builder.build();
+        oficina.getOrdensServico().add(os1);
 
-    // OS003: Manutenção de suspensão
-    List<Estoque.ItemEstoque> itensOS3 = new ArrayList<>();
-    itensOS3.add(oficina.getEstoque().getItens().get(6)); // Amortecedor
-    
-    director.construirOrdemCompleta(
-        "Entrada",
-        "Manutenção de suspensão e alinhamento",
-        "09/05/2024",
-        "Serviços",
-        mecanicoSuspensao.getNome(),
-        cliente1.getNome(),
-        agendamento3,
-        itensOS3
-    );
-    OrdemServico os3 = builder.build();
-    oficina.getOrdensServico().add(os3);
+        // OS002: Reparo elétrico e troca de bateria
+        List<Estoque.ItemEstoque> itensOS2 = new ArrayList<>();
+        itensOS2.add(oficina.getEstoque().getItens().get(4)); // Bateria
+        director.construirOrdemCompleta(
+            "Entrada",
+            "Reparo elétrico e troca de bateria",
+            "09/05/2024",
+            "10:00",
+            mecanicoEletrica.getNome(),
+            cliente2.getNome(),
+            "Concluído",
+            itensOS2,
+            new ArrayList<>()
+        );
+        OrdemServico os2 = builder.build();
+        oficina.getOrdensServico().add(os2);
+
+        // OS003: Manutenção de suspensão
+        List<Estoque.ItemEstoque> itensOS3 = new ArrayList<>();
+        itensOS3.add(oficina.getEstoque().getItens().get(6)); // Amortecedor
+        director.construirOrdemCompleta(
+            "Entrada",
+            "Manutenção de suspensão e alinhamento",
+            "09/05/2024",
+            "14:00",
+            mecanicoSuspensao.getNome(),
+            cliente1.getNome(),
+            "Concluído",
+            itensOS3,
+            new ArrayList<>()
+        );
+        OrdemServico os3 = builder.build();
+        oficina.getOrdensServico().add(os3);
     
         // Registrar algumas transações de demonstração
-        oficina.getCaixa().registrarEntrada(150.00, "Venda de óleo", "07/05/2024", "Produtos", mecanicoMotor.getNome(), null);
-        oficina.getCaixa().registrarEntrada(80.00, "Diagnóstico simples", "07/05/2024", "Serviços", mecanicoEletrica.getNome(), null);
+        oficina.getCaixa().registrarEntrada(os1);
+        oficina.getCaixa().registrarEntrada(os2);
         oficina.getCaixa().registrarSaida(1500.00, "Compra de ferramentas", "05/05/2024", "Equipamentos", admin.getNome(), null);
         oficina.getCaixa().registrarSaida(800.00, "Conta de energia", "06/05/2024", "Despesas Fixas", admin.getNome(), null);
         oficina.getCaixa().registrarSaida(2500.00, "Compra de peças diversas", "07/05/2024", "Estoque", admin.getNome(), null);
@@ -879,14 +883,8 @@ public class SistemaOficinac {
         System.out.println("Clientes cadastrados: " + oficina.getClientes().size());
         System.out.println("Itens em estoque: " + oficina.getEstoque().getItens().size());
         System.out.println("Serviços disponíveis: " + oficina.getServicos().size());
-        System.out.println("Agendamentos realizados: " + oficina.getAgenda().getAgendamentos().size());
+        System.out.println("Ordens de serviço registradas: " + oficina.getOrdensServico().size());
         System.out.println("Transações registradas: " + oficina.getCaixa().getOrdensServico().size());
-    
-        /*try {
-            oficina.salvarDados();
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar dados de demonstração: " + e.getMessage());
-        }*/
     }
     
     /**

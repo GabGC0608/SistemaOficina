@@ -245,4 +245,19 @@ public static class ItemEstoque {
     public List<ItemEstoque> getItens() {
         return itens;
     }
+
+    /**
+     * Busca um item no estoque pelo código.
+     *
+     * @param codigo Código do item a ser buscado.
+     * @return O item do estoque se encontrado, null caso contrário.
+     */
+    public ItemEstoque buscarItemPorCodigo(String codigo) {
+        for (ItemEstoque item : itens) {
+            if (item.getCodigo().equals(codigo)) {
+                return item;
+            }
+        }
+        return null;
+    }
 }

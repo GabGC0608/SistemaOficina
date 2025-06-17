@@ -113,7 +113,7 @@
   "descricao" : "Servicos e peças",
   "valor" : 0.0
 }, {
-  "numeroOrdem" : "df00cfb7",
+  "numeroOrdem" : "8a2b2e44",
   "cliente" : {
     "nome" : "Ricardo",
     "telefone" : "11922222222",
@@ -180,15 +180,15 @@
   "status" : "Concluído",
   "elevadorAlocado" : null,
   "itensUtilizados" : [ {
-    "codigo" : "F001",
+    "codigo" : "P002",
     "nome" : "Filtro de Óleo",
     "quantidade" : 15,
     "preco" : 45.0,
     "descricao" : "Filtro de óleo para motor"
   }, {
-    "codigo" : "O001",
-    "nome" : "Óleo Motor 5W30",
-    "quantidade" : 50,
+    "codigo" : "P003",
+    "nome" : "Óleo Motor",
+    "quantidade" : 30,
     "preco" : 35.0,
     "descricao" : "Óleo sintético 5W30"
   } ],

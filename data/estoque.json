@@ -66,8 +66,8 @@
     "preco" : 35.0,
     "descricao" : "Óleo sintético 5W30"
   }, {
-    "codigo" : "p123",
-    "nome" : "a",
+    "codigo" : "k123",
+    "nome" : "ala",
     "quantidade" : 15,
     "preco" : 0.0,
     "descricao" : ""

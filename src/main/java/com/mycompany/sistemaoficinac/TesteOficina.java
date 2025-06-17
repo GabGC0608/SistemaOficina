@@ -188,11 +188,10 @@ public class TesteOficina {
             System.out.println("\nTestando gerenciamento de estoque:");
             
             // Adicionar itens ao estoque
-            Estoque.ItemEstoque item1 = new Estoque.ItemEstoque("P002", "Filtro de Óleo", 20, 45.0, "Filtro de óleo para motor");
-            Estoque.ItemEstoque item2 = new Estoque.ItemEstoque("P003", "Óleo Motor", 30, 35.0, "Óleo sintético 5W30");
-            
-            oficina.getEstoque().adicionarItem(item1);
-            oficina.getEstoque().adicionarItem(item2);
+            Estoque.ItemEstoque filtroOleo = new Estoque.ItemEstoque("P002", "Filtro de Óleo", 20, 45.0, "Filtro de óleo para motor");
+            Estoque.ItemEstoque oleoMotor = new Estoque.ItemEstoque("P003", "Óleo Motor", 30, 35.0, "Óleo sintético 5W30");
+            oficina.getEstoque().adicionarItem(filtroOleo);
+            oficina.getEstoque().adicionarItem(oleoMotor);
             
             System.out.println("Itens adicionados ao estoque:");
             oficina.getEstoque().listarItens();
@@ -212,8 +211,8 @@ public class TesteOficina {
 
         // OS001: Troca de óleo e revisão geral
         List<Estoque.ItemEstoque> itensOS1 = new ArrayList<>();
-        itensOS1.add(oficina.getEstoque().getItens().get(1)); // Filtro de Óleo (F001)
-        itensOS1.add(oficina.getEstoque().getItens().get(2)); // Óleo Motor (O001)
+        itensOS1.add(filtroOleo);
+        itensOS1.add(oleoMotor);
         director.construirOrdemCompleta(
             "Entrada",
             "Troca de óleo e revisão geral",
@@ -291,9 +290,9 @@ public class TesteOficina {
             System.out.println("\nTestando comparadores:");
             
             List<Cliente> clientes = new ArrayList<>();
-            clientes.add(new Cliente("Ana", "11877777777", "Rua N, 1111", "111.222.333-44"));
-            clientes.add(new Cliente("Bruno", "11866666666", "Rua O, 1212", "222.333.444-55"));
-            clientes.add(new Cliente("Carla", "11855555555", "Rua P, 1313", "333.444.555-66"));
+            clientes.add(new Cliente("Ana", "11877777777", "Rua N, 1111", oficina.anonimizarCPF("111.222.333-44")));
+            clientes.add(new Cliente("Bruno", "11866666666", "Rua O, 1212", oficina.anonimizarCPF("222.333.444-55")));
+            clientes.add(new Cliente("Carla", "11855555555", "Rua P, 1313", oficina.anonimizarCPF("333.444.555-66")));
             
             // Ordenar por nome
             System.out.println("\nOrdenando por nome:");
@@ -507,7 +506,7 @@ public class TesteOficina {
                 
                 // 4. Registro de Baixa no Estoque
                 Estoque.ItemEstoque item = itensEstoque.get(i % itensEstoque.size());
-                ordem.getItensUtilizados().add(item);
+                ordem.adicionarItemEstoque(item, 1);
                 System.out.println("4. Item registrado: " + item);
                 
                 // 5. Conclusão do Serviço

@@ -1,6 +1,8 @@
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\Administrador.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\Caixa.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\Cliente.java
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\ClientePorNome.java
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\ClientePorQtdVeiculos.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\Comparadores.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\Elevador.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\Estoque.java
@@ -9,11 +11,15 @@ C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\my
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\Login.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\Oficina.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\OrdemDeServicoBuilder.java
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\OrdemPorData.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\OrdemServico.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\OrdemServicoConcretaBuilder.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\OrdemServicoDirector.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\Pessoa.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\PontoFuncionario.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\Servico.java
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\ServicoPorTempo.java
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\ServicoPorValor.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\SistemaOficinac.java
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\TesteOficina.java
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java\com\mycompany\sistemaoficinac\Veiculo.java

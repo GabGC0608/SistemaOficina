@@ -1808,17 +1808,17 @@ public class Oficina {
     public void ordenarTudo(List<Cliente> clientes, List<OrdemServico> ordens, List<Servico> servicos) {
         // 1. Ordenar clientes alfabeticamente
         if (clientes != null) {
-            clientes.sort(new Comparadores.ClientePorNome());
+            clientes.sort(new ClientePorNome());
         }
 
         // 2. Ordenar agendamentos por data
         if (ordens != null) {
-            ordens.sort(new Comparadores.ordemPorData());
+            ordens.sort(new OrdemPorData());
         }
 
         // 3. Ordenar serviços por preço
         if (servicos != null) {
-            servicos.sort(new Comparadores.ServicoPorValor());
+            servicos.sort(new ServicoPorValor());
         }
     }
 

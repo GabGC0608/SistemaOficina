@@ -227,7 +227,6 @@ public class TesteOficina {
         );
         OrdemServico os1 = builder.build();
         oficina.getOrdensServico().add(os1);
-        oficina.getCaixa().registrarEntrada(os1);
 
         // OS002: Reparo elétrico e troca de bateria
         List<Estoque.ItemEstoque> itensOS2 = new ArrayList<>();
@@ -245,7 +244,6 @@ public class TesteOficina {
         );
         OrdemServico os2 = builder.build();
         oficina.getOrdensServico().add(os2);
-        oficina.getCaixa().registrarEntrada(os2);
 
         // OS003: Manutenção de suspensão
         List<Estoque.ItemEstoque> itensOS3 = new ArrayList<>();
@@ -263,7 +261,6 @@ public class TesteOficina {
         );
         OrdemServico os3 = builder.build();
         oficina.getOrdensServico().add(os3);
-        oficina.getCaixa().registrarEntrada(os3);
         }
 
         // Questão 10: Extrato
@@ -300,18 +297,18 @@ public class TesteOficina {
             
             // Ordenar por nome
             System.out.println("\nOrdenando por nome:");
-            Collections.sort(clientes, new Comparadores.ClientePorNome());
+            Collections.sort(clientes, new ClientePorNome());
             clientes.forEach(System.out::println);
             
             // Ordenar por quantidade de veículos
             System.out.println("\nOrdenando por quantidade de veículos:");
-            Collections.sort(clientes, new Comparadores.ClientePorQtdVeiculos());
+            Collections.sort(clientes, new ClientePorQtdVeiculos());
             clientes.forEach(System.out::println);
             
             // Testar busca binária
             System.out.println("\nTestando busca binária:");
             Cliente clienteBusca = new Cliente("Bruno", "", "", "");
-            int indice = Collections.binarySearch(clientes, clienteBusca, new Comparadores.ClientePorNome());
+            int indice = Collections.binarySearch(clientes, clienteBusca, new ClientePorNome());
             if (indice >= 0) {
                 System.out.println("Cliente encontrado na posição " + indice + ": " + clientes.get(indice));
             } else {
@@ -406,12 +403,12 @@ public class TesteOficina {
             
             // Primeira ordenação: por nome
             System.out.println("\nOrdenando por nome:");
-            Collections.sort(clientes, new Comparadores.ClientePorNome());
+            Collections.sort(clientes, new ClientePorNome());
             clientes.forEach(c -> System.out.println(c.getNome()));
             
             // Segunda ordenação: por quantidade de veículos
             System.out.println("\nOrdenando por quantidade de veículos:");
-            Collections.sort(clientes, new Comparadores.ClientePorQtdVeiculos());
+            Collections.sort(clientes, new ClientePorQtdVeiculos());
             clientes.forEach(c -> System.out.println(c.getNome() + " - " + c.getVeiculos().size() + " veículos"));
         }
 
@@ -422,18 +419,18 @@ public class TesteOficina {
             
             // Criar lista de clientes para teste
             List<Cliente> clientes = new ArrayList<>();
-            clientes.add(new Cliente("Ana", "11999999999", "Rua A, 1", "111.111.111-11"));
-            clientes.add(new Cliente("Bruno", "11988888888", "Rua B, 2", "222.222.222-22"));
-            clientes.add(new Cliente("Carlos", "11977777777", "Rua C, 3", "333.333.333-33"));
-            clientes.add(new Cliente("Daniel", "11966666666", "Rua D, 4", "444.444.444-44"));
+            clientes.add(new Cliente("Ana", "11999999999", "Rua A, 1", oficina.anonimizarCPF("111.111.111-11")));
+            clientes.add(new Cliente("Bruno", "11988888888", "Rua B, 2", oficina.anonimizarCPF("222.222.222-22")));
+            clientes.add(new Cliente("Carlos", "11977777777", "Rua C, 3", oficina.anonimizarCPF("333.333.333-33")));
+            clientes.add(new Cliente("Daniel", "11966666666", "Rua D, 4", oficina.anonimizarCPF("444.444.444-44")));
             
             // Ordenar lista para busca binária
-            Collections.sort(clientes, new Comparadores.ClientePorNome());
+            Collections.sort(clientes, new ClientePorNome());
             
             // Testar busca binária
             System.out.println("\nTestando binarySearch:");
             Cliente clienteBusca = new Cliente("Bruno", "", "", "");
-            int indiceBinario = Collections.binarySearch(clientes, clienteBusca, new Comparadores.ClientePorNome());
+            int indiceBinario = Collections.binarySearch(clientes, clienteBusca, new ClientePorNome());
             if (indiceBinario >= 0) {
                 System.out.println("Cliente encontrado na posição " + indiceBinario + ": " + clientes.get(indiceBinario));
             } else {

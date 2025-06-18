@@ -175,11 +175,64 @@ public class Caixa {
 
         double totalEntradas = entradasPorCategoria.values().stream().mapToDouble(Double::doubleValue).sum();
         double totalSaidas = saidasPorCategoria.values().stream().mapToDouble(Double::doubleValue).sum();
+        double resultadoLiquido = totalEntradas - totalSaidas;
 
-        System.out.println("\nResumo:");
+        System.out.println("\nResumo Financeiro:");
         System.out.printf("Total de Entradas: R$ %.2f%n", totalEntradas);
         System.out.printf("Total de Saídas: R$ %.2f%n", totalSaidas);
-        System.out.printf("Resultado Líquido: R$ %.2f%n", totalEntradas - totalSaidas);
+        System.out.printf("Resultado Líquido: R$ %.2f%n", resultadoLiquido);
+        
+        // Novas métricas financeiras
+        if (totalEntradas > 0) {
+            double margemLucro = (resultadoLiquido / totalEntradas) * 100;
+            System.out.printf("Margem de Lucro: %.2f%%%n", margemLucro);
+        }
+        
+        // Análise de despesas
+        if (totalSaidas > 0) {
+            System.out.println("\nAnálise de Despesas:");
+            saidasPorCategoria.forEach((categoria, valor) -> {
+                double percentual = (valor / totalSaidas) * 100;
+                System.out.printf("%s: %.2f%% do total de despesas%n", categoria, percentual);
+            });
+        }
+        
+        // Análise de receitas
+        if (totalEntradas > 0) {
+            System.out.println("\nAnálise de Receitas:");
+            entradasPorCategoria.forEach((categoria, valor) -> {
+                double percentual = (valor / totalEntradas) * 100;
+                System.out.printf("%s: %.2f%% do total de receitas%n", categoria, percentual);
+            });
+        }
+        
+        // Indicadores de desempenho
+        System.out.println("\nIndicadores de Desempenho:");
+        int totalServicos = (int) ordensMes.stream()
+            .filter(os -> os.getTipo().equals("Entrada"))
+            .count();
+        if (totalServicos > 0) {
+            System.out.printf("Ticket Médio: R$ %.2f%n", totalEntradas / totalServicos);
+        }
+        
+        // Comparação com mês anterior (se disponível)
+        if (mes > 1) {
+            String mesAnteriorStr = String.format("%02d", mes - 1);
+            String dataInicioAnterior = "01/" + mesAnteriorStr + "/" + ano;
+            String dataFimAnterior = "31/" + mesAnteriorStr + "/" + ano;
+            
+            List<OrdemServico> ordensMesAnterior = getOrdensPorPeriodo(dataInicioAnterior, dataFimAnterior);
+            double totalEntradasAnterior = ordensMesAnterior.stream()
+                .filter(os -> os.getTipo().equals("Entrada"))
+                .mapToDouble(OrdemServico::getValor)
+                .sum();
+            
+            if (totalEntradasAnterior > 0) {
+                double variacaoReceita = ((totalEntradas - totalEntradasAnterior) / totalEntradasAnterior) * 100;
+                System.out.printf("Variação de Receita vs Mês Anterior: %.2f%%%n", variacaoReceita);
+            }
+        }
+        
         System.out.println("======================");
     }
 }

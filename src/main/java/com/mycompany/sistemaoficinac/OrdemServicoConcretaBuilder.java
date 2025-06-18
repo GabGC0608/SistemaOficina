@@ -1,15 +1,17 @@
 package com.mycompany.sistemaoficinac;
 
+import java.util.ArrayList;
+
 public class OrdemServicoConcretaBuilder implements OrdemDeServicoBuilder {
     private OrdemServico ordem;
 
     public OrdemServicoConcretaBuilder() {
-        this.reset();
+        reset();
     }
 
     @Override
     public void reset() {
-        this.ordem = new OrdemServico();
+        ordem = new OrdemServico();
     }
 
     @Override
@@ -39,16 +41,19 @@ public class OrdemServicoConcretaBuilder implements OrdemDeServicoBuilder {
 
     @Override
     public void setResponsavel(String responsavel) {
-        // Create a temporary Funcionario object with the name
-        Funcionario func = new Funcionario(responsavel, "", "", "Mecânico", 0.0, "TEMP", "Temporário");
-        ordem.setResponsavel(func);
+        if (responsavel != null && !responsavel.trim().isEmpty()) {
+            Funcionario func = new Funcionario(responsavel, "", "", "Mecânico", 0.0, "TEMP", "Temporário",
+                new ArrayList<>(), false);
+            ordem.setResponsavel(func);
+        }
     }
 
     @Override
     public void setCliente(String cliente) {
-        // Create a temporary Cliente object with the name
-        Cliente cli = new Cliente(cliente, "", "", "");
-        ordem.setCliente(cli);
+        if (cliente != null && !cliente.trim().isEmpty()) {
+            Cliente cli = new Cliente(cliente, "", "", "");
+            ordem.setCliente(cli);
+        }
     }
 
     @Override

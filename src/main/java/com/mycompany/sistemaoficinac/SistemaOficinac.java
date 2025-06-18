@@ -78,7 +78,7 @@ public class SistemaOficinac {
                 System.out.println("Criando novo sistema...");
                 oficina = new Oficina();
                 loginManager = new Login();
-                inicializarDadosDemonstracao();
+                oficina.inicializarDadosDemonstracao();
                 try {
                     oficina.salvarDados(); // Salva os dados após inicialização
                 } catch (IOException ex) {
@@ -310,26 +310,33 @@ public class SistemaOficinac {
      */
     private static void menuElevadores() {
         boolean voltar = false;
-        while (!voltar) {
-            System.out.println("\n=== MENU DE ELEVADORES ===");
+        while (!voltar) {   
+        
+            System.out.println("\n=== MENU ELEVADORES ===");
             System.out.println("1. Listar elevadores");
             System.out.println("2. Alocar elevador");
             System.out.println("3. Liberar elevador");
             System.out.println("0. Voltar");
             
-            int opcao = Oficina.lerInteiro("Digite sua opção: ");
+            int opcao = Oficina.lerInteiro("Digite a opção desejada: ");
+            
             switch (opcao) {
                 case 1:
                     Elevador.listarElevadores();
                     break;
                 case 2:
-                    alocarElevador();
+                    oficina.alocarElevador();
                     break;
                 case 3:
-                    oficina.liberarElevador();
+                    int numero = Oficina.lerInteiro("Digite o número do elevador a ser liberado (1-3): ");
+                    if (numero >= 1 && numero <= 3) {
+                        Elevador.liberarElevador(numero - 1);
+                    } else {
+                        System.out.println("Número inválido!");
+                    }
                     break;
                 case 0:
-                    voltar = true;
+                    voltar       = true;
                     break;
                 default:
                     System.out.println("Opção inválida!");
@@ -579,47 +586,29 @@ public class SistemaOficinac {
      * Permite registrar pagamentos, despesas, compras e gerar relatórios financeiros.
      */
     private static void menuFinanceiro() {
-        boolean voltar = false;
-        while (!voltar) {
+        while (true) {
             System.out.println("\n=== MENU FINANCEIRO ===");
-            System.out.println("1. Registrar pagamento");
-            System.out.println("2. Registrar despesa");
-            System.out.println("3. Registrar compra de peças");
-            System.out.println("4. Registrar pagamento de salários");
-            System.out.println("5. Gerar relatório diário");
-            System.out.println("6. Gerar relatório mensal");
-            System.out.println("7. Listar ordens de serviço");
+            System.out.println("1. Registrar entrada");
+            System.out.println("2. Registrar saída");
+            System.out.println("3. Gerar balanço mensal");
             System.out.println("0. Voltar");
             
-            int opcao = Oficina.lerInteiro("Digite sua opção: ");
+            int opcao = Oficina.lerInteiro("Digite a opção desejada: ");
+            
             switch (opcao) {
                 case 1:
-                    //oficina.registrarPagamento();
+                    oficina.registrarEntrada();
                     break;
                 case 2:
-                    oficina.registrarDespesa();
+                    oficina.registrarSaida();
                     break;
                 case 3:
-                    oficina.registrarCompraPecas();
-                    break;
-                case 4:
-                    oficina.registrarPagamentoSalarios();
-                    break;
-                case 5:
-                    oficina.gerarRelatorioDiario();
-                    break;
-                case 6:
-                    oficina.gerarRelatorioMensal();
-                    break;
-                case 7:
-                    menuListarTransacoes();
+                    oficina.gerarBalancoMensal();
                     break;
                 case 0:
-                    voltar = true;
-                    break;
+                    return;
                 default:
                     System.out.println("Opção inválida!");
-                    break;
             }
         }
     }
@@ -711,182 +700,6 @@ public class SistemaOficinac {
         }
     }
 
-    // Métodos auxiliares para operações específicas
-    /**
-     * Aloca um elevador para um veículo específico.
-     * Solicita o número do elevador (1-3) e o modelo do veículo.
-     */
-    private static void alocarElevador() {
-        System.out.println("\n=== ALOCAR ELEVADOR ===");
-        Elevador.listarElevadores();
-        int numero = Oficina.lerInteiro("Digite o número do elevador a ser alocado (1-3): ");
-        
-        if (numero < 1 || numero > 3) {
-            System.out.println("Número inválido!");
-            return;
-        }
-        
-        Elevador elevador = Elevador.alocarElevador(numero - 1); // Índice base 0
-        if (elevador != null) {
-            String modeloVeiculo = Oficina.lerString("Digite o modelo do veículo para o elevador: ");
-            elevador.setModelo(modeloVeiculo);
-            System.out.println("Elevador " + numero + " alocado para o veículo: " + modeloVeiculo);
-        }
-    }
-
-    /**
-     * Inicializa o sistema com dados de demonstração para testes.
-     * Cria funcionários, clientes, veículos, serviços e agendamentos de exemplo.
-     * @param oficina Instância da oficina a ser inicializada com dados de demonstração
-     */
-    public static void inicializarDadosDemonstracao() {
-        // Cadastrar funcionários de demonstração com especialidades
-        Funcionario mecanicoMotor = new Funcionario("João Silva", "11987654321", "Rua A, 123", 
-                                            "Mecânico", 2500.00, "MEC001", "Motor");
-        Funcionario mecanicoEletrica = new Funcionario("Pedro Santos", "11987654322", "Rua B, 234",
-                                            "Mecânico", 2500.00, "MEC002", "Elétrica");
-        Funcionario mecanicoSuspensao = new Funcionario("Carlos Oliveira", "11987654323", "Rua C, 345",
-                                            "Mecânico", 2500.00, "MEC003", "Suspensão");
-        Administrador admin = new Administrador("Maria Souza", "11912345678", "Rua D, 456", 
-                                            4500.00, "ADM001");
-        
-        oficina.contratarFuncionario(mecanicoMotor);
-        oficina.contratarFuncionario(mecanicoEletrica);
-        oficina.contratarFuncionario(mecanicoSuspensao);
-        oficina.contratarFuncionario(admin);
-        
-        // Criar clientes e veículos
-        Cliente cliente1 = new Cliente(
-            "Roberto Oliveira",
-            "11955556666",
-            "Rua E, 789",
-            oficina.anonimizarCPF("12345678909")
-        );
-        Veiculo veiculo1 = new Veiculo("Gol", "ABC1234", 2018, "Volkswagen", "Prata");
-        cliente1.adicionarVeiculo(veiculo1);
-        incrementarContadorVeiculosPrivate();
-        
-        Cliente cliente2 = new Cliente(
-            "Ana Santos",
-            "11944445555",
-            "Rua F, 1011",
-            oficina.anonimizarCPF("98765432100")
-        );
-        Veiculo veiculo2 = new Veiculo("Civic", "XYZ5678", 2020, "Honda", "Preto");
-        cliente2.adicionarVeiculo(veiculo2);
-        incrementarContadorVeiculosPrivate();
-        
-        oficina.getClientes().add(cliente1);
-        oficina.getClientes().add(cliente2);
-        
-        // Adicionar itens ao estoque
-        oficina.getEstoque().adicionarItem("P001", "Pastilha de Freio", 20, 150.00, "Pastilha de freio de alta performance");
-        oficina.getEstoque().adicionarItem("F001", "Filtro de Óleo", 15, 45.00, "Filtro de óleo para motor");
-        oficina.getEstoque().adicionarItem("O001", "Óleo Motor 5W30", 50, 35.00, "Óleo sintético 5W30");
-        oficina.getEstoque().adicionarItem("V001", "Vela de Ignição", 30, 25.00, "Vela de ignição de iridium");
-        oficina.getEstoque().adicionarItem("B001", "Bateria 60Ah", 10, 450.00, "Bateria selada 60Ah");
-        oficina.getEstoque().adicionarItem("C001", "Correia Dentada", 15, 180.00, "Correia dentada de alta durabilidade");
-        oficina.getEstoque().adicionarItem("A001", "Amortecedor", 8, 350.00, "Amortecedor dianteiro");
-        oficina.getEstoque().adicionarItem("R001", "Radiador", 5, 600.00, "Radiador de água completo");
-        oficina.getEstoque().adicionarItem("FA001", "Filtro de Ar", 25, 45.00, "Filtro de ar do motor");
-    
-        // Adicionar serviços diretamente
-        oficina.getServicos().add(new Servico("Troca de Pastilhas", "Troca das pastilhas de freio", 180.00, 60));
-        oficina.getServicos().add(new Servico("Troca de Óleo", "Troca do óleo do motor", 120.00, 45));
-        oficina.getServicos().add(new Servico("Alinhamento", "Alinhamento de direção", 100.00, 30));
-        oficina.getServicos().add(new Servico("Balanceamento", "Balanceamento de rodas", 80.00, 30));
-        oficina.getServicos().add(new Servico("Revisão Completa", "Revisão geral do veículo", 350.00, 120));
-        oficina.getServicos().add(new Servico("Diagnóstico Elétrico", "Diagnóstico do sistema elétrico", 150.00, 60));
-        oficina.getServicos().add(new Servico("Troca de Correia", "Troca da correia dentada", 280.00, 90));
-        oficina.getServicos().add(new Servico("Limpeza de Bicos", "Limpeza dos bicos injetores", 200.00, 60));
-    
-        // Adicionar registros de ponto de demonstração
-        oficina.getRegistrosPonto().add(new PontoFuncionario("MEC001", 
-            LocalDateTime.of(2024, 5, 8, 8, 0), 
-            LocalDateTime.of(2024, 5, 8, 17, 0)));
-        oficina.getRegistrosPonto().add(new PontoFuncionario("MEC001", 
-            LocalDateTime.of(2024, 5, 9, 8, 15), 
-            LocalDateTime.of(2024, 5, 9, 17, 30)));
-        oficina.getRegistrosPonto().add(new PontoFuncionario("MEC002", 
-            LocalDateTime.of(2024, 5, 8, 7, 45), 
-            LocalDateTime.of(2024, 5, 8, 16, 45)));
-        oficina.getRegistrosPonto().add(new PontoFuncionario("MEC003", 
-            LocalDateTime.of(2024, 5, 9, 8, 30), 
-            LocalDateTime.of(2024, 5, 9, 17, 30)));
-    
-        // Criar ordens de serviço de demonstração diretamente
-        OrdemDeServicoBuilder builder = new OrdemServicoConcretaBuilder();
-        OrdemServicoDirector director = new OrdemServicoDirector(builder);
-
-        // OS001: Troca de óleo e revisão geral
-        List<Estoque.ItemEstoque> itensOS1 = new ArrayList<>();
-        itensOS1.add(oficina.getEstoque().getItens().get(1)); // Filtro de Óleo
-        itensOS1.add(oficina.getEstoque().getItens().get(2)); // Óleo Motor
-        director.construirOrdemCompleta(
-            "Entrada",
-            "Troca de óleo e revisão geral",
-            "08/05/2024",
-            "16:00",
-
-            mecanicoMotor.getNome(),
-            cliente1.getNome(),
-            "Concluído",
-            itensOS1,
-            new ArrayList<>()
-        );
-        OrdemServico os1 = builder.build();
-        oficina.getOrdensServico().add(os1);
-
-        // OS002: Reparo elétrico e troca de bateria
-        List<Estoque.ItemEstoque> itensOS2 = new ArrayList<>();
-        itensOS2.add(oficina.getEstoque().getItens().get(4)); // Bateria
-        director.construirOrdemCompleta(
-            "Entrada",
-            "Reparo elétrico e troca de bateria",
-            "09/05/2024",
-            "10:00",
-            mecanicoEletrica.getNome(),
-            cliente2.getNome(),
-            "Concluído",
-            itensOS2,
-            new ArrayList<>()
-        );
-        OrdemServico os2 = builder.build();
-        oficina.getOrdensServico().add(os2);
-
-        // OS003: Manutenção de suspensão
-        List<Estoque.ItemEstoque> itensOS3 = new ArrayList<>();
-        itensOS3.add(oficina.getEstoque().getItens().get(6)); // Amortecedor
-        director.construirOrdemCompleta(
-            "Entrada",
-            "Manutenção de suspensão e alinhamento",
-            "09/05/2024",
-            "14:00",
-            mecanicoSuspensao.getNome(),
-            cliente1.getNome(),
-            "Concluído",
-            itensOS3,
-            new ArrayList<>()
-        );
-        OrdemServico os3 = builder.build();
-        oficina.getOrdensServico().add(os3);
-    
-        // Registrar algumas transações de demonstração
-        oficina.getCaixa().registrarEntrada(os1);
-        oficina.getCaixa().registrarEntrada(os2);
-        oficina.getCaixa().registrarSaida(1500.00, "Compra de ferramentas", "05/05/2024", "Equipamentos", admin.getNome(), null);
-        oficina.getCaixa().registrarSaida(800.00, "Conta de energia", "06/05/2024", "Despesas Fixas", admin.getNome(), null);
-        oficina.getCaixa().registrarSaida(2500.00, "Compra de peças diversas", "07/05/2024", "Estoque", admin.getNome(), null);
-    
-        System.out.println("\nDados de demonstração cadastrados com sucesso!");
-        System.out.println("Funcionários cadastrados: " + oficina.getFuncionarios().size());
-        System.out.println("Clientes cadastrados: " + oficina.getClientes().size());
-        System.out.println("Itens em estoque: " + oficina.getEstoque().getItens().size());
-        System.out.println("Serviços disponíveis: " + oficina.getServicos().size());
-        System.out.println("Ordens de serviço registradas: " + oficina.getOrdensServico().size());
-        System.out.println("Transações registradas: " + oficina.getCaixa().getOrdensServico().size());
-    }
-    
     /**
      * Incrementa o contador privado de veículos.
      * Este método é chamado sempre que um novo veículo é adicionado ao sistema.

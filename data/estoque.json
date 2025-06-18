@@ -1,75 +1,63 @@
 {
   "itens" : [ {
     "codigo" : "P001",
-    "nome" : "Pastilha de Freio",
-    "quantidade" : 20,
-    "preco" : 150.0,
-    "descricao" : "Pastilha de freio de alta performance"
-  }, {
-    "codigo" : "F001",
-    "nome" : "Filtro de Óleo",
-    "quantidade" : 15,
-    "preco" : 45.0,
-    "descricao" : "Filtro de óleo para motor"
-  }, {
-    "codigo" : "O001",
-    "nome" : "Óleo Motor 5W30",
+    "nome" : "Óleo Motor",
     "quantidade" : 50,
     "preco" : 35.0,
     "descricao" : "Óleo sintético 5W30"
   }, {
-    "codigo" : "V001",
-    "nome" : "Vela de Ignição",
+    "codigo" : "P002",
+    "nome" : "Filtro de Óleo",
     "quantidade" : 30,
     "preco" : 25.0,
-    "descricao" : "Vela de ignição de iridium"
+    "descricao" : "Filtro de óleo"
   }, {
-    "codigo" : "B001",
-    "nome" : "Bateria 60Ah",
-    "quantidade" : 10,
-    "preco" : 450.0,
-    "descricao" : "Bateria selada 60Ah"
+    "codigo" : "P003",
+    "nome" : "Pastilha de Freio",
+    "quantidade" : 40,
+    "preco" : 80.0,
+    "descricao" : "Pastilha de freio"
   }, {
-    "codigo" : "C001",
-    "nome" : "Correia Dentada",
-    "quantidade" : 15,
-    "preco" : 180.0,
-    "descricao" : "Correia dentada de alta durabilidade"
-  }, {
-    "codigo" : "A001",
-    "nome" : "Amortecedor",
-    "quantidade" : 8,
+    "codigo" : "P004",
+    "nome" : "Bateria",
+    "quantidade" : 20,
     "preco" : 350.0,
-    "descricao" : "Amortecedor dianteiro"
+    "descricao" : "Bateria 60Ah"
   }, {
-    "codigo" : "R001",
-    "nome" : "Radiador",
-    "quantidade" : 5,
-    "preco" : 600.0,
-    "descricao" : "Radiador de água completo"
-  }, {
-    "codigo" : "FA001",
+    "codigo" : "P005",
     "nome" : "Filtro de Ar",
     "quantidade" : 25,
     "preco" : 45.0,
-    "descricao" : "Filtro de ar do motor"
+    "descricao" : "Filtro de ar motor"
   }, {
-    "codigo" : "P002",
-    "nome" : "Filtro de Óleo",
+    "codigo" : "P006",
+    "nome" : "Filtro de Combustível",
+    "quantidade" : 20,
+    "preco" : 55.0,
+    "descricao" : "Filtro de combustível"
+  }, {
+    "codigo" : "P007",
+    "nome" : "Vela de Ignição",
+    "quantidade" : 50,
+    "preco" : 25.0,
+    "descricao" : "Vela de ignição"
+  }, {
+    "codigo" : "P008",
+    "nome" : "Correia Dentada",
     "quantidade" : 15,
-    "preco" : 45.0,
-    "descricao" : "Filtro de óleo para motor"
+    "preco" : 180.0,
+    "descricao" : "Correia dentada"
   }, {
-    "codigo" : "P003",
-    "nome" : "Óleo Motor",
+    "codigo" : "P009",
+    "nome" : "Fluido de Freio",
     "quantidade" : 30,
     "preco" : 35.0,
-    "descricao" : "Óleo sintético 5W30"
+    "descricao" : "Fluido de freio DOT4"
   }, {
-    "codigo" : "k123",
-    "nome" : "ala",
-    "quantidade" : 15,
-    "preco" : 0.0,
-    "descricao" : ""
+    "codigo" : "P010",
+    "nome" : "Óleo de Câmbio",
+    "quantidade" : 25,
+    "preco" : 45.0,
+    "descricao" : "Óleo de câmbio"
   } ]
 }

@@ -1,27 +1,131 @@
 [ {
-  "nome" : "Roberto Oliveira",
-  "telefone" : "11955556666",
-  "endereco" : "Rua E, 789",
+  "nome" : "João Silva",
+  "telefone" : "11999999999",
+  "endereco" : "Rua A, 123",
   "clienteId" : "CLI0001",
   "veiculos" : [ {
-    "modelo" : "Gol",
-    "placa" : "ABC1234",
-    "ano" : 2018,
-    "marca" : "Volkswagen",
-    "cor" : "Prata"
-  } ],
-  "cpfAnonimizado" : "***.456.***-09"
-}, {
-  "nome" : "Ana Santos",
-  "telefone" : "11944445555",
-  "endereco" : "Rua F, 1011",
-  "clienteId" : "CLI0002",
-  "veiculos" : [ {
     "modelo" : "Civic",
-    "placa" : "XYZ5678",
+    "placa" : "ABC1234",
     "ano" : 2020,
     "marca" : "Honda",
     "cor" : "Preto"
   } ],
-  "cpfAnonimizado" : "***.654.***-00"
+  "cpfAnonimizado" : "111.222.333-44"
+}, {
+  "nome" : "Maria Santos",
+  "telefone" : "11988888888",
+  "endereco" : "Rua B, 456",
+  "clienteId" : "CLI0002",
+  "veiculos" : [ {
+    "modelo" : "Corolla",
+    "placa" : "DEF5678",
+    "ano" : 2021,
+    "marca" : "Toyota",
+    "cor" : "Prata"
+  } ],
+  "cpfAnonimizado" : "222.333.444-55"
+}, {
+  "nome" : "Pedro Oliveira",
+  "telefone" : "11977777777",
+  "endereco" : "Rua C, 789",
+  "clienteId" : "CLI0003",
+  "veiculos" : [ {
+    "modelo" : "HB20",
+    "placa" : "GHI9012",
+    "ano" : 2022,
+    "marca" : "Hyundai",
+    "cor" : "Branco"
+  } ],
+  "cpfAnonimizado" : "333.444.555-66"
+}, {
+  "nome" : "Ana Costa",
+  "telefone" : "11966666666",
+  "endereco" : "Rua D, 101",
+  "clienteId" : "CLI0004",
+  "veiculos" : [ {
+    "modelo" : "Onix",
+    "placa" : "JKL3456",
+    "ano" : 2023,
+    "marca" : "Chevrolet",
+    "cor" : "Vermelho"
+  } ],
+  "cpfAnonimizado" : "444.555.666-77"
+}, {
+  "nome" : "Carlos Souza",
+  "telefone" : "11955555555",
+  "endereco" : "Rua E, 202",
+  "clienteId" : "CLI0005",
+  "veiculos" : [ {
+    "modelo" : "Cruze",
+    "placa" : "MNO7890",
+    "ano" : 2024,
+    "marca" : "Chevrolet",
+    "cor" : "Azul"
+  } ],
+  "cpfAnonimizado" : "555.666.777-88"
+}, {
+  "nome" : "Lucia Ferreira",
+  "telefone" : "11944444444",
+  "endereco" : "Rua F, 303",
+  "clienteId" : "CLI0006",
+  "veiculos" : [ {
+    "modelo" : "Cobalt",
+    "placa" : "PQR1234",
+    "ano" : 2025,
+    "marca" : "Chevrolet",
+    "cor" : "Cinza"
+  } ],
+  "cpfAnonimizado" : "666.777.888-99"
+}, {
+  "nome" : "Roberto Lima",
+  "telefone" : "11933333333",
+  "endereco" : "Rua G, 404",
+  "clienteId" : "CLI0007",
+  "veiculos" : [ {
+    "modelo" : "Prisma",
+    "placa" : "STU5678",
+    "ano" : 2026,
+    "marca" : "Chevrolet",
+    "cor" : "Verde"
+  } ],
+  "cpfAnonimizado" : "777.888.999-00"
+}, {
+  "nome" : "Patricia Alves",
+  "telefone" : "11922222222",
+  "endereco" : "Rua H, 505",
+  "clienteId" : "CLI0008",
+  "veiculos" : [ {
+    "modelo" : "Spin",
+    "placa" : "VWX9012",
+    "ano" : 2027,
+    "marca" : "Chevrolet",
+    "cor" : "Amarelo"
+  } ],
+  "cpfAnonimizado" : "888.999.000-11"
+}, {
+  "nome" : "Fernando Gomes",
+  "telefone" : "11911111111",
+  "endereco" : "Rua I, 606",
+  "clienteId" : "CLI0009",
+  "veiculos" : [ {
+    "modelo" : "Tracker",
+    "placa" : "YZA3456",
+    "ano" : 2028,
+    "marca" : "Chevrolet",
+    "cor" : "Marrom"
+  } ],
+  "cpfAnonimizado" : "999.000.111-22"
+}, {
+  "nome" : "Juliana Martins",
+  "telefone" : "11900000000",
+  "endereco" : "Rua J, 707",
+  "clienteId" : "CLI0010",
+  "veiculos" : [ {
+    "modelo" : "S10",
+    "placa" : "BCD7890",
+    "ano" : 2029,
+    "marca" : "Chevrolet",
+    "cor" : "Dourado"
+  } ],
+  "cpfAnonimizado" : "000.111.222-33"
 } ]

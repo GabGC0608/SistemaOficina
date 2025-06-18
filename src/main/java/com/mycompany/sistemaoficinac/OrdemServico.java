@@ -40,6 +40,20 @@ public class OrdemServico {
     private String descricao;
     @JsonProperty("valor")
     private double valor;
+    @JsonProperty("problemaDetectado")
+    private String problemaDetectado;
+    @JsonProperty("especialidadeNecessaria")
+    private String especialidadeNecessaria;
+    @JsonProperty("inspetor")
+    private Funcionario inspetor;
+    @JsonProperty("avaliacao")
+    private double avaliacao; // Avaliação do serviço (0-5)
+    @JsonProperty("pago")
+    private boolean pago;
+    @JsonProperty("formaPagamento")
+    private String formaPagamento;
+    @JsonProperty("id")
+    private String id;
 
     /**
      * Construtor da classe OrdemServico.
@@ -239,14 +253,19 @@ public class OrdemServico {
      */
     public void adicionarItemEstoque(Estoque.ItemEstoque item, int quantidade) {
         if (quantidade <= item.getQuantidade()) {
-            Estoque.ItemEstoque itemUtilizado = new Estoque.ItemEstoque(
-                item.getCodigo(),
-                item.getNome(),
-                quantidade,
-                item.getPreco(),
-                item.getDescricao()
-            );
-            itensUtilizados.add(itemUtilizado);
+            // Allow adding items while the order is in progress or completed
+            if ("Concluído".equals(status) || "Cancelado".equals(status) || "Saída".equals(tipo) || "Em Andamento".equals(status)) {
+                Estoque.ItemEstoque itemUtilizado = new Estoque.ItemEstoque(
+                    item.getCodigo(),
+                    item.getNome(),
+                    quantidade,
+                    item.getPreco(),
+                    item.getDescricao()
+                );
+                itensUtilizados.add(itemUtilizado);
+            } else {
+                throw new IllegalArgumentException("Itens só podem ser adicionados quando a ordem estiver em andamento, concluída, cancelada ou for uma transação de saída");
+            }
         } else {
             throw new IllegalArgumentException("Quantidade insuficiente em estoque");
         }
@@ -274,12 +293,27 @@ public class OrdemServico {
      * Calcula o valor total da ordem de serviço (serviços do agendamento + itens)
      * @return Valor total da ordem de serviço
      */
-    private double calcularValorTotal() {
-        double valorServicos = 0;
-        for (Servico servico : servicos) {
-            valorServicos += servico.getValor();
-        }
+    public double calcularValorTotal() {
+        double valorServicos = servicos.stream()
+            .mapToDouble(Servico::getValor)
+            .sum();
         return valorServicos + getValorItens();
+    }
+
+    /**
+     * Obtém o valor total da ordem de serviço
+     * @return Valor total
+     */
+    public double getValor() {
+        return calcularValorTotal();
+    }
+
+    /**
+     * Define o valor total da ordem de serviço
+     * @param valor Novo valor
+     */
+    public void setValor(double valor) {
+        this.valor = valor;
     }
 
     /**
@@ -331,37 +365,38 @@ public class OrdemServico {
     }
 
     /**
-     * Obtém o valor total da ordem.
-     * @return Valor total
+     * Define a data da ordem.
+     * @param data Data da ordem
      */
-    public double getValor() {
-        return valor;
-    }
-
-    /**
-     * Define o valor total da ordem.
-     * @param valor Valor total
-     */
-    public void setValor(double valor) {
-        this.valor = valor;
-    }
-
     public void setData(String data) {
         this.data = data;
     }
 
+    /**
+     * Define o horário da ordem.
+     * @param horario Horário da ordem
+     */
     public void setHorario(String horario) {
         this.horario = horario;
     }
-
+    /**
+     * Define o responsável pela ordem.
+     * @param responsável Responsável pela ordem
+     */
     public void setResponsavel(Funcionario responsavel) {
         this.responsavel = responsavel;
     }
-
+    /**
+     * Define o cliente da ordem.
+     * @param cliente Cliente da ordem
+     */
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
-
+    /**
+     * Retorna uma representação em string da ordem de serviço.
+     * @return String com informações da ordem
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -371,6 +406,19 @@ public class OrdemServico {
         sb.append("Data: ").append(data != null ? data : "N/A").append("\n");
         sb.append("Horário: ").append(horario != null ? horario : "N/A").append("\n");
         sb.append("Status: ").append(status != null ? status : "N/A").append("\n");
+        
+        if (inspetor != null) {
+            sb.append("Inspetor: ").append(inspetor.getNome()).append("\n");
+        }
+        
+        if (problemaDetectado != null) {
+            sb.append("Problema Detectado: ").append(problemaDetectado).append("\n");
+        }
+        
+        if (especialidadeNecessaria != null) {
+            sb.append("Especialidade Necessária: ").append(especialidadeNecessaria).append("\n");
+        }
+        
         sb.append("Responsável: ").append(responsavel != null ? responsavel.getNome() : "N/A").append("\n");
         
         // Lista de serviços
@@ -405,5 +453,151 @@ public class OrdemServico {
         }
         
         return sb.toString();
+    }
+
+    /**
+     * Realiza a inspeção inicial do veículo.
+     * 
+     * @param inspetor Funcionário que realizará a inspeção
+     * @return Resultado da inspeção
+     */
+    public String realizarInspecaoInicial(Funcionario inspetor) {
+        if (inspetor == null) {
+            throw new IllegalArgumentException("Inspetor não pode ser nulo");
+        }
+        
+        this.inspetor = inspetor;
+        String resultadoInspecao = inspetor.realizarInspecao(veiculo);
+        
+        // Extrai o problema e especialidade do resultado da inspeção
+        String[] partes = resultadoInspecao.split("Problema detectado: ");
+        if (partes.length > 1) {
+            String[] problemaPartes = partes[1].split("\\. Especialidade necessária: ");
+            if (problemaPartes.length > 1) {
+                this.problemaDetectado = problemaPartes[0];
+                this.especialidadeNecessaria = problemaPartes[1];
+            }
+        }
+        
+        this.status = "Aguardando Especialista";
+        return resultadoInspecao;
+    }
+
+    /**
+     * Atribui um especialista à ordem de serviço.
+     * 
+     * @param especialista Funcionário especialista a ser atribuído
+     * @return true se o especialista foi atribuído com sucesso, false caso contrário
+     */
+    public boolean atribuirEspecialista(Funcionario especialista) {
+        if (especialista == null) {
+            throw new IllegalArgumentException("Especialista não pode ser nulo");
+        }
+        
+        if (!especialista.isEspecialista()) {
+            return false;
+        }
+        
+        if (especialidadeNecessaria != null && !especialista.possuiEspecialidade(especialidadeNecessaria)) {
+            return false;
+        }
+        
+        this.responsavel = especialista;
+        this.status = "Em Manutenção";
+        return true;
+    }
+
+    /**
+     * Obtém o problema detectado na inspeção.
+     * 
+     * @return Problema detectado
+     */
+    public String getProblemaDetectado() {
+        return problemaDetectado;
+    }
+
+    /**
+     * Obtém a especialidade necessária para resolver o problema.
+     * 
+     * @return Especialidade necessária
+     */
+    public String getEspecialidadeNecessaria() {
+        return especialidadeNecessaria;
+    }
+
+    /**
+     * Obtém o inspetor que realizou a inspeção inicial.
+     * 
+     * @return Funcionário inspetor
+     */
+    public Funcionario getInspetor() {
+        return inspetor;
+    }
+
+    /**
+     * Define a avaliação do serviço.
+     * @param avaliacao Valor da avaliação (0-5)
+     */
+    public void setAvaliacao(double avaliacao) {
+        if (avaliacao < 0 || avaliacao > 5) {
+            throw new IllegalArgumentException("Avaliação deve estar entre 0 e 5");
+        }
+        this.avaliacao = avaliacao;
+    }
+
+    /**
+     * Retorna a avaliação do serviço.
+     * @return Valor da avaliação (0-5)
+     */
+    public double getAvaliacao() {
+        return avaliacao;
+    }
+
+    /**
+     * Define o ID da ordem de serviço.
+     * @param id ID da ordem
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * Retorna o ID da ordem de serviço.
+     * @return ID da ordem
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Verifica se a ordem de serviço foi paga.
+     * @return true se foi paga, false caso contrário
+     */
+    public boolean isPago() {
+        return pago;
+    }
+
+    /**
+     * Define o status de pagamento da ordem de serviço.
+     * @param pago true se foi paga, false caso contrário
+     */
+    public void setPago(boolean pago) {
+        this.pago = pago;
+    }
+
+    /**
+     * Define a forma de pagamento da ordem de serviço.
+     * @param formaPagamento Forma de pagamento
+     */
+    public void setFormaPagamento(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
+    }
+
+    /**
+     * Retorna a forma de pagamento da ordem de serviço.
+     * @return Forma de pagamento
+     */
+    public String getFormaPagamento() {
+        return formaPagamento;
     }
 }

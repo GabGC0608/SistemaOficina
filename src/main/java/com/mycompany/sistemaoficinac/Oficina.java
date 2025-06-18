@@ -26,6 +26,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import java.time.Duration;
 import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Calendar;
+import java.text.ParseException;
 
 /**
  * Classe que representa a oficina mecânica.
@@ -735,23 +739,93 @@ public class Oficina {
      * Solicita todas as informações necessárias para a contratação.
      */
     public void contratarFuncionario() {
-        System.out.println("\n=== CADASTRAR FUNCIONÁRIO ===");
-        String nome = lerString("Nome: ");
-        String telefone = lerString("Telefone: ");
-        String endereco = lerString("Endereço: ");
-        String cargo = lerString("Cargo: ");
-        double salario = lerDouble("Salário: ");
-        String matricula = lerString("Matrícula: ");
-        
-        if (cargo.equalsIgnoreCase("Administrador")) {
-            Administrador admin = new Administrador(nome, telefone, endereco, salario, matricula);
-            funcionarios.add(admin);
-            System.out.println("Administrador " + admin.getNome() + " contratado com sucesso!");
-        } else {
-            String especialidade = lerString("Especialidade (Motor/Elétrica/Suspensão/etc): ");
-            Funcionario funcionario = new Funcionario(nome, telefone, endereco, cargo, salario, matricula, especialidade);
+        try {
+            String nome = lerString("Digite o nome do funcionário: ");
+            if (nome == null || nome.trim().isEmpty()) {
+                throw new IllegalArgumentException("Nome não pode ser vazio");
+            }
+
+            String telefone = lerString("Digite o telefone do funcionário: ");
+            if (telefone == null || telefone.trim().isEmpty()) {
+                throw new IllegalArgumentException("Telefone não pode ser vazio");
+            }
+
+            String endereco = lerString("Digite o endereço do funcionário: ");
+            if (endereco == null || endereco.trim().isEmpty()) {
+                throw new IllegalArgumentException("Endereço não pode ser vazio");
+            }
+
+            String cargo = lerString("Digite o cargo do funcionário: ");
+            if (cargo == null || cargo.trim().isEmpty()) {
+                throw new IllegalArgumentException("Cargo não pode ser vazio");
+            }
+
+            double salario = lerDouble("Digite o salário do funcionário: ");
+            if (salario <= 0) {
+                throw new IllegalArgumentException("Salário deve ser maior que zero");
+            }
+
+            String matricula = lerString("Digite a matrícula do funcionário: ");
+            if (matricula == null || matricula.trim().isEmpty()) {
+                throw new IllegalArgumentException("Matrícula não pode ser vazia");
+            }
+
+            String departamento = lerString("Digite o departamento do funcionário: ");
+            if (departamento == null || departamento.trim().isEmpty()) {
+                throw new IllegalArgumentException("Departamento não pode ser vazio");
+            }
+
+            // Pergunta se o funcionário é especialista
+            String resposta = lerString("O funcionário é especialista? (S/N): ");
+            boolean isEspecialista = resposta.equalsIgnoreCase("S");
+
+            // Se for especialista, pergunta as especialidades
+            List<String> especialidades = new ArrayList<>();
+            if (isEspecialista) {
+                System.out.println("\nEspecialidades disponíveis:");
+                System.out.println("1. Mecânico de Motor");
+                System.out.println("2. Mecânico de Suspensão");
+                System.out.println("3. Mecânico Elétrico");
+                System.out.println("4. Mecânico de Freios");
+                System.out.println("5. Mecânico de Transmissão");
+                System.out.println("6. Mecânico Geral");
+
+                while (true) {
+                    String opcao = lerString("\nDigite o número da especialidade (ou 'F' para finalizar): ");
+                    if (opcao.equalsIgnoreCase("F")) {
+                        break;
+                    }
+
+                    try {
+                        int numEspecialidade = Integer.parseInt(opcao);
+                        String especialidade = switch (numEspecialidade) {
+                            case 1 -> "Mecânico de Motor";
+                            case 2 -> "Mecânico de Suspensão";
+                            case 3 -> "Mecânico Elétrico";
+                            case 4 -> "Mecânico de Freios";
+                            case 5 -> "Mecânico de Transmissão";
+                            case 6 -> "Mecânico Geral";
+                            default -> null;
+                        };
+
+                        if (especialidade != null && !especialidades.contains(especialidade)) {
+                            especialidades.add(especialidade);
+                            System.out.println("Especialidade adicionada: " + especialidade);
+                        } else {
+                            System.out.println("Opção inválida ou especialidade já adicionada.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Por favor, digite um número válido.");
+                    }
+                }
+            }
+
+            Funcionario funcionario = new Funcionario(nome, telefone, endereco, cargo, salario, 
+                matricula, departamento, especialidades, isEspecialista);
             funcionarios.add(funcionario);
-            System.out.println("Funcionário " + funcionario.getNome() + " contratado com sucesso!");
+            System.out.println("Funcionário contratado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            System.err.println("Erro ao contratar funcionário: " + e.getMessage());
         }
     }
 
@@ -1545,96 +1619,173 @@ public class Oficina {
      * faturamento total, média de serviços por dia, etc.
      */
     public void gerarRelatorioEstatistico() {
-        System.out.println("\n=== RELATÓRIO ESTATÍSTICO DETALHADO ===");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n=== Relatório Estatístico ===");
         
-        // Solicita período para análise
-        String dataInicio = lerData("Digite a data inicial (dd/mm/aaaa): ");
-        String dataFim = lerData("Digite a data final (dd/mm/aaaa): ");
+        System.out.print("Data inicial (DD/MM/AAAA): ");
+        String dataInicial = scanner.nextLine();
+        System.out.print("Data final (DD/MM/AAAA): ");
+        String dataFinal = scanner.nextLine();
         
-        List<OrdemServico> ordens = caixa.getOrdensPorPeriodo(dataInicio, dataFim);
-        if (ordens.isEmpty()) {
-            System.out.println("Nenhuma ordem de serviço encontrada no período especificado.");
-            return;
-        }
-
-        // Mapas para contabilizar estatísticas
-        Map<String, Integer> servicosPorMecanico = new HashMap<>();
-        Map<String, Integer> servicosMaisRealizados = new HashMap<>();
-        Map<String, Double> faturamentoPorMecanico = new HashMap<>();
-        double faturamentoTotal = 0;
-        int totalServicos = 0;
-
-        // Processa cada ordem de serviço
-        for (OrdemServico ordem : ordens) {
-            if (ordem.getTipo().equals("Entrada")) {
-                // Contabiliza serviços por mecânico
-                String mecanico = ordem.getResponsavel().getNome();
-                servicosPorMecanico.merge(mecanico, 1, Integer::sum);
-                faturamentoPorMecanico.merge(mecanico, ordem.getValor(), Double::sum);
-
-                // Contabiliza serviços mais realizados
-                String servico = ordem.getDescricao();
-                servicosMaisRealizados.merge(servico, 1, Integer::sum);
-
-                faturamentoTotal += ordem.getValor();
-                totalServicos++;
-            }
-        }
-
-        // Exibe estatísticas
-        System.out.println("\n=== PERÍODO: " + dataInicio + " a " + dataFim + " ===");
+        List<OrdemServico> ordensPeriodo = getOrdensPorPeriodo(dataInicial, dataFinal);
         
-        // 1. Mecânicos mais requisitados
-        System.out.println("\n=== TOP MECÂNICOS ===");
+        // Período anterior para comparação
+        String[] datasInicial = dataInicial.split("/");
+        String[] datasFinal = dataFinal.split("/");
+        int diasPeriodo = calcularDiasEntreDatas(dataInicial, dataFinal);
+        
+        String dataInicialAnterior = calcularDataAnterior(dataInicial, diasPeriodo);
+        String dataFinalAnterior = calcularDataAnterior(dataFinal, diasPeriodo);
+        
+        List<OrdemServico> ordensPeriodoAnterior = getOrdensPorPeriodo(dataInicialAnterior, dataFinalAnterior);
+        
+        System.out.println("\n=== Análise do Período Atual ===");
+        System.out.printf("Período: %s a %s%n", dataInicial, dataFinal);
+        
+        // Mecânicos mais solicitados
+        System.out.println("\nMecânicos mais solicitados:");
+        Map<Funcionario, Long> servicosPorMecanico = ordensPeriodo.stream()
+            .collect(Collectors.groupingBy(
+                OrdemServico::getResponsavel,
+                Collectors.counting()
+            ));
+        
         servicosPorMecanico.entrySet().stream()
-            .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
-            .limit(3)
-            .forEach(e -> System.out.printf("%s: %d serviços%n", e.getKey(), e.getValue()));
-
-        // 2. Serviços mais realizados
-        System.out.println("\n=== SERVIÇOS MAIS REALIZADOS ===");
-        servicosMaisRealizados.entrySet().stream()
-            .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
-            .limit(5)
-            .forEach(e -> System.out.printf("%s: %d vezes%n", e.getKey(), e.getValue()));
-
-        // 3. Faturamento por mecânico
-        System.out.println("\n=== FATURAMENTO POR MECÂNICO ===");
-        faturamentoPorMecanico.entrySet().stream()
-            .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
-            .forEach(e -> System.out.printf("%s: R$ %.2f%n", e.getKey(), e.getValue()));
-
-        // 4. Estatísticas gerais
-        System.out.println("\n=== ESTATÍSTICAS GERAIS ===");
-        System.out.printf("Faturamento Total: R$ %.2f%n", faturamentoTotal);
-        System.out.printf("Total de Serviços: %d%n", totalServicos);
-        System.out.printf("Ticket Médio: R$ %.2f%n", faturamentoTotal / totalServicos);
+            .sorted(Map.Entry.<Funcionario, Long>comparingByValue().reversed())
+            .forEach(entry -> System.out.printf("%s: %d serviços%n", 
+                entry.getKey().getNome(), entry.getValue()));
         
-        // 5. Análise de Estoque
-        System.out.println("\n=== ANÁLISE DE ESTOQUE ===");
-        Map<String, Integer> pecasMaisVendidas = new HashMap<>();
-        for (OrdemServico ordem : ordens) {
-            if (ordem.getTipo().equals("Saída") && ordem.getCategoria().equals("Peças")) {
-                String peca = ordem.getDescricao();
-                pecasMaisVendidas.merge(peca, 1, Integer::sum);
-            }
+        // Serviços mais realizados
+        System.out.println("\nServiços mais realizados:");
+        Map<String, Long> servicosPorTipo = ordensPeriodo.stream()
+            .collect(Collectors.groupingBy(
+                OrdemServico::getCategoria,
+                Collectors.counting()
+            ));
+        
+        servicosPorTipo.entrySet().stream()
+            .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+            .forEach(entry -> System.out.printf("%s: %d serviços%n", 
+                entry.getKey(), entry.getValue()));
+        
+        // Receita por mecânico
+        System.out.println("\nReceita por mecânico:");
+        Map<Funcionario, Double> receitaPorMecanico = ordensPeriodo.stream()
+            .collect(Collectors.groupingBy(
+                OrdemServico::getResponsavel,
+                Collectors.summingDouble(OrdemServico::getValor)
+            ));
+        
+        receitaPorMecanico.forEach((mecanico, valor) -> 
+            System.out.printf("%s: R$ %.2f%n", mecanico.getNome(), valor));
+        
+        // Estatísticas gerais
+        double receitaTotal = ordensPeriodo.stream()
+            .mapToDouble(OrdemServico::getValor)
+            .sum();
+        double receitaTotalAnterior = ordensPeriodoAnterior.stream()
+            .mapToDouble(OrdemServico::getValor)
+            .sum();
+        
+        System.out.println("\nEstatísticas Gerais:");
+        System.out.printf("Total de serviços: %d%n", ordensPeriodo.size());
+        System.out.printf("Receita total: R$ %.2f%n", receitaTotal);
+        if (ordensPeriodo.size() > 0) {
+            System.out.printf("Ticket médio: R$ %.2f%n", receitaTotal / ordensPeriodo.size());
         }
         
-        System.out.println("Peças mais vendidas:");
-        pecasMaisVendidas.entrySet().stream()
-            .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
-            .limit(5)
-            .forEach(e -> System.out.printf("%s: %d unidades%n", e.getKey(), e.getValue()));
-
-        // 6. Análise de Ocupação
-        System.out.println("\n=== ANÁLISE DE OCUPAÇÃO ===");
-        long diasPeriodo = ordens.stream()
-            .map(o -> o.getData().split("/")[0]) // Pega só o dia
-            .distinct()
-            .count();
+        // Análise de tendências
+        System.out.println("\nAnálise de Tendências:");
+        if (receitaTotalAnterior > 0) {
+            double variacaoReceita = ((receitaTotal - receitaTotalAnterior) / receitaTotalAnterior) * 100;
+            System.out.printf("Variação de receita vs período anterior: %.2f%%%n", variacaoReceita);
+        }
         
-        System.out.printf("Média de serviços por dia: %.1f%n", (double) totalServicos / diasPeriodo);
-        System.out.printf("Faturamento médio diário: R$ %.2f%n", faturamentoTotal / diasPeriodo);
+        // Análise de ocupação
+        System.out.println("\nAnálise de Ocupação:");
+        int totalDias = calcularDiasEntreDatas(dataInicial, dataFinal);
+        double servicosPorDia = (double) ordensPeriodo.size() / totalDias;
+        System.out.printf("Média de serviços por dia: %.2f%n", servicosPorDia);
+        
+        // Análise de estoque
+        System.out.println("\nAnálise de Estoque:");
+        Map<String, Long> itensUtilizados = ordensPeriodo.stream()
+            .flatMap(os -> os.getItensUtilizados().stream())
+            .collect(Collectors.groupingBy(
+                Estoque.ItemEstoque::getNome,
+                Collectors.counting()
+            ));
+        
+        System.out.println("Itens mais utilizados:");
+        itensUtilizados.entrySet().stream()
+            .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+            .limit(5)
+            .forEach(entry -> System.out.printf("%s: %d unidades%n", 
+                entry.getKey(), entry.getValue()));
+        
+        // Análise de satisfação (se houver avaliações)
+        System.out.println("\nAnálise de Satisfação:");
+        double mediaAvaliacoes = ordensPeriodo.stream()
+            .filter(os -> os.getAvaliacao() > 0)
+            .mapToDouble(OrdemServico::getAvaliacao)
+            .average()
+            .orElse(0.0);
+        
+        System.out.printf("Média de avaliações: %.1f/5.0%n", mediaAvaliacoes);
+        
+        System.out.println("\n=== Comparação com Período Anterior ===");
+        System.out.printf("Período anterior: %s a %s%n", dataInicialAnterior, dataFinalAnterior);
+        System.out.printf("Total de serviços: %d%n", ordensPeriodoAnterior.size());
+        System.out.printf("Receita total: R$ %.2f%n", receitaTotalAnterior);
+        
+        // Comparação de serviços por categoria
+        System.out.println("\nVariação de serviços por categoria:");
+        Map<String, Long> servicosPorCategoriaAnterior = ordensPeriodoAnterior.stream()
+            .collect(Collectors.groupingBy(
+                OrdemServico::getCategoria,
+                Collectors.counting()
+            ));
+        
+        servicosPorTipo.forEach((categoria, quantidade) -> {
+            long quantidadeAnterior = servicosPorCategoriaAnterior.getOrDefault(categoria, 0L);
+            if (quantidadeAnterior > 0) {
+                double variacao = ((quantidade - quantidadeAnterior) / (double) quantidadeAnterior) * 100;
+                System.out.printf("%s: %.2f%%%n", categoria, variacao);
+            }
+        });
+        
+        System.out.println("======================");
+    }
+    
+    /**
+     * Calcula o número de dias entre duas datas.
+     */
+    private int calcularDiasEntreDatas(String dataInicial, String dataFinal) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date inicio = sdf.parse(dataInicial);
+            Date fim = sdf.parse(dataFinal);
+            long diff = fim.getTime() - inicio.getTime();
+            return (int) (diff / (24 * 60 * 60 * 1000)) + 1;
+        } catch (ParseException e) {
+            return 0;
+        }
+    }
+    
+    /**
+     * Calcula uma data anterior subtraindo o número de dias especificado.
+     */
+    private String calcularDataAnterior(String data, int dias) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date dataAtual = sdf.parse(data);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(dataAtual);
+            cal.add(Calendar.DAY_OF_MONTH, -dias);
+            return sdf.format(cal.getTime());
+        } catch (ParseException e) {
+            return data;
+        }
     }
 
     /**
@@ -1972,6 +2123,8 @@ public void salvarDados() throws IOException {
         transacao.setCliente(cliente);
         
         boolean continuarVendendo = true;
+        boolean itensVendidos = false;
+        
         while (continuarVendendo) {
             String codigo = Oficina.lerString("Digite o código da peça a ser vendida (ou 0 para finalizar): ");
             
@@ -2009,6 +2162,7 @@ public void salvarDados() throws IOException {
             try {
                 transacao.adicionarItemEstoque(peca, quantidade);
                 peca.setQuantidade(peca.getQuantidade() - quantidade);
+                itensVendidos = true;
                 System.out.println("Peça adicionada com sucesso!");
             } catch (IllegalArgumentException e) {
                 System.out.println("Erro ao adicionar peça: " + e.getMessage());
@@ -2019,8 +2173,8 @@ public void salvarDados() throws IOException {
             continuarVendendo = resposta.equalsIgnoreCase("S");
         }
         
-        // Adiciona a transação ao caixa apenas se houver itens
-        if (!transacao.getItensUtilizados().isEmpty()) {
+        // Adiciona a transação ao caixa apenas se houver itens vendidos
+        if (itensVendidos) {
             caixa.getOrdensServico().add(transacao);
             System.out.println("Venda registrada com sucesso!");
             System.out.println("Valor total da venda: R$ " + transacao.getValor());
@@ -2169,5 +2323,337 @@ public void salvarDados() throws IOException {
         System.out.printf("Elevadores livres: %d%n", elevadores.length - elevadoresOcupados);
         System.out.printf("Taxa de ocupação: %.1f%%%n", 
             (elevadoresOcupados * 100.0) / elevadores.length);
+    }
+
+    /**
+     * Encontra um especialista adequado para uma ordem de serviço.
+     * 
+     * @param especialidadeNecessaria Especialidade necessária para o serviço
+     * @return Funcionário especialista adequado ou null se não encontrado
+     */
+    public Funcionario encontrarEspecialistaAdequado(String especialidadeNecessaria) {
+        if (especialidadeNecessaria == null || especialidadeNecessaria.trim().isEmpty()) {
+            return null;
+        }
+
+        return funcionarios.stream()
+            .filter(f -> f.isEspecialista() && f.possuiEspecialidade(especialidadeNecessaria))
+            .findFirst()
+            .orElse(null);
+    }
+
+    /**
+     * Atribui um especialista a uma ordem de serviço.
+     * 
+     * @param ordem Ordem de serviço que precisa de especialista
+     * @return true se um especialista foi atribuído com sucesso, false caso contrário
+     */
+    public boolean atribuirEspecialista(OrdemServico ordem) {
+        if (ordem == null) {
+            throw new IllegalArgumentException("Ordem de serviço não pode ser nula");
+        }
+
+        String especialidadeNecessaria = ordem.getEspecialidadeNecessaria();
+        if (especialidadeNecessaria == null) {
+            return false;
+        }
+
+        Funcionario especialista = encontrarEspecialistaAdequado(especialidadeNecessaria);
+        if (especialista == null) {
+            return false;
+        }
+
+        return ordem.atribuirEspecialista(especialista);
+    }
+
+    /**
+     * Lista todos os especialistas disponíveis na oficina.
+     */
+    public void listarEspecialistas() {
+        System.out.println("\n=== ESPECIALISTAS DISPONÍVEIS ===");
+        boolean encontrouEspecialistas = false;
+
+        for (Funcionario funcionario : funcionarios) {
+            if (funcionario.isEspecialista()) {
+                System.out.println("\nNome: " + funcionario.getNome());
+                System.out.println("Especialidades: " + String.join(", ", funcionario.getEspecialidades()));
+                encontrouEspecialistas = true;
+            }
+        }
+
+        if (!encontrouEspecialistas) {
+            System.out.println("Nenhum especialista cadastrado.");
+        }
+    }
+
+    /**
+     * Inicializa o sistema com dados de demonstração para testes.
+     * Cria funcionários, clientes, veículos, serviços e agendamentos de exemplo.
+     */
+    public void inicializarDadosDemonstracao() {
+        // Criar 10 clientes de demonstração
+        List<Cliente> clientesDemo = Arrays.asList(
+            new Cliente("João Silva", "11999999999", "Rua A, 123", "111.222.333-44"),
+            new Cliente("Maria Santos", "11988888888", "Rua B, 456", "222.333.444-55"),
+            new Cliente("Pedro Oliveira", "11977777777", "Rua C, 789", "333.444.555-66"),
+            new Cliente("Ana Costa", "11966666666", "Rua D, 101", "444.555.666-77"),
+            new Cliente("Carlos Souza", "11955555555", "Rua E, 202", "555.666.777-88"),
+            new Cliente("Lucia Ferreira", "11944444444", "Rua F, 303", "666.777.888-99"),
+            new Cliente("Roberto Lima", "11933333333", "Rua G, 404", "777.888.999-00"),
+            new Cliente("Patricia Alves", "11922222222", "Rua H, 505", "888.999.000-11"),
+            new Cliente("Fernando Gomes", "11911111111", "Rua I, 606", "999.000.111-22"),
+            new Cliente("Juliana Martins", "11900000000", "Rua J, 707", "000.111.222-33")
+        );
+        clientes.addAll(clientesDemo);
+
+        // Criar 10 funcionários de demonstração
+        List<Funcionario> funcionariosDemo = Arrays.asList(
+            new Funcionario("José Mecânico", "11987654321", "Rua K, 808", 
+                "Mecânico", 3000.0, "MEC001", "Mecânica",
+                List.of("Mecânico de Motor", "Mecânico Geral"), true),
+            new Funcionario("Antonio Elétrico", "11976543210", "Rua L, 909", 
+                "Mecânico", 3200.0, "MEC002", "Elétrica",
+                List.of("Mecânico Elétrico", "Mecânico de Freios"), true),
+            new Funcionario("Paulo Suspensão", "11965432109", "Rua M, 1010", 
+                "Mecânico", 2800.0, "MEC003", "Suspensão",
+                List.of("Mecânico de Suspensão"), true),
+            new Funcionario("Ricardo Motor", "11954321098", "Rua N, 1111", 
+                "Mecânico", 3500.0, "MEC004", "Motor",
+                List.of("Mecânico de Motor", "Mecânico de Câmbio"), true),
+            new Funcionario("Marcos Freios", "11943210987", "Rua O, 1212", 
+                "Mecânico", 2900.0, "MEC005", "Freios",
+                List.of("Mecânico de Freios"), true),
+            new Funcionario("Lucas Injeção", "11932109876", "Rua P, 1313", 
+                "Mecânico", 3100.0, "MEC006", "Injeção",
+                List.of("Mecânico de Injeção Eletrônica"), true),
+            new Funcionario("Rafael Ar Condicionado", "11921098765", "Rua Q, 1414", 
+                "Mecânico", 2700.0, "MEC007", "Ar Condicionado",
+                List.of("Mecânico de Ar Condicionado"), true),
+            new Funcionario("Bruno Pintura", "11910987654", "Rua R, 1515", 
+                "Mecânico", 3300.0, "MEC008", "Pintura",
+                List.of("Mecânico de Pintura"), true),
+            new Funcionario("Diego Funilaria", "11909876543", "Rua S, 1616", 
+                "Mecânico", 3400.0, "MEC009", "Funilaria",
+                List.of("Mecânico de Funilaria"), true),
+            new Funcionario("Gabriel Vidraçaria", "11998765432", "Rua T, 1717", 
+                "Mecânico", 2600.0, "MEC010", "Vidraçaria",
+                List.of("Mecânico de Vidraçaria"), true)
+        );
+        funcionarios.addAll(funcionariosDemo);
+
+        // Criar administrador de demonstração
+        Administrador admin = new Administrador("Admin", "11933333333", "Rua U, 1818", 
+            5000.0, "ADM001", List.of("Gestão", "Administração"), true);
+        funcionarios.add(admin);
+
+        // Criar veículos para cada cliente
+        String[] modelos = {"Civic", "Corolla", "HB20", "Onix", "Cruze", "Cobalt", "Prisma", "Spin", "Tracker", "S10"};
+        String[] marcas = {"Honda", "Toyota", "Hyundai", "Chevrolet", "Chevrolet", "Chevrolet", "Chevrolet", "Chevrolet", "Chevrolet", "Chevrolet"};
+        String[] cores = {"Preto", "Prata", "Branco", "Vermelho", "Azul", "Cinza", "Verde", "Amarelo", "Marrom", "Dourado"};
+        String[] placas = {"ABC1234", "DEF5678", "GHI9012", "JKL3456", "MNO7890", "PQR1234", "STU5678", "VWX9012", "YZA3456", "BCD7890"};
+        
+        for (int i = 0; i < clientesDemo.size(); i++) {
+            Veiculo veiculo = new Veiculo(modelos[i], placas[i], 2020 + i, marcas[i], cores[i]);
+            clientesDemo.get(i).adicionarVeiculo(veiculo);
+        }
+
+        // Criar 10 serviços de demonstração
+        List<Servico> servicosDemo = Arrays.asList(
+            new Servico("Troca de óleo", "Troca de óleo e filtro", 150.0, 60),
+            new Servico("Alinhamento", "Alinhamento e balanceamento", 200.0, 90),
+            new Servico("Revisão", "Revisão completa", 300.0, 120),
+            new Servico("Troca de freios", "Troca de pastilhas e discos", 400.0, 90),
+            new Servico("Troca de suspensão", "Troca de amortecedores", 800.0, 180),
+            new Servico("Troca de bateria", "Troca de bateria e teste", 350.0, 60),
+            new Servico("Troca de correia", "Troca de correia dentada", 600.0, 120),
+            new Servico("Troca de embreagem", "Troca de embreagem completa", 1200.0, 240),
+            new Servico("Troca de junta", "Troca de junta do cabeçote", 1500.0, 300),
+            new Servico("Troca de radiador", "Troca de radiador e fluido", 500.0, 90)
+        );
+        servicos.addAll(servicosDemo);
+
+        // Criar 10 itens de estoque de demonstração
+        List<Estoque.ItemEstoque> itensEstoque = Arrays.asList(
+            new Estoque.ItemEstoque("P001", "Óleo Motor", 50, 35.0, "Óleo sintético 5W30"),
+            new Estoque.ItemEstoque("P002", "Filtro de Óleo", 30, 25.0, "Filtro de óleo"),
+            new Estoque.ItemEstoque("P003", "Pastilha de Freio", 40, 80.0, "Pastilha de freio"),
+            new Estoque.ItemEstoque("P004", "Bateria", 20, 350.0, "Bateria 60Ah"),
+            new Estoque.ItemEstoque("P005", "Filtro de Ar", 25, 45.0, "Filtro de ar motor"),
+            new Estoque.ItemEstoque("P006", "Filtro de Combustível", 20, 55.0, "Filtro de combustível"),
+            new Estoque.ItemEstoque("P007", "Vela de Ignição", 50, 25.0, "Vela de ignição"),
+            new Estoque.ItemEstoque("P008", "Correia Dentada", 15, 180.0, "Correia dentada"),
+            new Estoque.ItemEstoque("P009", "Fluido de Freio", 30, 35.0, "Fluido de freio DOT4"),
+            new Estoque.ItemEstoque("P010", "Óleo de Câmbio", 25, 45.0, "Óleo de câmbio")
+        );
+        
+        for (Estoque.ItemEstoque item : itensEstoque) {
+            estoque.adicionarItem(item);
+        }
+
+        // Criar 10 ordens de serviço de demonstração
+        OrdemDeServicoBuilder builder = new OrdemServicoConcretaBuilder();
+        OrdemServicoDirector director = new OrdemServicoDirector(builder);
+
+        // Criar ordens de serviço para cada cliente
+        String[] datas = {"01/05/2024", "02/05/2024", "03/05/2024", "04/05/2024", "05/05/2024",
+                         "06/05/2024", "07/05/2024", "08/05/2024", "09/05/2024", "10/05/2024"};
+        String[] horarios = {"09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"};
+
+        for (int i = 0; i < clientesDemo.size(); i++) {
+            // Criar ordem de serviço com serviços e peças
+            List<Servico> servicosOS = new ArrayList<>();
+            servicosOS.add(servicosDemo.get(i));
+            
+            List<Estoque.ItemEstoque> itensOS = new ArrayList<>();
+            itensOS.add(itensEstoque.get(i));
+
+            director.construirOrdemCompleta(
+                "Entrada",
+                datas[i],
+                horarios[i],
+                "Serviços",
+                funcionariosDemo.get(i).getNome(),
+                clientesDemo.get(i).getNome(),
+                "Concluído",
+                itensOS,
+                servicosOS
+            );
+            
+            OrdemServico os = builder.build();
+            os.setValor(servicosOS.get(0).getValor() + (itensOS.get(0).getPreco() * itensOS.get(0).getQuantidade()));
+            ordensServico.add(os);
+            
+            // Registrar no caixa
+            caixa.registrarEntrada(os);
+        }
+    }
+
+    // ... existing code ...
+
+    /**
+     * Retorna todas as ordens de serviço em um período específico.
+     * @param dataInicial Data inicial no formato DD/MM/AAAA
+     * @param dataFinal Data final no formato DD/MM/AAAA
+     * @return Lista de ordens de serviço no período
+     */
+    public List<OrdemServico> getOrdensPorPeriodo(String dataInicial, String dataFinal) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date inicio = sdf.parse(dataInicial);
+            Date fim = sdf.parse(dataFinal);
+            
+            return ordensServico.stream()
+                .filter(os -> {
+                    try {
+                        Date dataOS = sdf.parse(os.getData());
+                        return !dataOS.before(inicio) && !dataOS.after(fim);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .collect(Collectors.toList());
+        } catch (ParseException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Registra uma entrada no caixa.
+     */
+    public void registrarEntrada() {
+        System.out.println("\n=== Registrar Entrada ===");
+        
+        System.out.print("Valor: R$ ");
+        double valor = Double.parseDouble(scanner.nextLine());
+        
+        System.out.print("Descrição: ");
+        String descricao = scanner.nextLine();
+        
+        System.out.print("Data (DD/MM/AAAA): ");
+        String data = scanner.nextLine();
+        
+        System.out.print("Categoria: ");
+        String categoria = scanner.nextLine();
+        
+        System.out.print("Responsável: ");
+        String responsavel = scanner.nextLine();
+        
+        OrdemServico os = new OrdemServico(
+            "Entrada",
+            valor,
+            descricao,
+            data,
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")),
+            categoria,
+            responsavel,
+            null,
+            new ArrayList<>(),
+            new ArrayList<>()
+        );
+        
+        caixa.registrarEntrada(os);
+        System.out.println("Entrada registrada com sucesso!");
+    }
+    
+    /**
+     * Registra uma saída no caixa.
+     */
+    public void registrarSaida() {
+        System.out.println("\n=== Registrar Saída ===");
+        
+        System.out.print("Valor: R$ ");
+        double valor = Double.parseDouble(scanner.nextLine());
+        
+        System.out.print("Descrição: ");
+        String descricao = scanner.nextLine();
+        
+        System.out.print("Data (DD/MM/AAAA): ");
+        String data = scanner.nextLine();
+        
+        System.out.print("Categoria: ");
+        String categoria = scanner.nextLine();
+        
+        System.out.print("Responsável: ");
+        String responsavel = scanner.nextLine();
+        
+        caixa.registrarSaida(valor, descricao, data, categoria, responsavel, new ArrayList<>());
+        System.out.println("Saída registrada com sucesso!");
+    }
+    
+    /**
+     * Gera o balanço mensal.
+     */
+    public void gerarBalancoMensal() {
+        System.out.println("\n=== Gerar Balanço Mensal ===");
+        
+        System.out.print("Mês (1-12): ");
+        int mes = Integer.parseInt(scanner.nextLine());
+        
+        System.out.print("Ano: ");
+        int ano = Integer.parseInt(scanner.nextLine());
+        
+        caixa.gerarBalancoMensal(mes, ano);
+    }
+
+    /**
+     * Aloca um elevador para um veículo específico.
+     * Solicita o número do elevador (1-3) e o modelo do veículo.
+     */
+    public void alocarElevador() {
+        System.out.println("\n=== ALOCAR ELEVADOR ===");
+        Elevador.listarElevadores();
+        int numero = lerInteiro("Digite o número do elevador a ser alocado (1-3): ");
+        
+        if (numero < 1 || numero > 3) {
+            System.out.println("Número inválido!");
+            return;
+        }
+        
+        Elevador elevador = Elevador.alocarElevador(numero - 1); // Índice base 0
+        if (elevador != null) {
+            String modeloVeiculo = lerString("Digite o modelo do veículo para o elevador: ");
+            elevador.setModelo(modeloVeiculo);
+            System.out.println("Elevador " + numero + " alocado para o veículo: " + modeloVeiculo);
+        }
     }
 }

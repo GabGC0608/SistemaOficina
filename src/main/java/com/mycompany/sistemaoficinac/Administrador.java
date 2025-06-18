@@ -19,14 +19,19 @@ public class Administrador extends Funcionario {
      * @param endereco Endereço do administrador.
      * @param salario Salário do administrador.
      * @param matricula Matrícula do administrador.
+     * @param especialidades Lista de especialidades do administrador.
+     * @param isEspecialista Indica se o administrador é um especialista.
      */
     @JsonCreator
     public Administrador(@JsonProperty("nome") String nome,
                          @JsonProperty("telefone") String telefone,
                          @JsonProperty("endereco") String endereco,
                          @JsonProperty("salario") double salario,
-                         @JsonProperty("matricula") String matricula) {
-        super(nome, telefone, endereco, "Administrador", salario, matricula, "Administração");
+                         @JsonProperty("matricula") String matricula,
+                         @JsonProperty("especialidades") List<String> especialidades,
+                         @JsonProperty("isEspecialista") boolean isEspecialista) {
+        super(nome, telefone, endereco, "Administrador", salario, matricula, "Administração", 
+            especialidades != null ? especialidades : List.of(), isEspecialista);
     }
 
     // Construtor vazio para o Jackson
@@ -89,6 +94,8 @@ public class Administrador extends Funcionario {
                 ", salario=" + getSalario() +
                 ", matricula='" + getMatricula() + '\'' +
                 ", departamento='" + getDepartamento() + '\'' +
+                ", especialidades=" + getEspecialidades() +
+                ", isEspecialista=" + isEspecialista() +
                 '}';
     }
 }

@@ -87,6 +87,7 @@ public class Oficina {
         } catch (Exception e) {
             throw new IllegalStateException("Erro ao inicializar a oficina: " + e.getMessage());
         }
+        ajustarContadorVeiculos();
     }
 
     /**
@@ -696,6 +697,15 @@ public class Oficina {
      */
     public  int getContadorVeiculosProtected() {
         return contadorVeiculosProtected;
+    }
+
+    public void ajustarContadorVeiculos() {
+            contadorVeiculosPrivate = 0;
+            contadorVeiculosProtected = 0;
+            for (Cliente cliente : getClientes()) {
+                contadorVeiculosPrivate += cliente.getVeiculos().size();
+                contadorVeiculosProtected += cliente.getVeiculos().size();
+            }
     }
 
      /**
@@ -1993,7 +2003,8 @@ public void salvarDados() throws IOException {
     JsonUtil.salvarParaJson(getFuncionarios(), "data/funcionarios.json");
     JsonUtil.salvarParaJson(getServicos(), "data/servicos.json");
     JsonUtil.salvarParaJson(getEstoque(), "data/estoque.json");
-    JsonUtil.salvarParaJson(getCaixa(), "data/caixa.json");
+    JsonUtil.salvarParaJson(getCaixa().getSaldo(), "data/saldo.json");
+    JsonUtil.salvarParaJson(getCaixa().getOrdensServico(), "data/transacoes.json");
 }
 
     /**
@@ -2002,15 +2013,29 @@ public void salvarDados() throws IOException {
      * @throws ClassNotFoundException Se ocorrer um erro na desserialização dos objetos.
      */
     public void carregarDados() throws IOException, ClassNotFoundException {
-        File arquivoOficina = new File("data/oficina.json");
         File arquivoLogin = new File("data/login.json");
         File arquivoClientes = new File("data/clientes.json");
         File arquivoFuncionarios = new File("data/funcionarios.json");
         File arquivoServicos = new File("data/servicos.json");
         File arquivoEstoque = new File("data/estoque.json");
-        File arquivoCaixa = new File("data/caixa.json");
+        File arquivoSaldo = new File("data/saldo.json");
+        File arquivoTransacoes = new File("data/transacoes.json");
+        File arquivoContador = new File("data/contadorVeiculos.json");
         File arquivoPonto = new File("data/pontos.json");
         File arquivoOrdensServico = new File("data/ordensServico.json");
+
+        // Verificação: se algum arquivo principal não existe, lança exceção
+        if (!arquivoLogin.exists() ||
+            !arquivoClientes.exists() ||
+            !arquivoFuncionarios.exists() ||
+            !arquivoServicos.exists() ||
+            !arquivoEstoque.exists() ||
+            !arquivoSaldo.exists() ||
+            !arquivoTransacoes.exists()) {
+            throw new IOException("Arquivos de dados principais ausentes. Inicialize o sistema.");
+        }
+
+        
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -2022,7 +2047,13 @@ public void salvarDados() throws IOException {
         } else {
             registrosPonto = new ArrayList<>();
         }
-        
+        if (arquivoTransacoes.exists()) {
+            mapper.readValue(arquivoTransacoes, new TypeReference<List<OrdemServico>>() {});
+            System.out.println("Dados das transações carregados com sucesso!");
+        } else {
+            ordensServico = new ArrayList<>();
+        }
+
         if(arquivoOrdensServico.exists()){
             ordensServico = mapper.readValue(arquivoOrdensServico, new TypeReference<List<OrdemServico>>() {});
             System.out.println("Dados das ordens de serviço carregados com sucesso!");
@@ -2038,8 +2069,7 @@ public void salvarDados() throws IOException {
             loginManager = new Login();
         }
 
-        // Carrega o contador de veículos
-        File arquivoContador = new File("data/contadorVeiculos.json");
+        // Carrega o contador de veículo
         if (arquivoContador.exists()) {
             contadorVeiculosPrivate = mapper.readValue(arquivoContador, Integer.class);
             System.out.println("Contador de veículos carregado com sucesso!");
@@ -2083,13 +2113,13 @@ public void salvarDados() throws IOException {
             setEstoque(new Estoque());
         }
 
-        // Carrega os dados do caixa
-        if (arquivoCaixa.exists()) {
-            Caixa caixa = mapper.readValue(arquivoCaixa, Caixa.class);
-            setCaixa(caixa);
+        // Carrega os dados do saldo caixa
+        if (arquivoSaldo.exists()) {
+            double saldo = mapper.readValue(arquivoSaldo, Integer.class);
+            caixa.setSaldo(saldo);
             System.out.println("Dados do caixa carregados com sucesso!");
         } else {
-            setCaixa(new Caixa());
+            caixa.setSaldo(0.0);
         }
     }
 
@@ -2522,9 +2552,18 @@ public void salvarDados() throws IOException {
             OrdemServico os = builder.build();
             os.setValor(servicosOS.get(0).getValor() + (itensOS.get(0).getPreco() * itensOS.get(0).getQuantidade()));
             ordensServico.add(os);
-            
-            // Registrar no caixa
+            // Registrar no caixa (entrada)
             caixa.registrarEntrada(os);
+            // Registrar saída (despesa) relacionada à ordem
+            caixa.registrarSaida(itensOS.get(0).getPreco() * itensOS.get(0).getQuantidade(), "Compra de peças para ordem de serviço", datas[i], "Despesa", funcionariosDemo.get(i).getNome(), itensOS);
+        }
+
+        // Criar registros de ponto de demonstração para os funcionários
+        registrosPonto = new ArrayList<>();
+        for (int i = 0; i < funcionariosDemo.size(); i++) {
+            Funcionario f = funcionariosDemo.get(i);
+            // Entrada às 08:00 e saída às 17:00 em datas diferentes
+            registrosPonto.add(new PontoFuncionario(f.getMatricula(), LocalDateTime.of(2024, 5, i+1, 8, 0), LocalDateTime.of(2024, 5, i+1, 17, 0)));
         }
     }
 
@@ -2593,6 +2632,7 @@ public void salvarDados() throws IOException {
         
         caixa.registrarEntrada(os);
         System.out.println("Entrada registrada com sucesso!");
+
     }
     
     /**

@@ -69,7 +69,6 @@ public class SistemaOficinac {
         
         try {
             oficina.carregarDados();    // Carrega os dados da oficina e do login
-            oficina.salvarDados(); // Salva os dados após inicialização
         } catch (IOException | ClassNotFoundException | IllegalArgumentException e) {
             System.err.println("Erro ao carregar os dados: " + e.getMessage());
             System.out.println("Deseja criar um novo sistema? (S/N)");

@@ -112,11 +112,11 @@
   "nome" : "Admin",
   "telefone" : "11933333333",
   "endereco" : "Rua U, 1818",
+  "cargo" : "Administrador",
   "salario" : 5000.0,
   "matricula" : "ADM001",
+  "departamento" : "Administração",
   "especialidades" : [ "Gestão", "Administração" ],
   "isEspecialista" : true,
-  "especialista" : true,
-  "cargo" : "Administrador",
-  "departamento" : "Administração"
+  "especialista" : true
 } ]

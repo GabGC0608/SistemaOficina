@@ -388,13 +388,20 @@ public class TesteOficina {
             // 8. Concluir a ordem de serviço
             ordem.setStatus("Concluído");
             
-            // 9. Registrar no caixa
-            oficina.getCaixa().registrarEntrada(ordem);
+            
             
             System.out.println("\nOrdem de serviço criada para " + cliente.getNome());
             System.out.println("Valor do serviço: R$ " + servico.getValor());
+            System.out.println("Servicos: " + servico.getNome());
             System.out.println("Valor dos itens: R$ " + (item.getPreco() * 2));
+            System.out.println("Produtos: " + item.getNome());
             System.out.println("Valor total: R$ " + ordem.getValor());
+
+            // 9. Registrar no caixa
+            oficina.getCaixa().registrarEntrada(ordem);
+            
+            
+
         }
         
         /*// 10. Gerar relatório mensal

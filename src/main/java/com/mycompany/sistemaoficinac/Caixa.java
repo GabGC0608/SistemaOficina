@@ -27,6 +27,13 @@ public class Caixa {
         this.saldo = saldo;
     }
 
+    public void setOrdensServico(List<OrdemServico> ordensServico) {
+        this.ordensServico = ordensServico;
+    }
+
+    
+    
+
     // Método simplificado para registrar entrada
     public void registrarEntrada(OrdemServico os) {
         if (os != null) {

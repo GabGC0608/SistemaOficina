@@ -667,7 +667,8 @@ public class SistemaOficinac {
             System.out.println("4. Relatório de funcionários");
             System.out.println("5. Relatório estatístico detalhado");
             System.out.println("6. Relatório de desempenho dos mecânicos");
-            System.out.println("0. Voltar");
+            System.out.println("7. Listar transações");
+            System.out.println("0. Voltar");    
             
             int opcao = Oficina.lerInteiro("Digite sua opção: ");
             
@@ -689,6 +690,9 @@ public class SistemaOficinac {
                     break;
                 case 6:
                     oficina.gerarRelatorioDesempenhoMecanicos();
+                    break;
+                case 7:
+                    menuListarTransacoes();
                     break;
                 case 0:
                     voltar = true;

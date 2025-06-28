@@ -8,6 +8,7 @@ com\mycompany\sistemaoficinac\Oficina$1.class
 com\mycompany\sistemaoficinac\PontoFuncionario.class
 com\mycompany\sistemaoficinac\ServicoPorTempo.class
 com\mycompany\sistemaoficinac\Estoque.class
+com\mycompany\sistemaoficinac\Oficina$6.class
 com\mycompany\sistemaoficinac\Estoque$ItemEstoque.class
 com\mycompany\sistemaoficinac\Elevador.class
 com\mycompany\sistemaoficinac\OrdemServicoDirector.class
@@ -19,11 +20,13 @@ com\mycompany\sistemaoficinac\ClientePorNome.class
 com\mycompany\sistemaoficinac\Login.class
 com\mycompany\sistemaoficinac\SistemaOficinac.class
 com\mycompany\sistemaoficinac\Servico.class
+com\mycompany\sistemaoficinac\OrdemDeServicoPorNumeroDeServicos.class
 com\mycompany\sistemaoficinac\ClientePorQtdVeiculos.class
 com\mycompany\sistemaoficinac\Oficina.class
 com\mycompany\sistemaoficinac\OrdemDeServicoBuilder.class
 com\mycompany\sistemaoficinac\Oficina$2.class
 com\mycompany\sistemaoficinac\Administrador.class
+com\mycompany\sistemaoficinac\OrdemDeServicoPorValor.class
 com\mycompany\sistemaoficinac\TesteOficina.class
 com\mycompany\sistemaoficinac\Comparadores.class
 com\mycompany\sistemaoficinac\OrdemPorData.class

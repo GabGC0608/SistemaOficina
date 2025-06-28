@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "SistemaOficinacGUI",
+            "request": "launch",
+            "mainClass": "com.mycompany.sistemaoficinac.gui.SistemaOficinacGUI",
+            "projectName": "SistemaOficinac"
+        },
+        {
+            "type": "java",
             "name": "TesteOficina",
             "request": "launch",
             "mainClass": "com.mycompany.sistemaoficinac.TesteOficina",

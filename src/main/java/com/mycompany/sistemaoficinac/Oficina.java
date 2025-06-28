@@ -87,7 +87,7 @@ public class Oficina {
         } catch (Exception e) {
             throw new IllegalStateException("Erro ao inicializar a oficina: " + e.getMessage());
         }
-        ajustarContadorVeiculos();
+        
     }
 
     /**
@@ -359,6 +359,11 @@ public class Oficina {
         
         Elevador.liberarElevador(numero - 1); // Índice base 0
         System.out.println("Elevador " + numero + " liberado com sucesso!");
+    }
+
+    public void excluirCliente(Cliente cliente) {
+        clientes.remove(cliente);
+        System.out.println("Cliente " + cliente.getNome() + " excluído com sucesso!");
     }
 
     /**
@@ -682,6 +687,7 @@ public class Oficina {
             System.out.println("Cliente não encontrado!");
         }
     }
+    
 
     /**
      * Obtém o contador total de veículos cadastrados.
@@ -1478,13 +1484,8 @@ public class Oficina {
     }
 
     public void listarTodasTransacoes() {
-        System.out.println("\n=== TODAS AS ORDENS DE SERVIÇO ===");
-        List<OrdemServico> ordens = caixa.getOrdensServico();
-        if (ordens.isEmpty()) {
-            System.out.println("Nenhuma ordem de serviço encontrada.");
-            return;
-        }
-        ordens.forEach(System.out::println);
+        System.out.println("\n=== LISTAR TODAS AS TRANSAÇÕES ===");
+        caixa.getOrdensServico().forEach(System.out::println);
     }
 
     public void listarTransacoesPorPeriodo() {
@@ -1887,6 +1888,10 @@ public class Oficina {
         return servicos;
     }
 
+    public Login getLogin() {
+        return loginManager;
+    }
+
     /**
      * Obtém o caixa financeiro.
      *
@@ -2048,10 +2053,11 @@ public void salvarDados() throws IOException {
             registrosPonto = new ArrayList<>();
         }
         if (arquivoTransacoes.exists()) {
-            mapper.readValue(arquivoTransacoes, new TypeReference<List<OrdemServico>>() {});
+            List<OrdemServico> transacoes = mapper.readValue(arquivoTransacoes, new TypeReference<List<OrdemServico>>() {});
+            caixa.setOrdensServico(transacoes); // <-- Esta linha está faltando!
             System.out.println("Dados das transações carregados com sucesso!");
         } else {
-            ordensServico = new ArrayList<>();
+            caixa.setOrdensServico(new ArrayList<>());
         }
 
         if(arquivoOrdensServico.exists()){
@@ -2520,16 +2526,15 @@ public void salvarDados() throws IOException {
             estoque.adicionarItem(item);
         }
 
-        // Criar 10 ordens de serviço de demonstração
+        // Criar 5 ordens de serviço de demonstração
         OrdemDeServicoBuilder builder = new OrdemServicoConcretaBuilder();
         OrdemServicoDirector director = new OrdemServicoDirector(builder);
 
-        // Criar ordens de serviço para cada cliente
-        String[] datas = {"01/05/2024", "02/05/2024", "03/05/2024", "04/05/2024", "05/05/2024",
-                         "06/05/2024", "07/05/2024", "08/05/2024", "09/05/2024", "10/05/2024"};
-        String[] horarios = {"09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"};
+        // Criar ordens de serviço para os primeiros 5 clientes
+        String[] datas = {"01/05/2024", "02/05/2024", "03/05/2024", "04/05/2024", "05/05/2024"};
+        String[] horarios = {"09:00", "10:00", "11:00", "13:00", "14:00"};
 
-        for (int i = 0; i < clientesDemo.size(); i++) {
+        for (int i = 0; i < 5; i++) {
             // Criar ordem de serviço com serviços e peças
             List<Servico> servicosOS = new ArrayList<>();
             servicosOS.add(servicosDemo.get(i));
@@ -2556,6 +2561,8 @@ public void salvarDados() throws IOException {
             caixa.registrarEntrada(os);
             // Registrar saída (despesa) relacionada à ordem
             caixa.registrarSaida(itensOS.get(0).getPreco() * itensOS.get(0).getQuantidade(), "Compra de peças para ordem de serviço", datas[i], "Despesa", funcionariosDemo.get(i).getNome(), itensOS);
+            
+
         }
 
         // Criar registros de ponto de demonstração para os funcionários
@@ -2565,6 +2572,179 @@ public void salvarDados() throws IOException {
             // Entrada às 08:00 e saída às 17:00 em datas diferentes
             registrosPonto.add(new PontoFuncionario(f.getMatricula(), LocalDateTime.of(2024, 5, i+1, 8, 0), LocalDateTime.of(2024, 5, i+1, 17, 0)));
         }
+        
+        // Adicionar transações adicionais de demonstração
+        // Vendas de peças avulsas
+        registrarEntradaCaixa(500.0, "Venda de peças - Filtro de óleo", "25/05/2024", "Vendas", "José Mecânico", 
+            Arrays.asList(new Estoque.ItemEstoque("P002", "Filtro de Óleo", 20, 25.0, "Filtro de óleo")));
+        
+        registrarEntradaCaixa(1200.0, "Venda de peças - Baterias", "28/05/2024", "Vendas", "Antonio Elétrico", 
+            Arrays.asList(new Estoque.ItemEstoque("P004", "Bateria", 3, 350.0, "Bateria 60Ah")));
+        
+        registrarEntradaCaixa(800.0, "Venda de peças - Óleo Motor", "30/05/2024", "Vendas", "Paulo Suspensão", 
+            Arrays.asList(new Estoque.ItemEstoque("P001", "Óleo Motor", 20, 35.0, "Óleo sintético 5W30")));
+        
+        // Despesas administrativas
+        caixa.registrarSaida(2500.0, "Compra de material de limpeza", "15/05/2024", "Despesas Administrativas", "Admin", new ArrayList<>());
+        caixa.registrarSaida(800.0, "Compra de café e lanches", "20/05/2024", "Despesas Administrativas", "Admin", new ArrayList<>());
+        caixa.registrarSaida(1200.0, "Compra de uniformes", "22/05/2024", "Despesas Administrativas", "Admin", new ArrayList<>());
+        caixa.registrarSaida(500.0, "Manutenção de equipamentos", "25/05/2024", "Despesas Administrativas", "Admin", new ArrayList<>());
+        
+        // Folha de pagamento
+        caixa.registrarSaida(15000.0, "Pagamento de salários - Maio/2024", "31/05/2024", "Folha de Pagamento", "Admin", new ArrayList<>());
+        
+        // Compras de estoque
+        caixa.registrarSaida(5000.0, "Compra de estoque - Óleos e filtros", "05/05/2024", "Compras", "Admin", 
+            Arrays.asList(new Estoque.ItemEstoque("P001", "Óleo Motor", 100, 30.0, "Óleo sintético 5W30")));
+        
+        caixa.registrarSaida(3000.0, "Compra de estoque - Peças de freio", "10/05/2024", "Compras", "Admin", 
+            Arrays.asList(new Estoque.ItemEstoque("P003", "Pastilha de Freio", 50, 70.0, "Pastilha de freio")));
+        
+        caixa.registrarSaida(8000.0, "Compra de estoque - Baterias", "15/05/2024", "Compras", "Admin", 
+            Arrays.asList(new Estoque.ItemEstoque("P004", "Bateria", 20, 320.0, "Bateria 60Ah")));
+        
+        // Serviços adicionais
+        registrarEntradaCaixa(750.0, "Serviço de diagnóstico eletrônico", "12/05/2024", "Serviços Especializados", "Lucas Injeção", new ArrayList<>());
+        registrarEntradaCaixa(1200.0, "Serviço de pintura automotiva", "18/05/2024", "Serviços Especializados", "Bruno Pintura", new ArrayList<>());
+        registrarEntradaCaixa(600.0, "Serviço de funilaria", "24/05/2024", "Serviços Especializados", "Diego Funilaria", new ArrayList<>());
+        
+        // Despesas operacionais
+        caixa.registrarSaida(1500.0, "Aluguel da oficina", "01/05/2024", "Despesas Operacionais", "Admin", new ArrayList<>());
+        caixa.registrarSaida(800.0, "Conta de energia elétrica", "10/05/2024", "Despesas Operacionais", "Admin", new ArrayList<>());
+        caixa.registrarSaida(400.0, "Conta de água", "10/05/2024", "Despesas Operacionais", "Admin", new ArrayList<>());
+        caixa.registrarSaida(300.0, "Internet e telefone", "15/05/2024", "Despesas Operacionais", "Admin", new ArrayList<>());
+        
+        // Receitas adicionais
+        registrarEntradaCaixa(200.0, "Taxa de diagnóstico", "03/05/2024", "Taxas", "José Mecânico", new ArrayList<>());
+        registrarEntradaCaixa(150.0, "Taxa de diagnóstico", "07/05/2024", "Taxas", "Antonio Elétrico", new ArrayList<>());
+        registrarEntradaCaixa(180.0, "Taxa de diagnóstico", "14/05/2024", "Taxas", "Paulo Suspensão", new ArrayList<>());
+        registrarEntradaCaixa(220.0, "Taxa de diagnóstico", "21/05/2024", "Taxas", "Ricardo Motor", new ArrayList<>());
+        
+        // Despesas com fornecedores
+        caixa.registrarSaida(4000.0, "Pagamento fornecedor - Auto Peças Silva", "08/05/2024", "Fornecedores", "Admin", new ArrayList<>());
+        caixa.registrarSaida(3500.0, "Pagamento fornecedor - Mecânica Express", "16/05/2024", "Fornecedores", "Admin", new ArrayList<>());
+        caixa.registrarSaida(2800.0, "Pagamento fornecedor - Peças Premium", "23/05/2024", "Fornecedores", "Admin", new ArrayList<>());
+        
+        // Receitas de serviços especiais
+        registrarEntradaCaixa(1800.0, "Revisão completa - Veículo de luxo", "11/05/2024", "Serviços Premium", "Ricardo Motor", new ArrayList<>());
+        registrarEntradaCaixa(2500.0, "Manutenção preventiva - Frota empresarial", "19/05/2024", "Serviços Premium", "José Mecânico", new ArrayList<>());
+        registrarEntradaCaixa(3200.0, "Reparo de motor - Veículo antigo", "26/05/2024", "Serviços Premium", "Ricardo Motor", new ArrayList<>());
+        
+        // Despesas de marketing
+        caixa.registrarSaida(1200.0, "Anúncios em jornais locais", "06/05/2024", "Marketing", "Admin", new ArrayList<>());
+        caixa.registrarSaida(800.0, "Panfletos e material promocional", "13/05/2024", "Marketing", "Admin", new ArrayList<>());
+        caixa.registrarSaida(1500.0, "Manutenção do site e redes sociais", "20/05/2024", "Marketing", "Admin", new ArrayList<>());
+        
+        // Receitas de consultoria
+        registrarEntradaCaixa(500.0, "Consultoria técnica - Cliente empresarial", "09/05/2024", "Consultoria", "Admin", new ArrayList<>());
+        registrarEntradaCaixa(800.0, "Avaliação de frota - Empresa de transporte", "17/05/2024", "Consultoria", "Admin", new ArrayList<>());
+        registrarEntradaCaixa(600.0, "Relatório técnico - Seguradora", "29/05/2024", "Consultoria", "Admin", new ArrayList<>());
+        
+        // Despesas de segurança
+        caixa.registrarSaida(600.0, "Sistema de alarme e câmeras", "04/05/2024", "Segurança", "Admin", new ArrayList<>());
+        caixa.registrarSaida(400.0, "Manutenção de extintores", "12/05/2024", "Segurança", "Admin", new ArrayList<>());
+        caixa.registrarSaida(300.0, "Treinamento de segurança", "27/05/2024", "Segurança", "Admin", new ArrayList<>());
+        
+        // Receitas de cursos
+        registrarEntradaCaixa(1200.0, "Curso de mecânica básica", "14/05/2024", "Educação", "José Mecânico", new ArrayList<>());
+        registrarEntradaCaixa(800.0, "Workshop de manutenção preventiva", "28/05/2024", "Educação", "Antonio Elétrico", new ArrayList<>());
+        
+        // Despesas de treinamento
+        caixa.registrarSaida(2000.0, "Treinamento técnico - Funcionários", "11/05/2024", "Treinamento", "Admin", new ArrayList<>());
+        caixa.registrarSaida(1500.0, "Certificação técnica - Mecânicos", "25/05/2024", "Treinamento", "Admin", new ArrayList<>());
+        
+        // Receitas de aluguel de equipamentos
+        registrarEntradaCaixa(300.0, "Aluguel de elevador - Mecânico externo", "16/05/2024", "Aluguel", "Admin", new ArrayList<>());
+        registrarEntradaCaixa(200.0, "Aluguel de ferramentas especiais", "22/05/2024", "Aluguel", "Admin", new ArrayList<>());
+        
+        // Despesas de manutenção de equipamentos
+        caixa.registrarSaida(1200.0, "Manutenção de elevadores", "07/05/2024", "Manutenção de Equipamentos", "Admin", new ArrayList<>());
+        caixa.registrarSaida(800.0, "Calibração de equipamentos", "21/05/2024", "Manutenção de Equipamentos", "Admin", new ArrayList<>());
+        
+        // Receitas de seguros
+        registrarEntradaCaixa(1500.0, "Comissão de seguro automotivo", "13/05/2024", "Comissões", "Admin", new ArrayList<>());
+        registrarEntradaCaixa(800.0, "Comissão de seguro automotivo", "27/05/2024", "Comissões", "Admin", new ArrayList<>());
+        
+        // Despesas de seguros
+        caixa.registrarSaida(2500.0, "Seguro da oficina", "02/05/2024", "Seguros", "Admin", new ArrayList<>());
+        caixa.registrarSaida(1800.0, "Seguro dos funcionários", "15/05/2024", "Seguros", "Admin", new ArrayList<>());
+        
+        // Receitas de parcerias
+        registrarEntradaCaixa(1000.0, "Comissão de parceria - Auto Center", "18/05/2024", "Parcerias", "Admin", new ArrayList<>());
+        registrarEntradaCaixa(750.0, "Comissão de parceria - Lava Jato", "30/05/2024", "Parcerias", "Admin", new ArrayList<>());
+        
+        // Despesas de impostos
+        caixa.registrarSaida(3000.0, "Impostos municipais", "10/05/2024", "Impostos", "Admin", new ArrayList<>());
+        caixa.registrarSaida(2000.0, "Impostos estaduais", "20/05/2024", "Impostos", "Admin", new ArrayList<>());
+        caixa.registrarSaida(1500.0, "Impostos federais", "31/05/2024", "Impostos", "Admin", new ArrayList<>());
+        
+        // Receitas de multas e taxas
+        registrarEntradaCaixa(100.0, "Taxa de atraso - Cliente", "05/05/2024", "Multas e Taxas", "Admin", new ArrayList<>());
+        registrarEntradaCaixa(150.0, "Taxa de cancelamento - Cliente", "19/05/2024", "Multas e Taxas", "Admin", new ArrayList<>());
+        
+        // Despesas de benefícios
+        caixa.registrarSaida(1200.0, "Vale refeição - Funcionários", "15/05/2024", "Benefícios", "Admin", new ArrayList<>());
+        caixa.registrarSaida(800.0, "Vale transporte - Funcionários", "15/05/2024", "Benefícios", "Admin", new ArrayList<>());
+        caixa.registrarSaida(600.0, "Plano de saúde - Funcionários", "20/05/2024", "Benefícios", "Admin", new ArrayList<>());
+        
+        // Receitas de serviços emergenciais
+        registrarEntradaCaixa(800.0, "Atendimento emergencial - Final de semana", "04/05/2024", "Serviços Emergenciais", "José Mecânico", new ArrayList<>());
+        registrarEntradaCaixa(1200.0, "Atendimento emergencial - Feriado", "12/05/2024", "Serviços Emergenciais", "Antonio Elétrico", new ArrayList<>());
+        
+        // Despesas de horas extras
+        caixa.registrarSaida(1500.0, "Pagamento de horas extras", "31/05/2024", "Horas Extras", "Admin", new ArrayList<>());
+        
+        // Receitas de garantia estendida
+        registrarEntradaCaixa(400.0, "Garantia estendida - Motor", "08/05/2024", "Garantias", "Ricardo Motor", new ArrayList<>());
+        registrarEntradaCaixa(300.0, "Garantia estendida - Transmissão", "23/05/2024", "Garantias", "Ricardo Motor", new ArrayList<>());
+        
+        // Despesas de garantia
+        caixa.registrarSaida(600.0, "Honorários de garantia", "26/05/2024", "Garantias", "Admin", new ArrayList<>());
+        
+        // Receitas de serviços de terceiros
+        registrarEntradaCaixa(200.0, "Comissão - Guincho", "06/05/2024", "Serviços de Terceiros", "Admin", new ArrayList<>());
+        registrarEntradaCaixa(150.0, "Comissão - Lava Jato", "17/05/2024", "Serviços de Terceiros", "Admin", new ArrayList<>());
+        
+        // Despesas de serviços de terceiros
+        caixa.registrarSaida(300.0, "Serviço de contabilidade", "10/05/2024", "Serviços de Terceiros", "Admin", new ArrayList<>());
+        caixa.registrarSaida(200.0, "Serviço de advocacia", "25/05/2024", "Serviços de Terceiros", "Admin", new ArrayList<>());
+        
+        // Receitas de eventos
+        registrarEntradaCaixa(2500.0, "Evento - Dia da Mecânica", "20/05/2024", "Eventos", "Admin", new ArrayList<>());
+        
+        // Despesas de eventos
+        caixa.registrarSaida(1800.0, "Organização - Dia da Mecânica", "20/05/2024", "Eventos", "Admin", new ArrayList<>());
+        
+        // Receitas de assinaturas
+        registrarEntradaCaixa(1200.0, "Assinatura - Plano de manutenção", "01/05/2024", "Assinaturas", "Admin", new ArrayList<>());
+        registrarEntradaCaixa(800.0, "Assinatura - Plano de manutenção", "15/05/2024", "Assinaturas", "Admin", new ArrayList<>());
+        
+        // Despesas de assinaturas
+        caixa.registrarSaida(500.0, "Assinatura - Software de gestão", "01/05/2024", "Assinaturas", "Admin", new ArrayList<>());
+        caixa.registrarSaida(300.0, "Assinatura - Revistas técnicas", "15/05/2024", "Assinaturas", "Admin", new ArrayList<>());
+        
+        ajustarContadorVeiculos();
+    }
+
+    /**
+     * Método auxiliar para registrar entrada no caixa.
+     * Cria uma OrdemServico e a registra no caixa.
+     */
+    private void registrarEntradaCaixa(double valor, String descricao, String data, String categoria, 
+                                      String responsavel, List<Estoque.ItemEstoque> itens) {
+        OrdemServico os = new OrdemServico(
+            "Entrada",
+            valor,
+            descricao,
+            data,
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")),
+            categoria,
+            responsavel,
+            null,
+            new ArrayList<>(),
+            itens
+        );
+        caixa.registrarEntrada(os);
     }
 
     // ... existing code ...

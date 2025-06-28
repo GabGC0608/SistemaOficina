@@ -80,6 +80,14 @@ public class Login {
         }
     }
 
+    public Map<String, String> getCredenciais() {
+        return credenciais;
+    }
+
+    public Map<String, String> getPermissoes() {
+        return permissoes;
+    }
+
     /**
      * Retorna uma representação em string do objeto Login, mostrando todas as credenciais e permissões.
      *

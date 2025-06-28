@@ -41,6 +41,8 @@
 'C:/Users/Gabriel/Documents/NetBeansProjects/SistemaOficinac/src/main/java/com/mycompany/sistemaoficinac/Login.java'
 'C:/Users/Gabriel/Documents/NetBeansProjects/SistemaOficinac/src/main/java/com/mycompany/sistemaoficinac/Oficina.java'
 'C:/Users/Gabriel/Documents/NetBeansProjects/SistemaOficinac/src/main/java/com/mycompany/sistemaoficinac/OrdemDeServicoBuilder.java'
+'C:/Users/Gabriel/Documents/NetBeansProjects/SistemaOficinac/src/main/java/com/mycompany/sistemaoficinac/OrdemDeServicoPorNumeroDeServicos.java'
+'C:/Users/Gabriel/Documents/NetBeansProjects/SistemaOficinac/src/main/java/com/mycompany/sistemaoficinac/OrdemDeServicoPorValor.java'
 'C:/Users/Gabriel/Documents/NetBeansProjects/SistemaOficinac/src/main/java/com/mycompany/sistemaoficinac/OrdemPorData.java'
 'C:/Users/Gabriel/Documents/NetBeansProjects/SistemaOficinac/src/main/java/com/mycompany/sistemaoficinac/OrdemServico.java'
 'C:/Users/Gabriel/Documents/NetBeansProjects/SistemaOficinac/src/main/java/com/mycompany/sistemaoficinac/OrdemServicoConcretaBuilder.java'
@@ -58,19 +60,19 @@ C:\Users\Gabriel\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2
 C:\Users\Gabriel\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.15.2\jackson-core-2.15.2.jar = 1744812791048
 C:\Users\Gabriel\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jsr310\2.15.2\jackson-datatype-jsr310-2.15.2.jar = 1744812790687
 C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\src\main\java = 1745857544686
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\allclasses-index.html = 1750123550294
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\allpackages-index.html = 1750123550307
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\element-list = 1750123549848
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\help-doc.html = 1750123550410
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\index-all.html = 1750123550398
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\index.html = 1750123550402
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\jquery-ui.overrides.css = 1750123550481
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\member-search-index.js = 1750123550318
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\module-search-index.js = 1750123550310
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\overview-tree.html = 1750123550230
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\package-search-index.js = 1750123550312
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\script.js = 1750123550417
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\search.js = 1750123550449
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\stylesheet.css = 1750123550414
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\tag-search-index.js = 1750123550320
-C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\type-search-index.js = 1750123550315
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\allclasses-index.html = 1750947463712
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\allpackages-index.html = 1750947463716
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\element-list = 1750947463380
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\help-doc.html = 1750947463857
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\index-all.html = 1750947463848
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\index.html = 1750947463852
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\jquery-ui.overrides.css = 1750947463923
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\member-search-index.js = 1750947463726
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\module-search-index.js = 1750947463719
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\overview-tree.html = 1750947463664
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\package-search-index.js = 1750947463722
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\script.js = 1750947463893
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\search.js = 1750947463896
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\stylesheet.css = 1750947463877
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\tag-search-index.js = 1750947463729
+C:\Users\Gabriel\Documents\NetBeansProjects\SistemaOficinac\target\reports\apidocs\type-search-index.js = 1750947463724

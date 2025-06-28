@@ -393,6 +393,14 @@ public class OrdemServico {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+    
+    /**
+     * Define o veículo da ordem.
+     * @param veiculo Veículo da ordem
+     */
+    public void setVeiculo(Veiculo veiculo) {
+        this.veiculo = veiculo;
+    }
     /**
      * Retorna uma representação em string da ordem de serviço.
      * @return String com informações da ordem

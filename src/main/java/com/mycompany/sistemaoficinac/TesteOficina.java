@@ -37,16 +37,64 @@ public class TesteOficina {
             System.out.println("\n=== QUESTÃO 1: IMPLEMENTAÇÃO DAS CLASSES ===");
             System.out.println("\nTestando implementação das classes principais:");
             
+
+
             // Exibir dados de demonstração
+            Cliente c1 = new Cliente("João Silva", "1234567890", "Rua das Flores, 123", "joao@email.com");
+            Cliente c2 = new Cliente("Maria Oliveira", "9876543210", "Avenida das Flores, 456", "maria@email.com");
+            Cliente c3 = new Cliente("Pedro Santos", "1112223330", "Rua das Flores, 789", "pedro@email.com");
+            Cliente c4 = new Cliente("Ana Souza", "4445556660", "Avenida das Flores, 101", "ana@email.com");
+            Cliente c5 = new Cliente("Carlos Oliveira", "7778889990", "Rua das Flores, 123", "carlos@email.com");
+            Cliente c6 = new Cliente("Lucas Santos", "3334445550", "Avenida das Flores, 456", "lucas@email.com");
+            Cliente c7 = new Cliente("Mariana Oliveira", "6667778880", "Rua das Flores, 789", "mariana@email.com");
+
+            oficina.getClientes().add(c1);
+            oficina.getClientes().add(c2);
+            oficina.getClientes().add(c3);
+            oficina.getClientes().add(c4);
+            oficina.getClientes().add(c5);
+            oficina.getClientes().add(c6);
+            oficina.getClientes().add(c7);
             System.out.println("\nClientes cadastrados:");
             oficina.getClientes().forEach(System.out::println);
             
+            Funcionario f1 = new Funcionario("João Silva", "1234567890", "Rua das Flores, 123", "Mecânico", 2500.0, "MAT001", "Mecânica", new ArrayList<>(), false);
+            Funcionario f2 = new Funcionario("Maria Oliveira", "9876543210", "Avenida das Flores, 456", "Mecânico", 2500.0, "MAT002", "Mecânica", new ArrayList<>(), false);
+            Funcionario f3 = new Funcionario("Pedro Santos", "1112223330", "Rua das Flores, 789", "Mecânico", 2500.0, "MAT003", "Mecânica", new ArrayList<>(), false);
+            Funcionario f4 = new Funcionario("Ana Souza", "4445556660", "Avenida das Flores, 101", "Mecânico", 2500.0, "MAT004", "Mecânica", new ArrayList<>(), false);
+            Funcionario f5 = new Funcionario("Carlos Oliveira", "7778889990", "Rua das Flores, 123", "Mecânico", 2500.0, "MAT005", "Mecânica", new ArrayList<>(), false);
+            Funcionario f6 = new Funcionario("Lucas Santos", "3334445550", "Avenida das Flores, 456", "Mecânico", 2500.0, "MAT006", "Mecânica", new ArrayList<>(), false);
+            Funcionario f7 = new Funcionario("Mariana Oliveira", "6667778880", "Rua das Flores, 789", "Mecânico", 2500.0, "MAT007", "Mecânica", new ArrayList<>(), false);
+
+            oficina.getFuncionarios().add(f1);
+            oficina.getFuncionarios().add(f2);
+            oficina.getFuncionarios().add(f3);
+            oficina.getFuncionarios().add(f4);
+            oficina.getFuncionarios().add(f5);
+            oficina.getFuncionarios().add(f6);
+            oficina.getFuncionarios().add(f7);
             System.out.println("\nFuncionários cadastrados:");
             oficina.getFuncionarios().forEach(System.out::println);
             
+            Veiculo v1 = new Veiculo("Fiat Uno", "ABC1234", 2020, "Fiat", "Preto");
+            Veiculo v2 = new Veiculo("Fiat Uno", "ABC1235", 2020, "Fiat", "Preto");
+            Veiculo v3 = new Veiculo("Fiat Uno", "ABC1236", 2020, "Fiat", "Preto");
+            Veiculo v4 = new Veiculo("Fiat Uno", "ABC1237", 2020, "Fiat", "Preto");
+            Veiculo v5 = new Veiculo("Fiat Uno", "ABC1238", 2020, "Fiat", "Preto");
+            Veiculo v6 = new Veiculo("Fiat Uno", "ABC1239", 2020, "Fiat", "Preto");
+            Veiculo v7 = new Veiculo("Fiat Uno", "ABC1240", 2020, "Fiat", "Preto");
+
+            c1.getVeiculos().add(v1);
+            c2.getVeiculos().add(v2);
+            c3.getVeiculos().add(v3);
+            c4.getVeiculos().add(v4);
+            c5.getVeiculos().add(v5);
+            c6.getVeiculos().add(v6);
+            c7.getVeiculos().add(v7);
             System.out.println("\nVeículos cadastrados:");
             oficina.listarVeiculos();
             
+            //criar ordem de servico com builder////////////////////////////////
             System.out.println("\nOrdens de serviço cadastradas:");
             oficina.getOrdensServico().forEach(System.out::println);
         }
@@ -63,6 +111,11 @@ public class TesteOficina {
             // Listar especialistas
             System.out.println("\nLista de especialistas:");
             oficina.listarEspecialistas();
+
+            //Printar Login:
+            System.out.println("\nLogin:");
+            System.out.println(oficina.getLogin().getCredenciais());
+            System.out.println(oficina.getLogin().getPermissoes());
         }
 
         // Questão 3: toString() e Construtores
@@ -132,6 +185,10 @@ public class TesteOficina {
             if (funcionario != null) {
                 System.out.println("\nFuncionário encontrado: " + funcionario);
             }
+
+            Funcionario f1 = new Funcionario("João Silva", "1234567890", "Rua das Flores, 123", "Mecânico", 2500.0, "MAT001", "Mecânica", new ArrayList<>(), false);
+            f1.setNome("testeTesete");
+            f1.setCargo("observador");
         }
 
         // Questão 7: Gerenciamento de Clientes
@@ -141,7 +198,8 @@ public class TesteOficina {
             
             // Listar clientes
             System.out.println("\nLista de clientes:");
-            oficina.getClientes().forEach(System.out::println);
+            Cliente c1 = new Cliente("João Silva", "1234567890", "Rua das Flores, 123", "joao@email.com");
+            oficina.excluirCliente(c1);
             
             // Listar veículos
             System.out.println("\nLista de veículos:");
@@ -153,25 +211,61 @@ public class TesteOficina {
             System.out.println("\n=== QUESTÃO 8: ORDENS DE SERVIÇO ===");
             System.out.println("\nTestando ordens de serviço:");
             
+            //Mostrar ordem de serviço com nome João Silva
+            if(oficina.getOrdensServico().get(0).getCliente().getNome().equals("João Silva")){
             // Listar ordens de serviço
             System.out.println("\nLista de ordens de serviço:");
             oficina.getOrdensServico().forEach(System.out::println);
         }
+        //Mostrar ordem de serviço com nome testeTesete
+        if(oficina.getOrdensServico().get(0).getCliente().getNome().equals("testeTesete")){
+            System.out.println("\nOrdem de serviço com nome João Silva:");
+            oficina.getOrdensServico().forEach(System.out::println);
+        }
+    }
 
-        // Questão 9: Estoque
+        // Questão 9: 
         {
-            System.out.println("\n=== QUESTÃO 9: ESTOQUE ===");
+            System.out.println("\n=== QUESTÃO 9:  ===");
             System.out.println("\nTestando gerenciamento de estoque:");
             
-            // Listar itens do estoque
-            System.out.println("\nLista de itens no estoque:");
-            oficina.getEstoque().listarItens();
-        }
+            Estoque.ItemEstoque item = new Estoque.ItemEstoque("Item1", "Item1", 10, 100.0, "Descrição do item1");
+            
+            oficina.getEstoque().adicionarItem(item);
 
-        // Questão 10: Extrato
+            Cliente c1 = new Cliente("Coringa", "1234567890", "Rua das Flores, 123", "joao@email.com");
+            
+            oficina.excluirCliente(c1);
+            
+            //criar ordem de serviço com builder
+            
+         OrdemDeServicoBuilder builder = new OrdemServicoConcretaBuilder();
+         OrdemServicoDirector director = new OrdemServicoDirector(builder);
+
+         director.construirOrdemCompleta("Entrada", "01/01/2024", "09:00", "Mecânica", "Mecânico Teste", "Cliente Teste", "Agendado", new ArrayList<>(), new ArrayList<>());
+
+         OrdemServico os = builder.build();
+         
+         // Configurar objetos complexos
+         os.setCliente(new Cliente("Cliente Teste", "1234567890", "Rua das Flores, 123", "cliente@email.com"));
+         os.setResponsavel(new Funcionario("Mecânico Teste", "1234567890", "Rua dos Mecânicos, 456", "Mecânico", 2500.0, "MAT001", "Mecânica", new ArrayList<>(), false));
+         os.setVeiculo(new Veiculo("Fiat Uno", "ABC1234", 2020, "Fiat", "Preto"));
+         
+         oficina.getOrdensServico().add(os);
+         
+    }
+
+        // Questão 10: Extrato  
         {
             System.out.println("\n=== QUESTÃO 10: EXTRATO ===");
             System.out.println("\nTestando geração de extrato:");
+            
+            //criar ordem de serviço com builder
+                
+            OrdemServico os2 = new OrdemServico("Entrada", 0.0, "Ordem de teste", "01/01/2024", "09:00", "Mecânica", "Mecânico Teste", "Cliente Teste", new ArrayList<>(), new ArrayList<>());
+
+            oficina.getOrdensServico().add(os2);
+            
             
             // Listar transações
             System.out.println("\nLista de transações:");
@@ -211,6 +305,16 @@ public class TesteOficina {
             Collections.sort(clientes, new ClientePorQtdVeiculos());
             System.out.println("\nClientes ordenados por quantidade de veículos:");
             clientes.forEach(System.out::println);
+
+            // Ordenar ordens de serviço por valor
+            Collections.sort(oficina.getOrdensServico(), new OrdemDeServicoPorValor());
+            System.out.println("\nOrdens de serviço ordenadas por valor:");
+            oficina.getOrdensServico().forEach(System.out::println);
+
+            // Ordenar ordens de serviço por número de serviços
+            Collections.sort(oficina.getOrdensServico(), new OrdemDeServicoPorNumeroDeServicos());  
+            System.out.println("\nOrdens de serviço ordenadas por número de serviços:");
+            oficina.getOrdensServico().forEach(System.out::println);
         }
 
         // Questão 14: Persistência
@@ -243,9 +347,8 @@ public class TesteOficina {
         
         // Teste do foreach
         System.out.println("\nListando clientes usando foreach:");
-        for (Cliente cliente : oficina.getClientes()) {
-            System.out.println(cliente);
-        }
+        oficina.getClientes().forEach(System.out::println);
+        
         
         // Questão 16: Teste do Comparator
         System.out.println("\n=== Teste do Comparator ===");
@@ -253,22 +356,12 @@ public class TesteOficina {
         
         // Ordenando por nome
         System.out.println("\nOrdenando clientes por nome:");
-        Collections.sort(clientes, new Comparator<Cliente>() {
-            @Override
-            public int compare(Cliente c1, Cliente c2) {
-                return c1.getNome().compareTo(c2.getNome());
-            }
-        });
+        Collections.sort(clientes, new ClientePorNome());
         clientes.forEach(System.out::println);
         
         // Ordenando por CPF
-        System.out.println("\nOrdenando clientes por CPF:");
-        Collections.sort(clientes, new Comparator<Cliente>() {
-            @Override
-            public int compare(Cliente c1, Cliente c2) {
-                return c1.getCpfAnonimizado().compareTo(c2.getCpfAnonimizado());
-            }
-        });
+        System.out.println("\nOrdenando clientes por número de veículos:");
+        Collections.sort(clientes, new ClientePorQtdVeiculos());
         clientes.forEach(System.out::println);
         
         // Questão 17: Teste do método find e binarySearch
@@ -281,20 +374,10 @@ public class TesteOficina {
         System.out.println(clienteEncontrado != null ? clienteEncontrado : "Cliente não encontrado");
         
         // Usando binarySearch
-        Collections.sort(clientes, new Comparator<Cliente>() {
-            @Override
-            public int compare(Cliente c1, Cliente c2) {
-                return c1.getNome().compareTo(c2.getNome());
-            }
-        });
+        Collections.sort(clientes, new ClientePorNome());
         
         int index = Collections.binarySearch(clientes, new Cliente(nomeBusca, "", "", ""), 
-            new Comparator<Cliente>() {
-                @Override
-                public int compare(Cliente c1, Cliente c2) {
-                    return c1.getNome().compareTo(c2.getNome());
-                }
-            });
+            new ClientePorNome());
         
         System.out.println("\nCliente encontrado pelo binarySearch:");
         System.out.println(index >= 0 ? clientes.get(index) : "Cliente não encontrado");

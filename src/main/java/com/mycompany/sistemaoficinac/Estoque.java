@@ -145,6 +145,24 @@ public static class ItemEstoque {
     }
 
     /**
+     * Define o nome do item.
+     *
+     * @param nome Novo nome do item.
+     */
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    /**
+     * Define o código do item.
+     *
+     * @param codigo Novo código do item.
+     */
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    /**
      * Retorna uma representação textual do item.
      *
      * @return String representando o item.
